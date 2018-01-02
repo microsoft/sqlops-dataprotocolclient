@@ -4,6 +4,7 @@ import * as protocol from './protocol';
 import { Ip2c } from './protocolConverter';
 export interface LanguageClientOptions extends VSLanguageClientOptions {
     providerId: string;
+    serverConnectionMetadata: any;
 }
 /**
  *
