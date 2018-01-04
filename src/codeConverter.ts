@@ -34,8 +34,8 @@ function asScriptingParams(ownerURI: string, operation: sqlops.ScriptOperation, 
 	let targetDatabaseEngineType = paramDetails.targetDatabaseEngineType;
 	let scriptCompatibilityOption = paramDetails.scriptCompatibilityOption;
 	let scriptOptions: types.ScriptOptions = {
-		scriptCreateDrop: (operation === types.ScriptOperation.Delete) ? 'ScriptDrop' :
-			(operation === types.ScriptOperation.Select) ? 'ScriptSelect' : 'ScriptCreate',
+		scriptCreateDrop: (operation === sqlops.ScriptOperation.Delete) ? 'ScriptDrop' :
+			(operation === sqlops.ScriptOperation.Select) ? 'ScriptSelect' : 'ScriptCreate',
 		typeOfDataToScript: 'SchemaOnly',
 		scriptStatistics: 'ScriptStatsNone',
 		targetDatabaseEngineEdition: targetDatabaseEngineEdition ? targetDatabaseEngineEdition : 'SqlServerEnterpriseEdition',

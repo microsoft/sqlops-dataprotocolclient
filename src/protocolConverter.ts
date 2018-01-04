@@ -21,11 +21,11 @@ function asProviderMetadata(params: types.MetadataQueryResult): sqlops.ProviderM
 		if (metadata.metadataTypeName) {
 			// Read from the provider since it's defined
 			metadataTypeName = metadata.metadataTypeName;
-		} else if (metadata.metadataType === types.MetadataType.View) {
+		} else if (metadata.metadataType === sqlops.MetadataType.View) {
 			metadataTypeName = 'View';
-		} else if (metadata.metadataType === types.MetadataType.SProc) {
+		} else if (metadata.metadataType === sqlops.MetadataType.SProc) {
 			metadataTypeName = 'StoredProcedure';
-		} else if (metadata.metadataType === types.MetadataType.Function) {
+		} else if (metadata.metadataType === sqlops.MetadataType.Function) {
 			metadataTypeName = 'Function';
 		} else {
 			metadataTypeName = 'Table';
