@@ -194,14 +194,6 @@ export declare class ServerInfo {
 export declare class CapabiltiesDiscoveryResult {
     capabilities: sqlops.DataProtocolServerCapabilities;
 }
-export declare enum TaskStatus {
-    notStarted = 0,
-    inProgress = 1,
-    succeeded = 2,
-    succeededWithWarning = 3,
-    failed = 4,
-    canceled = 5,
-}
 export interface CreateDatabaseParams {
     ownerUri: string;
     databaseInfo: sqlops.DatabaseInfo;
@@ -385,32 +377,17 @@ export interface IResultMessage {
     time: string;
     message: string;
 }
-export declare enum EditRowState {
-    clean = 0,
-    dirtyInsert = 1,
-    dirtyDelete = 2,
-    dirtyUpdate = 3,
-}
 export interface EditRow {
     cells: sqlops.DbCellValue[];
     id: number;
     isDirty: boolean;
-    state: EditRowState;
+    state: sqlops.EditRowState;
 }
 export declare class MetadataQueryParams {
     /**
      * Owner URI of the connection that changed.
      */
     ownerUri: string;
-}
-/**
- * Used as value version of sqlops.MetadataType THESE SHOULD MIRROR
- */
-export declare enum MetadataType {
-    Table = 0,
-    View = 1,
-    SProc = 2,
-    Function = 3,
 }
 export declare class MetadataQueryResult {
     metadata: sqlops.ObjectMetadata[];
@@ -714,16 +691,4 @@ export interface ProfilerEventsAvailableParams {
      * New profiler events available
      */
     events: ProfilerEvent[];
-}
-/**
- * Used as value version of sqlops.ScriptOperation THESE SHOULD BE THE SAME
- */
-export declare enum ScriptOperation {
-    Select = 0,
-    Create = 1,
-    Insert = 2,
-    Update = 3,
-    Delete = 4,
-    Execute = 5,
-    Alter = 6,
 }
