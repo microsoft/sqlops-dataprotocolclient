@@ -383,6 +383,15 @@ export interface EditRow {
     isDirty: boolean;
     state: sqlops.EditRowState;
 }
+export interface ExecutionPlanOptions {
+    includeEstimatedExecutionPlanXml?: boolean;
+    includeActualExecutionPlanXml?: boolean;
+}
+export interface QueryExecuteParams {
+    ownerUri: string;
+    querySelection: sqlops.ISelectionData;
+    executionPlanOptions?: ExecutionPlanOptions;
+}
 export declare class MetadataQueryParams {
     /**
      * Owner URI of the connection that changed.

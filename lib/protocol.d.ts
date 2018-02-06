@@ -235,7 +235,7 @@ export declare namespace QueryExecuteMessageNotification {
     const type: NotificationType<sqlops.QueryExecuteMessageParams, void>;
 }
 export declare namespace QueryExecuteRequest {
-    const type: RequestType<sqlops.QueryExecuteParams, QueryExecuteResult, void, void>;
+    const type: RequestType<types.QueryExecuteParams, QueryExecuteResult, void, void>;
 }
 export interface QueryExecuteResult {
 }
