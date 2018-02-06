@@ -505,6 +505,17 @@ export interface EditRow {
 	state: sqlops.EditRowState;
 }
 
+export interface ExecutionPlanOptions {
+	includeEstimatedExecutionPlanXml?: boolean;
+	includeActualExecutionPlanXml?: boolean;
+}
+
+export interface QueryExecuteParams {
+	ownerUri: string;
+	querySelection: sqlops.ISelectionData;
+	executionPlanOptions?: ExecutionPlanOptions;
+}
+
 export class MetadataQueryParams {
 	/**
 	 * Owner URI of the connection that changed.
