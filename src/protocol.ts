@@ -561,6 +561,13 @@ export namespace GetDatabaseInfoRequest {
 	export const type = new RequestType<types.GetDatabaseInfoParams, types.GetDatabaseInfoResponse, void, void>('admin/getdatabaseinfo');
 }
 
+// ------------------------------- < Agent Service Events > ------------------------------------
+
+export namespace GetAgentJobsRequest {
+	export const type = new RequestType<types.GetAgentJobsParams, types.GetAgentJobsResponse, void, void>('agent/getjobs');
+}
+
+
 // ------------------------------- < Disaster Recovery Events > ------------------------------------
 
 export namespace BackupRequest {

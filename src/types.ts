@@ -289,6 +289,16 @@ export interface CreateLoginParams {
 	loginInfo: sqlops.LoginInfo;
 }
 
+// Job Management types
+export interface GetAgentJobsParams {
+	ownerUri: string;
+}
+
+export interface GetAgentJobsResponse {
+	jobInfo: sqlops.AgentJobInfo[];
+}
+
+
 // Disaster Recovery types
 
 export interface BackupInfo {
