@@ -741,6 +741,49 @@ class AdminServicesFeature extends SqlOpsFeature<undefined> {
 	}
 }
 
+
+class AgentServicesFeature extends SqlOpsFeature<undefined> {
+	private static readonly messagesTypes: RPCMessageType[] = [
+		protocol.GetAgentJobsRequest.type
+	];
+
+	constructor(client: SqlOpsDataClient) {
+		super(client, AgentServicesFeature.messagesTypes);
+	}
+
+	public fillClientCapabilities(capabilities: protocol.ClientCapabilities): void {
+		ensure(ensure(capabilities, 'connection')!, 'agentServices')!.dynamicRegistration = true;
+	}
+
+	public initialize(capabilities: ServerCapabilities): void {
+		this.register(this.messages, {
+			id: UUID.generateUuid(),
+			registerOptions: undefined
+		});
+	}
+
+	protected registerProvider(options: undefined): Disposable {
+		const client = this._client;
+
+		let getJobs = (ownerUri: string): Thenable<sqlops.AgentJobInfo[]> => {
+			let params: types.GetAgentJobsParams = { ownerUri };
+			return client.sendRequest(protocol.GetAgentJobsRequest.type, params).then(
+				r => r,
+				e => {
+					client.logFailedRequest(protocol.GetAgentJobsRequest.type, e);
+					return Promise.resolve(undefined);
+				}
+			);
+		};
+
+		return sqlops.dataprotocol.registerAgentServicesProvider({
+			providerId: client.providerId,
+			getJobs
+		});
+	}
+}
+
+
 class BackupFeature extends SqlOpsFeature<undefined> {
 	private static readonly messagesTypes: RPCMessageType[] = [
 		protocol.BackupRequest.type,

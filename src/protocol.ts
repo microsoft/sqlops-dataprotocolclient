@@ -76,6 +76,12 @@ export interface ConnectionClientCapabilities {
 		 */
 		dynamicRegistration?: boolean;
 	};
+	agentServices?: {
+		/**
+		 *
+		 */
+		dynamicRegistration?: boolean;
+	};
 }
 
 export interface ClientCapabilities extends VSClientCapabilities {
