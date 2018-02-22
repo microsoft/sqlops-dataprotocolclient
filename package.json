@@ -14,7 +14,7 @@
   "license": "ISC",
   "dependencies": {
     "vscode": "1.1.5",
-    "sqlops": "git://github.com/anthonydresser/vscode-extension-vscode#1.1.11",
+    "sqlops": "github:anthonydresser/vscode-extension-vscode#1.1.11",
     "vscode-languageclient": "3.5.0"
   },
   "devDependencies": {
