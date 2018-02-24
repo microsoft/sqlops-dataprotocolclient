@@ -13,15 +13,16 @@
   "author": "Microsoft",
   "license": "ISC",
   "dependencies": {
-    "vscode": "1.1.5",
-    "sqlops": "github:anthonydresser/vscode-extension-vscode#1.1.11",
     "vscode-languageclient": "3.5.0"
   },
   "devDependencies": {
     "@types/node": "^8.5.2",
-    "typescript": "2.6.2"
+    "typescript": "2.6.2",
+    "vscode": "1.1.5",
+    "sqlops": "github:anthonydresser/vscode-extension-vscode"
   },
   "engines": {
-    "vscode": "*"
+    "vscode": "*",
+    "sqlops": "master"
   }
 }
