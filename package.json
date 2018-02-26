@@ -6,7 +6,8 @@
   "typings": "lib/main",
   "scripts": {
     "compile": "tsc -p ./src",
-    "watch": "tsc -w -p ./src"
+    "watch": "tsc -w -p ./src",
+    "prepare": "node ./node_modules/vscode/bin/install && node ./node_modules/sqlops/bin/install && npm run compile"
   },
   "author": "Microsoft",
   "license": "ISC",
