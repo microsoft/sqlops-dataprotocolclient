@@ -5,7 +5,6 @@
   "main": "lib/main",
   "typings": "lib/main",
   "scripts": {
-    "prepublish": "node ./node_modules/vscode/bin/install && node ./node_modules/sqlops/bin/install && tsc -p ./src",
     "compile": "tsc -p ./src",
     "watch": "tsc -w -p ./src",
     "update-vscode": "node ./node_modules/vscode/bin/install"
