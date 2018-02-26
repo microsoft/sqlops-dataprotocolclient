@@ -1529,9 +1529,9 @@ split@0.3:
   dependencies:
     through "2"
 
-"sqlops@github:anthonydresser/vscode-extension-vscode#1.1.11":
+"sqlops@github:anthonydresser/vscode-extension-vscode":
   version "1.1.11"
-  resolved "https://codeload.github.com/anthonydresser/vscode-extension-vscode/tar.gz/06c604d7f6ab9642a678d86a1b93412da37b01cc"
+  resolved "https://codeload.github.com/anthonydresser/vscode-extension-vscode/tar.gz/dac501bbaa03a25239c060c6371dfdcf06707599"
   dependencies:
     glob "^7.1.2"
     gulp-chmod "^2.0.0"
