@@ -290,11 +290,11 @@ export interface CreateLoginParams {
 }
 
 // Job Management types
-export interface GetAgentJobsParams {
+export interface AgentJobsParams {
 	ownerUri: string;
 }
 
-export interface GetAgentJobsResponse {
+export interface AgentJobsResponse {
 	jobInfo: sqlops.AgentJobInfo[];
 }
 

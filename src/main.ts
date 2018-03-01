@@ -744,7 +744,7 @@ class AdminServicesFeature extends SqlOpsFeature<undefined> {
 
 class AgentServicesFeature extends SqlOpsFeature<undefined> {
 	private static readonly messagesTypes: RPCMessageType[] = [
-		protocol.GetAgentJobsRequest.type
+		protocol.AgentJobsRequest.type
 	];
 
 	constructor(client: SqlOpsDataClient) {
@@ -766,11 +766,11 @@ class AgentServicesFeature extends SqlOpsFeature<undefined> {
 		const client = this._client;
 
 		let getJobs = (ownerUri: string): Thenable<sqlops.AgentJobInfo[]> => {
-			let params: types.GetAgentJobsParams = { ownerUri };
-			return client.sendRequest(protocol.GetAgentJobsRequest.type, params).then(
+			let params: types.AgentJobsParams = { ownerUri };
+			return client.sendRequest(protocol.AgentJobsRequest.type, params).then(
 				r => r,
 				e => {
-					client.logFailedRequest(protocol.GetAgentJobsRequest.type, e);
+					client.logFailedRequest(protocol.AgentJobsRequest.type, e);
 					return Promise.resolve(undefined);
 				}
 			);
@@ -1351,5 +1351,6 @@ export class SqlOpsDataClient extends LanguageClient {
 		this.registerFeature(new TaskServicesFeature(this));
 		this.registerFeature(new FileBrowserFeature(this));
 		this.registerFeature(new ProfilerFeature(this));
+		this.registerFeature(new AgentServicesFeature(this));
 	}
 }
