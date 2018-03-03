@@ -1320,7 +1320,7 @@ export class SqlOpsDataClient extends LanguageClient {
 
 	private registerSqlopsFeatures(features: Array<ISqlopsFeature>) {
 		features.map(f => {
-			new f(this);
+			this.registerFeature(new f(this));
 		});
 	}
 }
