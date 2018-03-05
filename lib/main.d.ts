@@ -2,6 +2,7 @@ import { LanguageClient, ServerOptions, LanguageClientOptions as VSLanguageClien
 import { Ic2p } from './codeConverter';
 import * as protocol from './protocol';
 import { Ip2c } from './protocolConverter';
+export declare function ensure<T, K extends keyof T>(target: T, key: K): T[K];
 export interface ISqlopsFeature {
     new (client: SqlOpsDataClient): any;
 }
