@@ -14,7 +14,7 @@ import * as protocol from './protocol';
 import * as types from './types';
 import { Ip2c, p2c } from './protocolConverter';
 
-function ensure<T, K extends keyof T>(target: T, key: K): T[K] {
+export function ensure<T, K extends keyof T>(target: T, key: K): T[K] {
 	if (target[key] === void 0) {
 		target[key] = {} as any;
 	}
