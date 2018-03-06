@@ -21,14 +21,14 @@ function ensure<T, K extends keyof T>(target: T, key: K): T[K] {
 	return target[key];
 }
 
-export interface ISqlopsFeature {
+export interface ISqlOpsFeature {
 	new (client: SqlOpsDataClient);
 }
 
 export interface ClientOptions extends VSLanguageClientOptions {
 	providerId: string;
 	serverConnectionMetadata: any;
-	features?: Array<ISqlopsFeature>;
+	features?: Array<ISqlOpsFeature>;
 }
 
 /**
@@ -1269,7 +1269,7 @@ export class ProfilerFeature extends SqlOpsFeature<undefined> {
  */
 export class SqlOpsDataClient extends LanguageClient {
 
-	private static readonly defaultFeatures: Array<ISqlopsFeature> = [
+	private static readonly defaultFeatures: Array<ISqlOpsFeature> = [
 		ConnectionFeature,
 		CapabilitiesFeature,
 		QueryFeature,
@@ -1303,7 +1303,7 @@ export class SqlOpsDataClient extends LanguageClient {
 	public constructor(name: string, serverOptions: ServerOptions, clientOptions: ClientOptions, forceDebug?: boolean);
 	public constructor(id: string, name: string, serverOptions: ServerOptions, clientOptions: ClientOptions, forceDebug?: boolean);
 	public constructor(arg1: string, arg2: ServerOptions | string, arg3: ClientOptions | ServerOptions, arg4?: boolean | ClientOptions, arg5?: boolean) {
-		let features: Array<ISqlopsFeature>;
+		let features: Array<ISqlOpsFeature>;
 		if (is.string(arg2)) {
 			super(arg1, arg2, arg3 as ServerOptions, arg4 as ClientOptions, arg5);
 			this._providerId = (arg4 as ClientOptions).providerId;
@@ -1318,7 +1318,7 @@ export class SqlOpsDataClient extends LanguageClient {
 		this.registerSqlopsFeatures(features || SqlOpsDataClient.defaultFeatures);
 	}
 
-	private registerSqlopsFeatures(features: Array<ISqlopsFeature>) {
+	private registerSqlopsFeatures(features: Array<ISqlOpsFeature>) {
 		features.map(f => {
 			this.registerFeature(new f(this));
 		});
