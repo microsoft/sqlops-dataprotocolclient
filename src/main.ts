@@ -776,9 +776,14 @@ class AgentServicesFeature extends SqlOpsFeature<undefined> {
 			);
 		};
 
+		let getJobHistory = (connectionUri: string, jobID: string): Thenable<sqlops.AgentJobHistoryResult> => {
+			return undefined;
+		}
+
 		return sqlops.dataprotocol.registerAgentServicesProvider({
 			providerId: client.providerId,
-			getJobs
+			getJobs,
+			getJobHistory
 		});
 	}
 }
