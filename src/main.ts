@@ -769,7 +769,7 @@ class AgentServicesFeature extends SqlOpsFeature<undefined> {
 	protected registerProvider(options: undefined): Disposable {
 		const client = this._client;
 
-		let getJobs = (ownerUri: string): Thenable<sqlops.AgentJobInfo[]> => {
+		let getJobs = (ownerUri: string): Thenable<sqlops.AgentJobsResult> => {
 			let params: types.AgentJobsParams = { ownerUri };
 			return client.sendRequest(protocol.AgentJobsRequest.type, params).then(
 				r => r,
