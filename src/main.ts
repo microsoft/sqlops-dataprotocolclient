@@ -21,9 +21,13 @@ function ensure<T, K extends keyof T>(target: T, key: K): T[K] {
 	return target[key];
 }
 
-export interface LanguageClientOptions extends VSLanguageClientOptions {
+export interface ISqlOpsFeature {
+	new (client: SqlOpsDataClient);
+}
+
+export interface ClientOptions extends VSLanguageClientOptions {
 	providerId: string;
-	serverConnectionMetadata: any;
+	features?: Array<ISqlOpsFeature>;
 }
 
 /**
@@ -83,7 +87,7 @@ export abstract class SqlOpsFeature<T> implements DynamicFeature<T> {
 	}
 }
 
-class CapabilitiesFeature extends SqlOpsFeature<undefined> {
+export class CapabilitiesFeature extends SqlOpsFeature<undefined> {
 
 	private static readonly messagesTypes: RPCMessageType[] = [
 		protocol.CapabiltiesDiscoveryRequest.type
@@ -124,7 +128,7 @@ class CapabilitiesFeature extends SqlOpsFeature<undefined> {
 	}
 }
 
-class ConnectionFeature extends SqlOpsFeature<undefined> {
+export class ConnectionFeature extends SqlOpsFeature<undefined> {
 
 	private static readonly messagesTypes: RPCMessageType[] = [
 		protocol.ConnectionRequest.type,
@@ -264,7 +268,7 @@ class ConnectionFeature extends SqlOpsFeature<undefined> {
 	}
 }
 
-class QueryFeature extends SqlOpsFeature<undefined> {
+export class QueryFeature extends SqlOpsFeature<undefined> {
 	private static readonly messagesTypes: RPCMessageType[] = [
 		protocol.QueryExecuteRequest.type,
 		protocol.QueryCancelRequest.type,
@@ -581,7 +585,7 @@ class QueryFeature extends SqlOpsFeature<undefined> {
 	}
 }
 
-class MetadataFeature extends SqlOpsFeature<undefined> {
+export class MetadataFeature extends SqlOpsFeature<undefined> {
 	private static readonly messagesTypes: RPCMessageType[] = [
 		protocol.MetadataQueryRequest.type,
 		protocol.ListDatabasesRequest.type,
@@ -661,7 +665,7 @@ class MetadataFeature extends SqlOpsFeature<undefined> {
 	}
 }
 
-class AdminServicesFeature extends SqlOpsFeature<undefined> {
+export class AdminServicesFeature extends SqlOpsFeature<undefined> {
 	private static readonly messagesTypes: RPCMessageType[] = [
 		protocol.CreateDatabaseRequest.type,
 		protocol.DefaultDatabaseInfoRequest.type,
@@ -843,7 +847,7 @@ class BackupFeature extends SqlOpsFeature<undefined> {
 	}
 }
 
-class RestoreFeature extends SqlOpsFeature<undefined> {
+export class RestoreFeature extends SqlOpsFeature<undefined> {
 	private static readonly messagesTypes: RPCMessageType[] = [
 		protocol.RestorePlanRequest.type,
 		protocol.RestoreRequest.type,
@@ -923,7 +927,7 @@ class RestoreFeature extends SqlOpsFeature<undefined> {
 	}
 }
 
-class ObjectExplorerFeature extends SqlOpsFeature<undefined> {
+export class ObjectExplorerFeature extends SqlOpsFeature<undefined> {
 	private static readonly messagesTypes: RPCMessageType[] = [
 		protocol.ObjectExplorerCreateSessionRequest.type,
 		protocol.ObjectExplorerExpandRequest.type,
@@ -1010,7 +1014,7 @@ class ObjectExplorerFeature extends SqlOpsFeature<undefined> {
 	}
 }
 
-class ScriptingFeature extends SqlOpsFeature<undefined> {
+export class ScriptingFeature extends SqlOpsFeature<undefined> {
 	private static readonly messagesTypes: RPCMessageType[] = [
 		protocol.ScriptingRequest.type,
 		protocol.ScriptingCompleteNotification.type
@@ -1057,7 +1061,7 @@ class ScriptingFeature extends SqlOpsFeature<undefined> {
 	}
 }
 
-class TaskServicesFeature extends SqlOpsFeature<undefined> {
+export class TaskServicesFeature extends SqlOpsFeature<undefined> {
 	private static readonly messagesTypes: RPCMessageType[] = [
 		protocol.ListTasksRequest.type,
 		protocol.CancelTaskRequest.type,
@@ -1122,7 +1126,7 @@ class TaskServicesFeature extends SqlOpsFeature<undefined> {
 	}
 }
 
-class FileBrowserFeature extends SqlOpsFeature<undefined> {
+export class FileBrowserFeature extends SqlOpsFeature<undefined> {
 	private static readonly messagesTypes: RPCMessageType[] = [
 		protocol.FileBrowserOpenRequest.type,
 		protocol.FileBrowserOpenedNotification.type,
@@ -1220,7 +1224,7 @@ class FileBrowserFeature extends SqlOpsFeature<undefined> {
 	}
 }
 
-class ProfilerFeature extends SqlOpsFeature<undefined> {
+export class ProfilerFeature extends SqlOpsFeature<undefined> {
 	private static readonly messagesTypes: RPCMessageType[] = [
 		protocol.StartProfilingRequest.type,
 		protocol.StopProfilingRequest.type,
@@ -1312,6 +1316,22 @@ class ProfilerFeature extends SqlOpsFeature<undefined> {
  */
 export class SqlOpsDataClient extends LanguageClient {
 
+	private static readonly defaultFeatures: Array<ISqlOpsFeature> = [
+		ConnectionFeature,
+		CapabilitiesFeature,
+		QueryFeature,
+		MetadataFeature,
+		AdminServicesFeature,
+		BackupFeature,
+		RestoreFeature,
+		ObjectExplorerFeature,
+		ScriptingFeature,
+		TaskServicesFeature,
+		FileBrowserFeature,
+		ProfilerFeature,
+		AgentServicesFeature
+	];
+
 	private _sqlc2p: Ic2p;
 	private _sqlp2c: Ip2c;
 	private _providerId: string;
@@ -1328,34 +1348,27 @@ export class SqlOpsDataClient extends LanguageClient {
 		return this._providerId;
 	}
 
-	public constructor(name: string, serverOptions: ServerOptions, clientOptions: LanguageClientOptions, forceDebug?: boolean);
-	public constructor(id: string, name: string, serverOptions: ServerOptions, clientOptions: LanguageClientOptions, forceDebug?: boolean);
-	public constructor(arg1: string, arg2: ServerOptions | string, arg3: LanguageClientOptions | ServerOptions, arg4?: boolean | LanguageClientOptions, arg5?: boolean) {
+	public constructor(name: string, serverOptions: ServerOptions, clientOptions: ClientOptions, forceDebug?: boolean);
+	public constructor(id: string, name: string, serverOptions: ServerOptions, clientOptions: ClientOptions, forceDebug?: boolean);
+	public constructor(arg1: string, arg2: ServerOptions | string, arg3: ClientOptions | ServerOptions, arg4?: boolean | ClientOptions, arg5?: boolean) {
+		let features: Array<ISqlOpsFeature>;
 		if (is.string(arg2)) {
-			super(arg1, arg2, arg3 as ServerOptions, arg4 as LanguageClientOptions, arg5);
-			this._providerId = (arg4 as LanguageClientOptions).providerId;
+			super(arg1, arg2, arg3 as ServerOptions, arg4 as ClientOptions, arg5);
+			this._providerId = (arg4 as ClientOptions).providerId;
+			features = (arg4 as ClientOptions).features;
 		} else {
-			super(arg1, arg2 as ServerOptions, arg3 as LanguageClientOptions, arg4 as boolean);
-			this._providerId = (arg3 as LanguageClientOptions).providerId;
+			super(arg1, arg2 as ServerOptions, arg3 as ClientOptions, arg4 as boolean);
+			this._providerId = (arg3 as ClientOptions).providerId;
+			features = (arg3 as ClientOptions).features;
 		}
 		this._sqlc2p = c2p;
 		this._sqlp2c = p2c;
-		this.registerDataFeatures();
+		this.registerSqlopsFeatures(features || SqlOpsDataClient.defaultFeatures);
 	}
 
-	private registerDataFeatures() {
-		this.registerFeature(new ConnectionFeature(this));
-		this.registerFeature(new CapabilitiesFeature(this));
-		this.registerFeature(new QueryFeature(this));
-		this.registerFeature(new MetadataFeature(this));
-		this.registerFeature(new AdminServicesFeature(this));
-		this.registerFeature(new BackupFeature(this));
-		this.registerFeature(new RestoreFeature(this));
-		this.registerFeature(new ObjectExplorerFeature(this));
-		this.registerFeature(new ScriptingFeature(this));
-		this.registerFeature(new TaskServicesFeature(this));
-		this.registerFeature(new FileBrowserFeature(this));
-		this.registerFeature(new ProfilerFeature(this));
-		this.registerFeature(new AgentServicesFeature(this));
+	private registerSqlopsFeatures(features: Array<ISqlOpsFeature>) {
+		features.map(f => {
+			this.registerFeature(new f(this));
+		});
 	}
 }
