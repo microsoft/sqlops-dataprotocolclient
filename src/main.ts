@@ -27,7 +27,6 @@ export interface ISqlOpsFeature {
 
 export interface ClientOptions extends VSLanguageClientOptions {
 	providerId: string;
-	serverConnectionMetadata: any;
 	features?: Array<ISqlOpsFeature>;
 }
 
