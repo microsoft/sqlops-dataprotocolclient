@@ -35,6 +35,17 @@ export interface CloseSessionResponse {
     success: boolean;
     sessionId: string;
 }
+export interface FindNodesParams {
+    sessionId: string;
+    type: string;
+    schema: string;
+    name: string;
+    database: string;
+    parentObjectNames: string[];
+}
+export interface FindNodesResponse {
+    nodes: NodeInfo[];
+}
 export interface CategoryValue {
     displayName: string;
     name: string;

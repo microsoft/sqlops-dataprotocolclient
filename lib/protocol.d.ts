@@ -344,6 +344,9 @@ export declare namespace ObjectExplorerRefreshRequest {
 export declare namespace ObjectExplorerCloseSessionRequest {
     const type: RequestType<types.CloseSessionParams, types.CloseSessionResponse, void, void>;
 }
+export declare namespace ObjectExplorerFindNodesRequest {
+    const type: RequestType<types.FindNodesParams, types.FindNodesResponse, void, void>;
+}
 export declare namespace ObjectExplorerCreateSessionCompleteNotification {
     const type: NotificationType<types.SessionCreatedParameters, void>;
 }
