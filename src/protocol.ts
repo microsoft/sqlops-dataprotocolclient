@@ -570,7 +570,11 @@ export namespace GetDatabaseInfoRequest {
 // ------------------------------- < Agent Service Events > ------------------------------------
 
 export namespace AgentJobsRequest {
-	export const type = new RequestType<types.AgentJobsParams, types.AgentJobsResponse, void, void>('agent/jobs');
+	export const type = new RequestType<types.AgentJobsParams, types.AgentJobsResult, void, void>('agent/jobs');
+}
+
+export namespace AgentJobHistoryRequest {
+	export const type = new RequestType<types.AgentJobHistoryParams, types.AgentJobHistoryResult, void, void>('agent/jobhistory');
 }
 
 
