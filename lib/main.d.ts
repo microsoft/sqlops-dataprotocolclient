@@ -113,7 +113,7 @@ export declare class ProfilerFeature extends SqlOpsFeature<undefined> {
  *
  */
 export declare class SqlOpsDataClient extends LanguageClient {
-    private static readonly defaultFeatures;
+    static readonly defaultFeatures: Array<ISqlOpsFeature>;
     private _sqlc2p;
     private _sqlp2c;
     private _providerId;
