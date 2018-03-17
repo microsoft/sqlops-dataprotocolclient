@@ -1280,7 +1280,7 @@ export class ProfilerFeature extends SqlOpsFeature<undefined> {
  */
 export class SqlOpsDataClient extends LanguageClient {
 
-	private static readonly defaultFeatures: Array<ISqlOpsFeature> = [
+	public static readonly defaultFeatures: Array<ISqlOpsFeature> = [
 		ConnectionFeature,
 		CapabilitiesFeature,
 		QueryFeature,
