@@ -285,19 +285,31 @@ export interface BackupConfigInfoResponse {
 
 export interface CreateLoginParams {
 	ownerUri: string;
-
 	loginInfo: sqlops.LoginInfo;
 }
 
 // Job Management types
 export interface AgentJobsParams {
 	ownerUri: string;
+	jobId: string;
 }
 
-export interface AgentJobsResponse {
-	jobInfo: sqlops.AgentJobInfo[];
+export interface AgentJobsResult {
+	succeeded: boolean;
+	errorMessage: string;
+	jobs: sqlops.AgentJobInfo[];
 }
 
+export interface AgentJobHistoryParams {
+	ownerUri: string;
+	jobId: string;
+}
+
+export interface AgentJobHistoryResult {
+	succeeded: boolean;
+	errorMessage: string;
+	jobs: sqlops.AgentJobHistoryInfo[];
+}
 
 // Disaster Recovery types
 
