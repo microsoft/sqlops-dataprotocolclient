@@ -577,6 +577,10 @@ export namespace AgentJobHistoryRequest {
 	export const type = new RequestType<types.AgentJobHistoryParams, types.AgentJobHistoryResult, void, void>('agent/jobhistory');
 }
 
+export namespace AgentJobActionRequest {
+	export const type = new RequestType<types.AgentJobActionParams, types.AgentJobActionResult, void, void>('agent/jobaction');
+}
+
 
 // ------------------------------- < Disaster Recovery Events > ------------------------------------
 

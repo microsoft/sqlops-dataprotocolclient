@@ -749,7 +749,8 @@ export class AdminServicesFeature extends SqlOpsFeature<undefined> {
 class AgentServicesFeature extends SqlOpsFeature<undefined> {
 	private static readonly messagesTypes: RPCMessageType[] = [
 		protocol.AgentJobsRequest.type,
-		protocol.AgentJobHistoryRequest.type
+		protocol.AgentJobHistoryRequest.type,
+		protocol.AgentJobActionRequest.type
 	];
 
 	constructor(client: SqlOpsDataClient) {
@@ -790,12 +791,24 @@ class AgentServicesFeature extends SqlOpsFeature<undefined> {
 					return Promise.resolve(undefined);
 				}
 			);
-		}
+		};
+
+		let jobAction = (connectionUri: string, jobName: string, action: string): Thenable<sqlops.AgentJobActionResult> => {
+			let params: types.AgentJobActionParams = { ownerUri: connectionUri, jobName: jobName, action: action };
+			return client.sendRequest(protocol.AgentJobActionRequest.type, params).then(
+				r => r,
+				e => {
+					client.logFailedRequest(protocol.AgentJobActionRequest.type, e);
+					return Promise.resolve(undefined);
+				}
+			);
+		};
 
 		return sqlops.dataprotocol.registerAgentServicesProvider({
 			providerId: client.providerId,
 			getJobs,
-			getJobHistory
+			getJobHistory,
+			jobAction
 		});
 	}
 }

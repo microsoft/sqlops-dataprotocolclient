@@ -311,6 +311,18 @@ export interface AgentJobHistoryResult {
 	jobs: sqlops.AgentJobHistoryInfo[];
 }
 
+export interface AgentJobActionParams {
+	ownerUri: string;
+	jobName: string;
+	action: string;
+}
+
+export interface AgentJobActionResult {
+	succeeded: boolean;
+	errorMessage: string;
+}
+
+
 // Disaster Recovery types
 
 export interface BackupInfo {
