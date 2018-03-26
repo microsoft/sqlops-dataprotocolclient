@@ -517,6 +517,10 @@ export namespace ObjectExplorerCloseSessionRequest {
 	export const type = new RequestType<types.CloseSessionParams, types.CloseSessionResponse, void, void>('objectexplorer/closesession');
 }
 
+export namespace ObjectExplorerFindNodesRequest {
+	export const type = new RequestType<types.FindNodesParams, types.FindNodesResponse, void, void>('objectexplorer/findnodes');
+}
+
 // ------------------------------- < Object Explorer Events > ------------------------------------
 
 

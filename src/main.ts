@@ -955,7 +955,8 @@ export class ObjectExplorerFeature extends SqlOpsFeature<undefined> {
 		protocol.ObjectExplorerRefreshRequest.type,
 		protocol.ObjectExplorerCloseSessionRequest.type,
 		protocol.ObjectExplorerCreateSessionCompleteNotification.type,
-		protocol.ObjectExplorerExpandCompleteNotification.type
+		protocol.ObjectExplorerExpandCompleteNotification.type,
+		protocol.ObjectExplorerFindNodesRequest.type
 	];
 
 	constructor(client: SqlOpsDataClient) {
@@ -1015,6 +1016,16 @@ export class ObjectExplorerFeature extends SqlOpsFeature<undefined> {
 			);
 		};
 
+		let findNodes = (findNodesInfo: sqlops.FindNodesInfo): Thenable<any> => {
+			return client.sendRequest(protocol.ObjectExplorerFindNodesRequest.type, findNodesInfo).then(
+				r => r,
+				e => {
+					client.logFailedRequest(protocol.ObjectExplorerFindNodesRequest.type, e);
+					return Promise.resolve(undefined);
+				}
+			)
+		}
+
 		let registerOnSessionCreated = (handler: (response: sqlops.ObjectExplorerSession) => any): void => {
 			client.onNotification(protocol.ObjectExplorerCreateSessionCompleteNotification.type, handler);
 		};
@@ -1029,6 +1040,7 @@ export class ObjectExplorerFeature extends SqlOpsFeature<undefined> {
 			createNewSession,
 			expandNode,
 			refreshNode,
+			findNodes,
 			registerOnExpandCompleted,
 			registerOnSessionCreated
 		});
@@ -1337,7 +1349,7 @@ export class ProfilerFeature extends SqlOpsFeature<undefined> {
  */
 export class SqlOpsDataClient extends LanguageClient {
 
-	private static readonly defaultFeatures: Array<ISqlOpsFeature> = [
+	public static readonly defaultFeatures: Array<ISqlOpsFeature> = [
 		ConnectionFeature,
 		CapabilitiesFeature,
 		QueryFeature,
