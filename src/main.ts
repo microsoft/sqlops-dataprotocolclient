@@ -745,7 +745,76 @@ export class AdminServicesFeature extends SqlOpsFeature<undefined> {
 	}
 }
 
-export class BackupFeature extends SqlOpsFeature<undefined> {
+
+class AgentServicesFeature extends SqlOpsFeature<undefined> {
+	private static readonly messagesTypes: RPCMessageType[] = [
+		protocol.AgentJobsRequest.type,
+		protocol.AgentJobHistoryRequest.type,
+		protocol.AgentJobActionRequest.type
+	];
+
+	constructor(client: SqlOpsDataClient) {
+		super(client, AgentServicesFeature.messagesTypes);
+	}
+
+	public fillClientCapabilities(capabilities: protocol.ClientCapabilities): void {
+		ensure(ensure(capabilities, 'connection')!, 'agentServices')!.dynamicRegistration = true;
+	}
+
+	public initialize(capabilities: ServerCapabilities): void {
+		this.register(this.messages, {
+			id: UUID.generateUuid(),
+			registerOptions: undefined
+		});
+	}
+
+	protected registerProvider(options: undefined): Disposable {
+		const client = this._client;
+
+		let getJobs = (ownerUri: string): Thenable<sqlops.AgentJobsResult> => {
+			let params: types.AgentJobsParams = { ownerUri: ownerUri, jobId: null };
+			return client.sendRequest(protocol.AgentJobsRequest.type, params).then(
+				r => r,
+				e => {
+					client.logFailedRequest(protocol.AgentJobsRequest.type, e);
+					return Promise.resolve(undefined);
+				}
+			);
+		};
+
+		let getJobHistory = (connectionUri: string, jobID: string): Thenable<sqlops.AgentJobHistoryResult> => {
+			let params: types.AgentJobHistoryParams = { ownerUri: connectionUri, jobId: jobID };
+			return client.sendRequest(protocol.AgentJobHistoryRequest.type, params).then(
+				r => r,
+				e => {
+					client.logFailedRequest(protocol.AgentJobHistoryRequest.type, e);
+					return Promise.resolve(undefined);
+				}
+			);
+		};
+
+		let jobAction = (connectionUri: string, jobName: string, action: string): Thenable<sqlops.AgentJobActionResult> => {
+			let params: types.AgentJobActionParams = { ownerUri: connectionUri, jobName: jobName, action: action };
+			return client.sendRequest(protocol.AgentJobActionRequest.type, params).then(
+				r => r,
+				e => {
+					client.logFailedRequest(protocol.AgentJobActionRequest.type, e);
+					return Promise.resolve(undefined);
+				}
+			);
+		};
+
+		return sqlops.dataprotocol.registerAgentServicesProvider({
+			providerId: client.providerId,
+			getJobs,
+			getJobHistory,
+			jobAction
+		});
+	}
+}
+
+
+class BackupFeature extends SqlOpsFeature<undefined> {
 	private static readonly messagesTypes: RPCMessageType[] = [
 		protocol.BackupRequest.type,
 		protocol.BackupConfigInfoRequest.type
@@ -1292,7 +1361,8 @@ export class SqlOpsDataClient extends LanguageClient {
 		ScriptingFeature,
 		TaskServicesFeature,
 		FileBrowserFeature,
-		ProfilerFeature
+		ProfilerFeature,
+		AgentServicesFeature
 	];
 
 	private _sqlc2p: Ic2p;

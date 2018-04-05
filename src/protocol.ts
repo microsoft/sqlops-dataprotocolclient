@@ -76,6 +76,12 @@ export interface ConnectionClientCapabilities {
 		 */
 		dynamicRegistration?: boolean;
 	};
+	agentServices?: {
+		/**
+		 *
+		 */
+		dynamicRegistration?: boolean;
+	};
 }
 
 export interface ClientCapabilities extends VSClientCapabilities {
@@ -564,6 +570,21 @@ export namespace CreateLoginRequest {
 export namespace GetDatabaseInfoRequest {
 	export const type = new RequestType<types.GetDatabaseInfoParams, types.GetDatabaseInfoResponse, void, void>('admin/getdatabaseinfo');
 }
+
+// ------------------------------- < Agent Service Events > ------------------------------------
+
+export namespace AgentJobsRequest {
+	export const type = new RequestType<types.AgentJobsParams, types.AgentJobsResult, void, void>('agent/jobs');
+}
+
+export namespace AgentJobHistoryRequest {
+	export const type = new RequestType<types.AgentJobHistoryParams, types.AgentJobHistoryResult, void, void>('agent/jobhistory');
+}
+
+export namespace AgentJobActionRequest {
+	export const type = new RequestType<types.AgentJobActionParams, types.AgentJobActionResult, void, void>('agent/jobaction');
+}
+
 
 // ------------------------------- < Disaster Recovery Events > ------------------------------------
 
