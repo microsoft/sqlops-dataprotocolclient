@@ -494,9 +494,9 @@ export class QueryFeature extends SqlOpsFeature<undefined> {
 			);
 		};
 
-		let initializeEdit = (ownerUri: string, schemaName: string, objectName: string, objectType: string, LimitResults: number): Thenable<void> => {
+		let initializeEdit = (ownerUri: string, schemaName: string, objectName: string, objectType: string, LimitResults: number, queryString: string): Thenable<void> => {
 			let filters: sqlops.EditInitializeFiltering = { LimitResults };
-			let params: sqlops.EditInitializeParams = { ownerUri, schemaName, objectName, objectType, filters };
+			let params: sqlops.EditInitializeParams = { ownerUri, schemaName, objectName, objectType, filters, queryString };
 			return client.sendRequest(protocol.EditInitializeRequest.type, params).then(
 				r => undefined,
 				e => {
