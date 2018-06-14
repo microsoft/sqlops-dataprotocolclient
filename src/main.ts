@@ -1242,8 +1242,18 @@ export class ProfilerFeature extends SqlOpsFeature<undefined> {
 			);
 		};
 
-		let pauseSession = (sessionId: string): Thenable<boolean> => {
-			return undefined;
+		let pauseSession = (ownerUri: string): Thenable<boolean> => {
+			let params: types.PauseProfilingParams = {
+				ownerUri
+			};
+
+			return client.sendRequest(protocol.PauseProfilingRequest.type, params).then(
+				r => true,
+				e => {
+					client.logFailedRequest(protocol.PauseProfilingRequest.type, e);
+					return Promise.reject(e);
+				}
+			);
 		};
 
 		let connectSession = (sessionId: string): Thenable<boolean> => {
@@ -1267,10 +1277,10 @@ export class ProfilerFeature extends SqlOpsFeature<undefined> {
 			providerId: client.providerId,
 			connectSession,
 			disconnectSession,
-			pauseSession,
 			registerOnSessionEventsAvailable,
 			startSession,
-			stopSession
+			stopSession,
+			pauseSession
 		});
 	}
 }
