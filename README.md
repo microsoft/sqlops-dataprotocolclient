@@ -3,7 +3,7 @@
 
 ```bash
 git clone https://github.com/Microsoft/sqlops-dataprotocolclient.git
-cd sqlops-dataprotocolclient.git
+cd sqlops-dataprotocolclient
 yarn
 yarn run watch
 ```
