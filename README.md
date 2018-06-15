@@ -1,4 +1,13 @@
 
+# Build and Run From Source
+
+```bash
+git clone https://github.com/Microsoft/sqlops-dataprotocolclient.git
+cd sqlops-dataprotocolclient.git
+yarn
+yarn run watch
+```
+
 # Contributing
 
 This project welcomes contributions and suggestions.  Most contributions require you to agree to a
