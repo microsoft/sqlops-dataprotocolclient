@@ -422,6 +422,9 @@ export declare namespace StartProfilingRequest {
 export declare namespace StopProfilingRequest {
     const type: RequestType<types.StopProfilingParams, types.StopProfilingResponse, void, void>;
 }
+export declare namespace PauseProfilingRequest {
+    const type: RequestType<types.PauseProfilingParams, types.PauseProfilingResponse, void, void>;
+}
 export declare namespace ProfilerEventsAvailableNotification {
     const type: NotificationType<types.ProfilerEventsAvailableParams, void>;
 }
