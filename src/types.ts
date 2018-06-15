@@ -861,7 +861,7 @@ export interface StartProfilingResponse {
 }
 
 /**
- * Parameters to start a profiler session
+ * Parameters to stop a profiler session
  */
 export interface StopProfilingParams {
 	/**
@@ -870,10 +870,19 @@ export interface StopProfilingParams {
 	ownerUri: string;
 }
 
-export interface StopProfilingResponse {
-	succeeded: string;
-	errorMessage: string;
+export interface StopProfilingResponse {}
+
+/**
+ * Parameters to pause a profiler session
+ */
+export interface PauseProfilingParams {
+	/**
+	 * Session Owner URI
+	 */
+	ownerUri: string;
 }
+
+export interface PauseProfilingResponse {}
 
 /**
  * Profiler Event

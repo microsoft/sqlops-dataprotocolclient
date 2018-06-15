@@ -632,6 +632,10 @@ export namespace StopProfilingRequest {
 	export const type = new RequestType<types.StopProfilingParams, types.StopProfilingResponse, void, void>('profiler/stop');
 }
 
+export namespace PauseProfilingRequest {
+	export const type = new RequestType<types.PauseProfilingParams, types.PauseProfilingResponse, void, void>('profiler/pause');
+}
+
 export namespace ProfilerEventsAvailableNotification {
 	export const type = new NotificationType<types.ProfilerEventsAvailableParams, void>('profiler/eventsavailable');
 }
