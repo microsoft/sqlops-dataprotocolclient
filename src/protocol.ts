@@ -639,3 +639,7 @@ export namespace PauseProfilingRequest {
 export namespace ProfilerEventsAvailableNotification {
 	export const type = new NotificationType<types.ProfilerEventsAvailableParams, void>('profiler/eventsavailable');
 }
+
+export namespace ProfilerSessionStoppedNotification {
+	export const type = new NotificationType<types.ProfilerSessionStoppedParams, void>('profiler/sessionstopped');
+}
