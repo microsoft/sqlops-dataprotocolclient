@@ -1268,16 +1268,29 @@ export class ProfilerFeature extends SqlOpsFeature<undefined> {
 			client.onNotification(protocol.ProfilerEventsAvailableNotification.type, (params: types.ProfilerEventsAvailableParams) => {
 				handler(<sqlops.ProfilerSessionEvents>{
 					sessionId: params.ownerUri,
-					events: params.events
+					events: params.events,
+					eventsLost: params.eventsLost
 				});
 			});
 		};
+
+		
+		let registerOnSessionStopped = (handler: (response: sqlops.ProfilerSessionStoppedParams) => any): void => {
+			client.onNotification(protocol.ProfilerSessionStoppedNotification.type, (params: types.ProfilerSessionStoppedParams) => {
+				handler(<sqlops.ProfilerSessionStoppedParams>{
+					ownerUri: params.ownerUri,
+					sessionId: params.sessionId,
+				});
+			});
+		};
+		
 
 		return sqlops.dataprotocol.registerProfilerProvider({
 			providerId: client.providerId,
 			connectSession,
 			disconnectSession,
 			registerOnSessionEventsAvailable,
+			registerOnSessionStopped,
 			startSession,
 			stopSession,
 			pauseSession

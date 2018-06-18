@@ -917,4 +917,24 @@ export interface ProfilerEventsAvailableParams {
 	 * New profiler events available
 	 */
 	events: ProfilerEvent[];
+
+	/**
+	 * If events may have been dropped
+	 */
+	eventsLost: boolean;
+}
+
+/**
+ * Profiler events available notification parameters
+ */
+export interface ProfilerSessionStoppedParams {
+	/**
+	 * Session owner URI
+	 */
+	ownerUri: string;
+
+	/**
+	 * Stopped session Id
+	 */
+	sessionId: number;
 }
