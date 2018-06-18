@@ -428,3 +428,6 @@ export declare namespace PauseProfilingRequest {
 export declare namespace ProfilerEventsAvailableNotification {
     const type: NotificationType<types.ProfilerEventsAvailableParams, void>;
 }
+export declare namespace ProfilerSessionStoppedNotification {
+    const type: NotificationType<types.ProfilerSessionStoppedParams, void>;
+}
