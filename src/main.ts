@@ -366,8 +366,8 @@ export class QueryFeature extends SqlOpsFeature<undefined> {
 			);
 		};
 
-		let runQueryAndReturn = (ownerUri: string, queryString: string): Thenable<sqlops.SimpleExecuteResult> => {
-			let params: sqlops.SimpleExecuteParams = { ownerUri, queryString };
+		let runQueryAndReturn = (ownerUri: string, queryString: string, isParse: boolean): Thenable<sqlops.SimpleExecuteResult> => {
+			let params: sqlops.SimpleExecuteParams = { ownerUri, queryString , isParse };
 			return client.sendRequest(protocol.SimpleExecuteRequest.type, params).then(
 				r => r,
 				e => {
