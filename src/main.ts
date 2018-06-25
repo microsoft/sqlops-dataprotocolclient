@@ -366,8 +366,8 @@ export class QueryFeature extends SqlOpsFeature<undefined> {
 			);
 		};
 
-		let runQueryAndReturn = (ownerUri: string, queryString: string, isParse: boolean): Thenable<sqlops.SimpleExecuteResult> => {
-			let params: sqlops.SimpleExecuteParams = { ownerUri, queryString , isParse };
+		let runQueryAndReturn = (ownerUri: string, queryString: string): Thenable<sqlops.SimpleExecuteResult> => {
+			let params: sqlops.SimpleExecuteParams = { ownerUri, queryString };
 			return client.sendRequest(protocol.SimpleExecuteRequest.type, params).then(
 				r => r,
 				e => {
@@ -376,6 +376,17 @@ export class QueryFeature extends SqlOpsFeature<undefined> {
 				}
 			);
 		};
+
+		let parseSyntax = (ownerUri: string, query: string): Thenable<sqlops.SyntaxParseResult> => {
+			let params: sqlops.SyntaxParseParams = { ownerUri, query };
+			return client.sendRequest(protocol.SyntaxParseRequest.type, params).then(
+				r => r,
+				e => {
+					client.logFailedRequest(protocol.SyntaxParseRequest.type, e);
+					return Promise.reject(e);
+				}
+			)
+		}
 
 		let getQueryRows = (rowData: sqlops.QueryExecuteSubsetParams): Thenable<sqlops.QueryExecuteSubsetResult> => {
 			return client.sendRequest(protocol.QueryExecuteSubsetRequest.type, rowData).then(
@@ -577,6 +588,7 @@ export class QueryFeature extends SqlOpsFeature<undefined> {
 			revertRow,
 			runQuery,
 			runQueryAndReturn,
+			parseSyntax,
 			runQueryStatement,
 			runQueryString,
 			saveResults,

@@ -383,6 +383,11 @@ export namespace SaveResultsAsExcelRequest {
 }
 // --------------------------------- </ Save Results as Excel Request > ------------------------------------------
 
+// ------------------------------- < T-SQL Syntax Parse > -----------------------------------
+export namespace SyntaxParseRequest {
+	export const type = new RequestType<sqlops.SyntaxParseParams, sqlops.SyntaxParseResult, void, void>('query/syntaxparse');
+}
+
 // ------------------------------- < Execute and Return > -----------------------------------
 
 export namespace SimpleExecuteRequest {
