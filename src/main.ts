@@ -377,6 +377,17 @@ export class QueryFeature extends SqlOpsFeature<undefined> {
 			);
 		};
 
+		let parseSyntax = (ownerUri: string, query: string): Thenable<sqlops.SyntaxParseResult> => {
+			let params: sqlops.SyntaxParseParams = { ownerUri, query };
+			return client.sendRequest(protocol.SyntaxParseRequest.type, params).then(
+				r => r,
+				e => {
+					client.logFailedRequest(protocol.SyntaxParseRequest.type, e);
+					return Promise.reject(e);
+				}
+			)
+		}
+
 		let getQueryRows = (rowData: sqlops.QueryExecuteSubsetParams): Thenable<sqlops.QueryExecuteSubsetResult> => {
 			return client.sendRequest(protocol.QueryExecuteSubsetRequest.type, rowData).then(
 				r => r,
@@ -577,6 +588,7 @@ export class QueryFeature extends SqlOpsFeature<undefined> {
 			revertRow,
 			runQuery,
 			runQueryAndReturn,
+			parseSyntax,
 			runQueryStatement,
 			runQueryString,
 			saveResults,
