@@ -655,17 +655,40 @@ export declare class TableMetadata {
 /**
  * Parameters to start a profiler session
  */
+export interface CreateProfilerSessionParams {
+    /**
+     * Session Owner URI
+     */
+    ownerUri: string;
+    /**
+     * T-SQL to create the session
+     */
+    createStatement: string;
+    /**
+     * XEvent Session name
+     */
+    xEventSessionName: string;
+}
+export interface CreateProfilerSessionResponse {
+    xEventSessionId: string;
+    succeeded: string;
+    errorMessage: string;
+}
+/**
+ * Parameters to start a profiler session
+ */
 export interface StartProfilingParams {
     /**
      * Session Owner URI
      */
     ownerUri: string;
     /**
-     * Session options
+     * XEvent Session name
      */
-    options: {};
+    xEventSessionName: string;
 }
 export interface StartProfilingResponse {
+    xEventSessionId: string;
     succeeded: string;
     errorMessage: string;
 }
@@ -690,6 +713,20 @@ export interface PauseProfilingParams {
     ownerUri: string;
 }
 export interface PauseProfilingResponse {
+}
+/**
+ * Parameters to start a profiler session
+ */
+export interface ListAvailableSessionsParams {
+    /**
+     * Session Owner URI
+     */
+    ownerUri: string;
+}
+export interface ListAvailableSessionsResponse {
+    availableSessions: string[];
+    succeeded: string;
+    errorMessage: string;
 }
 /**
  * Profiler Event
@@ -728,7 +765,7 @@ export interface ProfilerEventsAvailableParams {
 /**
  * Profiler events available notification parameters
  */
-export interface ProfilerSessionStoppedParams {
+export interface ProfilerSessionStoppedNotification {
     /**
      * Session owner URI
      */
@@ -736,5 +773,5 @@ export interface ProfilerSessionStoppedParams {
     /**
      * Stopped session Id
      */
-    sessionId: number;
+    xEventSessionId: string;
 }

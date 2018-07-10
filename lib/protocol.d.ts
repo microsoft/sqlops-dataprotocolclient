@@ -416,6 +416,9 @@ export declare namespace FileBrowserValidatedNotification {
 export declare namespace FileBrowserCloseRequest {
     const type: RequestType<types.FileBrowserCloseParams, sqlops.FileBrowserCloseResponse, void, void>;
 }
+export declare namespace CreateProfilerSessionRequest {
+    const type: RequestType<types.CreateProfilerSessionParams, types.CreateProfilerSessionResponse, void, void>;
+}
 export declare namespace StartProfilingRequest {
     const type: RequestType<types.StartProfilingParams, types.StartProfilingResponse, void, void>;
 }
@@ -425,9 +428,12 @@ export declare namespace StopProfilingRequest {
 export declare namespace PauseProfilingRequest {
     const type: RequestType<types.PauseProfilingParams, types.PauseProfilingResponse, void, void>;
 }
+export declare namespace ListAvailableSessionsRequest {
+    const type: RequestType<types.ListAvailableSessionsParams, types.ListAvailableSessionsResponse, void, void>;
+}
 export declare namespace ProfilerEventsAvailableNotification {
     const type: NotificationType<types.ProfilerEventsAvailableParams, void>;
 }
 export declare namespace ProfilerSessionStoppedNotification {
-    const type: NotificationType<types.ProfilerSessionStoppedParams, void>;
+    const type: NotificationType<types.ProfilerSessionStoppedNotification, void>;
 }

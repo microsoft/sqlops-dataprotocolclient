@@ -1213,14 +1213,30 @@ export class ProfilerFeature extends SqlOpsFeature<undefined> {
 	protected registerProvider(options: undefined): Disposable {
 		const client = this._client;
 
-		let startSession = (ownerUri: string): Thenable<boolean> => {
+		let createSession = (ownerUri: string, createStatement: string, xEventSessionName: string): Thenable<sqlops.CreateProfilerSessionResponse> => {
+			let params: types.CreateProfilerSessionParams = {
+				ownerUri,
+				createStatement,
+				xEventSessionName
+			};
+
+			return client.sendRequest(protocol.CreateProfilerSessionRequest.type, params).then(
+				r => r,
+				e => {
+					client.logFailedRequest(protocol.CreateProfilerSessionRequest.type, e);
+					return Promise.reject(e);
+				}
+			);
+		};
+
+		let startSession = (ownerUri: string, xEventSessionName: string): Thenable<sqlops.StartProfilingResponse> => {
 			let params: types.StartProfilingParams = {
 				ownerUri,
-				options: {}
+				xEventSessionName
 			};
 
 			return client.sendRequest(protocol.StartProfilingRequest.type, params).then(
-				r => true,
+				r => r,
 				e => {
 					client.logFailedRequest(protocol.StartProfilingRequest.type, e);
 					return Promise.reject(e);
@@ -1256,6 +1272,20 @@ export class ProfilerFeature extends SqlOpsFeature<undefined> {
 			);
 		};
 
+		let listAvailableSessions = (ownerUri: string): Thenable<sqlops.ListAvailableSessionsResponse> => {
+			let params: types.ListAvailableSessionsParams = {
+				ownerUri
+			};
+
+			return client.sendRequest(protocol.ListAvailableSessionsRequest.type, params).then(
+				r => r,
+				e => {
+					client.logFailedRequest(protocol.ListAvailableSessionsRequest.type, e);
+					return Promise.reject(e);
+				}
+			);
+		};
+
 		let connectSession = (sessionId: string): Thenable<boolean> => {
 			return undefined;
 		};
@@ -1267,7 +1297,7 @@ export class ProfilerFeature extends SqlOpsFeature<undefined> {
 		let registerOnSessionEventsAvailable = (handler: (response: sqlops.ProfilerSessionEvents) => any): void => {
 			client.onNotification(protocol.ProfilerEventsAvailableNotification.type, (params: types.ProfilerEventsAvailableParams) => {
 				handler(<sqlops.ProfilerSessionEvents>{
-					sessionId: params.ownerUri,
+					profilerSessionId: params.ownerUri,
 					events: params.events,
 					eventsLost: params.eventsLost
 				});
@@ -1275,11 +1305,11 @@ export class ProfilerFeature extends SqlOpsFeature<undefined> {
 		};
 
 		
-		let registerOnSessionStopped = (handler: (response: sqlops.ProfilerSessionStoppedParams) => any): void => {
-			client.onNotification(protocol.ProfilerSessionStoppedNotification.type, (params: types.ProfilerSessionStoppedParams) => {
-				handler(<sqlops.ProfilerSessionStoppedParams>{
-					ownerUri: params.ownerUri,
-					sessionId: params.sessionId,
+		let registerOnSessionStopped = (handler: (response: sqlops.ProfilerSessionStoppedNotification) => any): void => {
+			client.onNotification(protocol.ProfilerSessionStoppedNotification.type, (params: types.ProfilerSessionStoppedNotification) => {
+				handler(<sqlops.ProfilerSessionStoppedNotification>{
+					profilerSessionId: params.ownerUri,
+					xEventSessionId: params.xEventSessionId
 				});
 			});
 		};
@@ -1291,6 +1321,8 @@ export class ProfilerFeature extends SqlOpsFeature<undefined> {
 			disconnectSession,
 			registerOnSessionEventsAvailable,
 			registerOnSessionStopped,
+			listAvailableSessions,
+			createSession,
 			startSession,
 			stopSession,
 			pauseSession
