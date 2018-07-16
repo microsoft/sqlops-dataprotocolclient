@@ -263,6 +263,9 @@ export declare namespace SaveResultsAsJsonRequest {
 export declare namespace SaveResultsAsExcelRequest {
     const type: RequestType<sqlops.SaveResultsRequestParams, sqlops.SaveResultRequestResult, void, void>;
 }
+export declare namespace SyntaxParseRequest {
+    const type: RequestType<sqlops.SyntaxParseParams, sqlops.SyntaxParseResult, void, void>;
+}
 export declare namespace SimpleExecuteRequest {
     const type: RequestType<sqlops.SimpleExecuteParams, sqlops.SimpleExecuteResult, void, void>;
 }
