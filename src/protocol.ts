@@ -641,6 +641,10 @@ export namespace PauseProfilingRequest {
 	export const type = new RequestType<types.PauseProfilingParams, types.PauseProfilingResponse, void, void>('profiler/pause');
 }
 
+export namespace GetXEventSessionsRequest {
+	export const type = new RequestType<types.GetXEventSessionsParams, types.GetXEventSessionsResponse, void, void>('profiler/getsessions');
+}
+
 export namespace ProfilerEventsAvailableNotification {
 	export const type = new NotificationType<types.ProfilerEventsAvailableParams, void>('profiler/eventsavailable');
 }

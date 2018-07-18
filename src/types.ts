@@ -850,15 +850,12 @@ export interface StartProfilingParams {
 	ownerUri: string;
 
 	/**
-	 * Session options
+	 * Session name
 	 */
-	options: {};
+	sessionName: string;
 }
 
-export interface StartProfilingResponse {
-	succeeded: string;
-	errorMessage: string;
-}
+export interface StartProfilingResponse {}
 
 /**
  * Parameters to stop a profiler session
@@ -883,6 +880,23 @@ export interface PauseProfilingParams {
 }
 
 export interface PauseProfilingResponse {}
+
+/**
+ * Parameters to get a list of XEvent sessions
+ */
+export interface GetXEventSessionsParams {
+	/**
+	 * Session Owner URI
+	 */
+	ownerUri: string;
+}
+
+export interface GetXEventSessionsResponse {
+	/**
+	 * List of all running XEvent Sessions on target server
+	 */
+	sessions: string[];
+}
 
 /**
  * Profiler Event
