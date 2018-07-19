@@ -629,6 +629,10 @@ export namespace FileBrowserCloseRequest {
 
 // ------------------------------- < Profiler Events > ------------------------------------
 
+export namespace CreateXEventSessionRequest {
+	export const type = new RequestType<types.CreateXEventSessionParams, types.CreateXEventSessionResponse, void, void>('profiler/createsession');
+}
+
 export namespace StartProfilingRequest {
 	export const type = new RequestType<types.StartProfilingParams, types.StartProfilingResponse, void, void>('profiler/start');
 }

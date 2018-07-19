@@ -1225,6 +1225,22 @@ export class ProfilerFeature extends SqlOpsFeature<undefined> {
 	protected registerProvider(options: undefined): Disposable {
 		const client = this._client;
 
+		let createSession = (ownerUri: string, createStatement:string, sessionName: string): Thenable<boolean> => {
+			let params: types.CreateXEventSessionParams = {
+				ownerUri,
+				createStatement,
+				sessionName
+			};
+
+			return client.sendRequest(protocol.CreateXEventSessionRequest.type, params).then(
+				r => true,
+				e => {
+					client.logFailedRequest(protocol.CreateXEventSessionRequest.type, e);
+					return Promise.reject(e);
+				}
+			);
+		}
+
 		let startSession = (ownerUri: string, sessionName: string): Thenable<boolean> => {
 			let params: types.StartProfilingParams = {
 				ownerUri,
@@ -1317,6 +1333,7 @@ export class ProfilerFeature extends SqlOpsFeature<undefined> {
 			disconnectSession,
 			registerOnSessionEventsAvailable,
 			registerOnSessionStopped,
+			createSession,
 			startSession,
 			stopSession,
 			pauseSession,

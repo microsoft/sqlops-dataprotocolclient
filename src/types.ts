@@ -843,6 +843,28 @@ export class TableMetadata {
 /**
  * Parameters to start a profiler session
  */
+export interface CreateXEventSessionParams {
+	/**
+	 * Session Owner URI
+	 */
+	ownerUri: string;
+
+	/**
+	 * T-SQL Create statement
+	 */
+	createStatement: string;
+
+	/**
+	 * Session name
+	 */
+	sessionName: string;
+}
+
+export interface CreateXEventSessionResponse {}
+
+/**
+ * Parameters to start a profiler session
+ */
 export interface StartProfilingParams {
 	/**
 	 * Session Owner URI
