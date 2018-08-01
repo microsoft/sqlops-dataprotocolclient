@@ -225,9 +225,10 @@ export class ConnectionFeature extends SqlOpsFeature<undefined> {
 			);
 		};
 
-		let getConnectionString = (ownerUri: string): Thenable<string> => {
+		let getConnectionString = (ownerUri: string, includePassword: boolean): Thenable<string> => {
 			let params: protocol.GetConnectionStringParams = {
-				ownerUri
+				ownerUri,
+				includePassword
 			};
 
 			return client.sendRequest(protocol.GetConnectionStringRequest.type, params).then(

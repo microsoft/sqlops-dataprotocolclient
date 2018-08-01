@@ -221,6 +221,9 @@ export namespace ListDatabasesRequest {
 export class GetConnectionStringParams {
 	// Connection key to lookup connection string for
 	public ownerUri: string;
+
+	// Indicates whether to include the password in the connection string
+	public includePassword: boolean;
 }
 
 // Get Connection String request callback declaration
