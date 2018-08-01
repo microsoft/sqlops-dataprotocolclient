@@ -138,6 +138,7 @@ export class ConnectionFeature extends SqlOpsFeature<undefined> {
 		protocol.CancelConnectRequest.type,
 		protocol.ChangeDatabaseRequest.type,
 		protocol.ListDatabasesRequest.type,
+		protocol.GetConnectionStringRequest.type,
 		protocol.LanguageFlavorChangedNotification.type
 	];
 
