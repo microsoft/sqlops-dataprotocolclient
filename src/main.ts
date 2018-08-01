@@ -225,6 +225,20 @@ export class ConnectionFeature extends SqlOpsFeature<undefined> {
 			);
 		};
 
+		let getConnectionString = (ownerUri: string): Thenable<string> => {
+			let params: protocol.GetConnectionStringParams = {
+				ownerUri
+			};
+
+			return client.sendRequest(protocol.GetConnectionStringRequest.type, params).then(
+				r => r,
+				e => {
+					client.logFailedRequest(protocol.GetConnectionStringRequest.type, e);
+					return Promise.resolve(undefined);
+				}
+			);
+		};
+
 		let rebuildIntelliSenseCache = (ownerUri: string): Thenable<void> => {
 			let params: protocol.RebuildIntelliSenseParams = {
 				ownerUri
@@ -260,6 +274,7 @@ export class ConnectionFeature extends SqlOpsFeature<undefined> {
 			cancelConnect,
 			changeDatabase,
 			listDatabases,
+			getConnectionString,
 			rebuildIntelliSenseCache,
 			registerOnConnectionChanged,
 			registerOnIntelliSenseCacheComplete,

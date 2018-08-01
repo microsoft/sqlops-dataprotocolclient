@@ -215,6 +215,19 @@ export namespace ListDatabasesRequest {
 	export const type = new RequestType<ListDatabasesParams, sqlops.ListDatabasesResult, void, void>('connection/listdatabases');
 }
 
+// ------------------------------- < Get Connection String Request > ---------------------------------------
+
+// Get Connection String request format
+export class GetConnectionStringParams {
+	// Connection key to lookup connection string for
+	public ownerUri: string;
+}
+
+// Get Connection String request callback declaration
+export namespace GetConnectionStringRequest {
+	export const type = new RequestType<GetConnectionStringParams, string, void, void>('connection/getconnectionstring');
+}
+
 // Language Flavor Changed ================================================================================
 
 /**
