@@ -656,3 +656,7 @@ export namespace ProfilerEventsAvailableNotification {
 export namespace ProfilerSessionStoppedNotification {
 	export const type = new NotificationType<types.ProfilerSessionStoppedParams, void>('profiler/sessionstopped');
 }
+
+export namespace ProfilerSessionCreatedNotification {
+	export const type = new NotificationType<types.ProfilerSessionCreatedParams, void>('profiler/sessioncreated');
+}

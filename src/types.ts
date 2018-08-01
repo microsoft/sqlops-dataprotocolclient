@@ -850,14 +850,14 @@ export interface CreateXEventSessionParams {
 	ownerUri: string;
 
 	/**
-	 * T-SQL Create statement
-	 */
-	createStatement: string;
-
-	/**
 	 * Session name
 	 */
 	sessionName: string;
+
+	/**
+	 * Profiler Session template
+	 */
+	template: ProfilerSessionTemplate;
 }
 
 export interface CreateXEventSessionResponse {}
@@ -941,6 +941,26 @@ export interface ProfilerEvent {
 }
 
 /**
+ * Profiler Session Template
+ */
+export interface ProfilerSessionTemplate {
+	/**
+	 * Template name
+	 */
+	name: string;
+
+	/**
+	 * Default view for template
+	 */
+	defaultView: string;
+
+	/**
+	 * TSQL for creating a session
+	 */
+	createStatement: string;
+}
+
+/**
  * Profiler events available notification parameters
  */
 export interface ProfilerEventsAvailableParams {
@@ -973,4 +993,24 @@ export interface ProfilerSessionStoppedParams {
 	 * Stopped session Id
 	 */
 	sessionId: number;
+}
+
+/**
+ * Profiler session created notification parameters
+ */
+export interface ProfilerSessionCreatedParams {
+	/**
+	 * Session owner URI
+	 */
+	ownerUri: string;
+
+	/**
+	 * Created session name
+	 */
+	sessionName: string;
+
+	/**
+	 * Template used to create session
+	 */
+	templateName: string;
 }

@@ -1225,11 +1225,11 @@ export class ProfilerFeature extends SqlOpsFeature<undefined> {
 	protected registerProvider(options: undefined): Disposable {
 		const client = this._client;
 
-		let createSession = (ownerUri: string, createStatement:string, sessionName: string): Thenable<boolean> => {
+		let createSession = (ownerUri: string, sessionName:string, template: sqlops.ProfilerSessionTemplate): Thenable<boolean> => {
 			let params: types.CreateXEventSessionParams = {
 				ownerUri,
-				createStatement,
-				sessionName
+				sessionName,
+				template
 			};
 
 			return client.sendRequest(protocol.CreateXEventSessionRequest.type, params).then(
@@ -1325,6 +1325,16 @@ export class ProfilerFeature extends SqlOpsFeature<undefined> {
 				});
 			});
 		};
+
+		let registerOnProfilerSessionCreated = (handler: (response: sqlops.ProfilerSessionCreatedParams) => any): void => {
+			client.onNotification(protocol.ProfilerSessionCreatedNotification.type, (params: types.ProfilerSessionCreatedParams) => {
+				handler(<sqlops.ProfilerSessionCreatedParams>{
+					ownerUri: params.ownerUri,
+					sessionName: params.sessionName,
+					templateName: params.templateName
+				});
+			});
+		};
 		
 
 		return sqlops.dataprotocol.registerProfilerProvider({
@@ -1333,6 +1343,7 @@ export class ProfilerFeature extends SqlOpsFeature<undefined> {
 			disconnectSession,
 			registerOnSessionEventsAvailable,
 			registerOnSessionStopped,
+			registerOnProfilerSessionCreated,
 			createSession,
 			startSession,
 			stopSession,
