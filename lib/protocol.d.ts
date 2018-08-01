@@ -161,6 +161,13 @@ export declare class ListDatabasesParams {
 export declare namespace ListDatabasesRequest {
     const type: RequestType<ListDatabasesParams, sqlops.ListDatabasesResult, void, void>;
 }
+export declare class GetConnectionStringParams {
+    ownerUri: string;
+    includePassword: boolean;
+}
+export declare namespace GetConnectionStringRequest {
+    const type: RequestType<GetConnectionStringParams, string, void, void>;
+}
 /**
  * Parameters to provide when sending a language flavor changed notification
  */
