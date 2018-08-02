@@ -645,6 +645,10 @@ export namespace FileBrowserCloseRequest {
 
 // ------------------------------- < Profiler Events > ------------------------------------
 
+export namespace CreateXEventSessionRequest {
+	export const type = new RequestType<types.CreateXEventSessionParams, types.CreateXEventSessionResponse, void, void>('profiler/createsession');
+}
+
 export namespace StartProfilingRequest {
 	export const type = new RequestType<types.StartProfilingParams, types.StartProfilingResponse, void, void>('profiler/start');
 }
@@ -657,10 +661,18 @@ export namespace PauseProfilingRequest {
 	export const type = new RequestType<types.PauseProfilingParams, types.PauseProfilingResponse, void, void>('profiler/pause');
 }
 
+export namespace GetXEventSessionsRequest {
+	export const type = new RequestType<types.GetXEventSessionsParams, types.GetXEventSessionsResponse, void, void>('profiler/getsessions');
+}
+
 export namespace ProfilerEventsAvailableNotification {
 	export const type = new NotificationType<types.ProfilerEventsAvailableParams, void>('profiler/eventsavailable');
 }
 
 export namespace ProfilerSessionStoppedNotification {
 	export const type = new NotificationType<types.ProfilerSessionStoppedParams, void>('profiler/sessionstopped');
+}
+
+export namespace ProfilerSessionCreatedNotification {
+	export const type = new NotificationType<types.ProfilerSessionCreatedParams, void>('profiler/sessioncreated');
 }

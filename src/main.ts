@@ -1242,10 +1242,26 @@ export class ProfilerFeature extends SqlOpsFeature<undefined> {
 	protected registerProvider(options: undefined): Disposable {
 		const client = this._client;
 
-		let startSession = (ownerUri: string): Thenable<boolean> => {
+		let createSession = (ownerUri: string, sessionName:string, template: sqlops.ProfilerSessionTemplate): Thenable<boolean> => {
+			let params: types.CreateXEventSessionParams = {
+				ownerUri,
+				sessionName,
+				template
+			};
+
+			return client.sendRequest(protocol.CreateXEventSessionRequest.type, params).then(
+				r => true,
+				e => {
+					client.logFailedRequest(protocol.CreateXEventSessionRequest.type, e);
+					return Promise.reject(e);
+				}
+			);
+		}
+
+		let startSession = (ownerUri: string, sessionName: string): Thenable<boolean> => {
 			let params: types.StartProfilingParams = {
 				ownerUri,
-				options: {}
+				sessionName
 			};
 
 			return client.sendRequest(protocol.StartProfilingRequest.type, params).then(
@@ -1285,6 +1301,20 @@ export class ProfilerFeature extends SqlOpsFeature<undefined> {
 			);
 		};
 
+		let getXEventSessions = (ownerUri: string): Thenable<string[]> => {
+			let params: types.GetXEventSessionsParams = {
+				ownerUri
+			};
+
+			return client.sendRequest(protocol.GetXEventSessionsRequest.type, params).then(
+				r => r.sessions,
+				e => {
+					client.logFailedRequest(protocol.GetXEventSessionsRequest.type, e);
+					return Promise.reject(e);
+				}
+			);
+		};
+
 		let connectSession = (sessionId: string): Thenable<boolean> => {
 			return undefined;
 		};
@@ -1312,6 +1342,16 @@ export class ProfilerFeature extends SqlOpsFeature<undefined> {
 				});
 			});
 		};
+
+		let registerOnProfilerSessionCreated = (handler: (response: sqlops.ProfilerSessionCreatedParams) => any): void => {
+			client.onNotification(protocol.ProfilerSessionCreatedNotification.type, (params: types.ProfilerSessionCreatedParams) => {
+				handler(<sqlops.ProfilerSessionCreatedParams>{
+					ownerUri: params.ownerUri,
+					sessionName: params.sessionName,
+					templateName: params.templateName
+				});
+			});
+		};
 		
 
 		return sqlops.dataprotocol.registerProfilerProvider({
@@ -1320,9 +1360,12 @@ export class ProfilerFeature extends SqlOpsFeature<undefined> {
 			disconnectSession,
 			registerOnSessionEventsAvailable,
 			registerOnSessionStopped,
+			registerOnProfilerSessionCreated,
+			createSession,
 			startSession,
 			stopSession,
-			pauseSession
+			pauseSession,
+			getXEventSessions
 		});
 	}
 }
