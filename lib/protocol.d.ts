@@ -161,6 +161,13 @@ export declare class ListDatabasesParams {
 export declare namespace ListDatabasesRequest {
     const type: RequestType<ListDatabasesParams, sqlops.ListDatabasesResult, void, void>;
 }
+export declare class GetConnectionStringParams {
+    ownerUri: string;
+    includePassword: boolean;
+}
+export declare namespace GetConnectionStringRequest {
+    const type: RequestType<GetConnectionStringParams, string, void, void>;
+}
 /**
  * Parameters to provide when sending a language flavor changed notification
  */
@@ -262,6 +269,9 @@ export declare namespace SaveResultsAsJsonRequest {
 }
 export declare namespace SaveResultsAsExcelRequest {
     const type: RequestType<sqlops.SaveResultsRequestParams, sqlops.SaveResultRequestResult, void, void>;
+}
+export declare namespace SyntaxParseRequest {
+    const type: RequestType<sqlops.SyntaxParseParams, sqlops.SyntaxParseResult, void, void>;
 }
 export declare namespace SimpleExecuteRequest {
     const type: RequestType<sqlops.SimpleExecuteParams, sqlops.SimpleExecuteResult, void, void>;
@@ -416,6 +426,9 @@ export declare namespace FileBrowserValidatedNotification {
 export declare namespace FileBrowserCloseRequest {
     const type: RequestType<types.FileBrowserCloseParams, sqlops.FileBrowserCloseResponse, void, void>;
 }
+export declare namespace CreateXEventSessionRequest {
+    const type: RequestType<types.CreateXEventSessionParams, types.CreateXEventSessionResponse, void, void>;
+}
 export declare namespace StartProfilingRequest {
     const type: RequestType<types.StartProfilingParams, types.StartProfilingResponse, void, void>;
 }
@@ -425,9 +438,15 @@ export declare namespace StopProfilingRequest {
 export declare namespace PauseProfilingRequest {
     const type: RequestType<types.PauseProfilingParams, types.PauseProfilingResponse, void, void>;
 }
+export declare namespace GetXEventSessionsRequest {
+    const type: RequestType<types.GetXEventSessionsParams, types.GetXEventSessionsResponse, void, void>;
+}
 export declare namespace ProfilerEventsAvailableNotification {
     const type: NotificationType<types.ProfilerEventsAvailableParams, void>;
 }
 export declare namespace ProfilerSessionStoppedNotification {
     const type: NotificationType<types.ProfilerSessionStoppedParams, void>;
+}
+export declare namespace ProfilerSessionCreatedNotification {
+    const type: NotificationType<types.ProfilerSessionCreatedParams, void>;
 }
