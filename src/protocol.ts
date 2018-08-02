@@ -215,6 +215,22 @@ export namespace ListDatabasesRequest {
 	export const type = new RequestType<ListDatabasesParams, sqlops.ListDatabasesResult, void, void>('connection/listdatabases');
 }
 
+// ------------------------------- < Get Connection String Request > ---------------------------------------
+
+// Get Connection String request format
+export class GetConnectionStringParams {
+	// Connection key to lookup connection string for
+	public ownerUri: string;
+
+	// Indicates whether to include the password in the connection string
+	public includePassword: boolean;
+}
+
+// Get Connection String request callback declaration
+export namespace GetConnectionStringRequest {
+	export const type = new RequestType<GetConnectionStringParams, string, void, void>('connection/getconnectionstring');
+}
+
 // Language Flavor Changed ================================================================================
 
 /**
@@ -382,6 +398,11 @@ export namespace SaveResultsAsExcelRequest {
 	export const type = new RequestType<sqlops.SaveResultsRequestParams, sqlops.SaveResultRequestResult, void, void>('query/saveExcel');
 }
 // --------------------------------- </ Save Results as Excel Request > ------------------------------------------
+
+// ------------------------------- < T-SQL Syntax Parse > -----------------------------------
+export namespace SyntaxParseRequest {
+	export const type = new RequestType<sqlops.SyntaxParseParams, sqlops.SyntaxParseResult, void, void>('query/syntaxparse');
+}
 
 // ------------------------------- < Execute and Return > -----------------------------------
 
@@ -624,6 +645,10 @@ export namespace FileBrowserCloseRequest {
 
 // ------------------------------- < Profiler Events > ------------------------------------
 
+export namespace CreateXEventSessionRequest {
+	export const type = new RequestType<types.CreateXEventSessionParams, types.CreateXEventSessionResponse, void, void>('profiler/createsession');
+}
+
 export namespace StartProfilingRequest {
 	export const type = new RequestType<types.StartProfilingParams, types.StartProfilingResponse, void, void>('profiler/start');
 }
@@ -636,10 +661,18 @@ export namespace PauseProfilingRequest {
 	export const type = new RequestType<types.PauseProfilingParams, types.PauseProfilingResponse, void, void>('profiler/pause');
 }
 
+export namespace GetXEventSessionsRequest {
+	export const type = new RequestType<types.GetXEventSessionsParams, types.GetXEventSessionsResponse, void, void>('profiler/getsessions');
+}
+
 export namespace ProfilerEventsAvailableNotification {
 	export const type = new NotificationType<types.ProfilerEventsAvailableParams, void>('profiler/eventsavailable');
 }
 
 export namespace ProfilerSessionStoppedNotification {
 	export const type = new NotificationType<types.ProfilerSessionStoppedParams, void>('profiler/sessionstopped');
+}
+
+export namespace ProfilerSessionCreatedNotification {
+	export const type = new NotificationType<types.ProfilerSessionCreatedParams, void>('profiler/sessioncreated');
 }

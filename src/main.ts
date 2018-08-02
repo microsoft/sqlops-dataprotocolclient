@@ -138,6 +138,7 @@ export class ConnectionFeature extends SqlOpsFeature<undefined> {
 		protocol.CancelConnectRequest.type,
 		protocol.ChangeDatabaseRequest.type,
 		protocol.ListDatabasesRequest.type,
+		protocol.GetConnectionStringRequest.type,
 		protocol.LanguageFlavorChangedNotification.type
 	];
 
@@ -225,6 +226,21 @@ export class ConnectionFeature extends SqlOpsFeature<undefined> {
 			);
 		};
 
+		let getConnectionString = (ownerUri: string, includePassword: boolean): Thenable<string> => {
+			let params: protocol.GetConnectionStringParams = {
+				ownerUri,
+				includePassword
+			};
+
+			return client.sendRequest(protocol.GetConnectionStringRequest.type, params).then(
+				r => r,
+				e => {
+					client.logFailedRequest(protocol.GetConnectionStringRequest.type, e);
+					return Promise.resolve(undefined);
+				}
+			);
+		};
+
 		let rebuildIntelliSenseCache = (ownerUri: string): Thenable<void> => {
 			let params: protocol.RebuildIntelliSenseParams = {
 				ownerUri
@@ -260,6 +276,7 @@ export class ConnectionFeature extends SqlOpsFeature<undefined> {
 			cancelConnect,
 			changeDatabase,
 			listDatabases,
+			getConnectionString,
 			rebuildIntelliSenseCache,
 			registerOnConnectionChanged,
 			registerOnIntelliSenseCacheComplete,
@@ -376,6 +393,17 @@ export class QueryFeature extends SqlOpsFeature<undefined> {
 				}
 			);
 		};
+
+		let parseSyntax = (ownerUri: string, query: string): Thenable<sqlops.SyntaxParseResult> => {
+			let params: sqlops.SyntaxParseParams = { ownerUri, query };
+			return client.sendRequest(protocol.SyntaxParseRequest.type, params).then(
+				r => r,
+				e => {
+					client.logFailedRequest(protocol.SyntaxParseRequest.type, e);
+					return Promise.reject(e);
+				}
+			)
+		}
 
 		let getQueryRows = (rowData: sqlops.QueryExecuteSubsetParams): Thenable<sqlops.QueryExecuteSubsetResult> => {
 			return client.sendRequest(protocol.QueryExecuteSubsetRequest.type, rowData).then(
@@ -577,6 +605,7 @@ export class QueryFeature extends SqlOpsFeature<undefined> {
 			revertRow,
 			runQuery,
 			runQueryAndReturn,
+			parseSyntax,
 			runQueryStatement,
 			runQueryString,
 			saveResults,
@@ -1213,10 +1242,26 @@ export class ProfilerFeature extends SqlOpsFeature<undefined> {
 	protected registerProvider(options: undefined): Disposable {
 		const client = this._client;
 
-		let startSession = (ownerUri: string): Thenable<boolean> => {
+		let createSession = (ownerUri: string, sessionName:string, template: sqlops.ProfilerSessionTemplate): Thenable<boolean> => {
+			let params: types.CreateXEventSessionParams = {
+				ownerUri,
+				sessionName,
+				template
+			};
+
+			return client.sendRequest(protocol.CreateXEventSessionRequest.type, params).then(
+				r => true,
+				e => {
+					client.logFailedRequest(protocol.CreateXEventSessionRequest.type, e);
+					return Promise.reject(e);
+				}
+			);
+		}
+
+		let startSession = (ownerUri: string, sessionName: string): Thenable<boolean> => {
 			let params: types.StartProfilingParams = {
 				ownerUri,
-				options: {}
+				sessionName
 			};
 
 			return client.sendRequest(protocol.StartProfilingRequest.type, params).then(
@@ -1256,6 +1301,20 @@ export class ProfilerFeature extends SqlOpsFeature<undefined> {
 			);
 		};
 
+		let getXEventSessions = (ownerUri: string): Thenable<string[]> => {
+			let params: types.GetXEventSessionsParams = {
+				ownerUri
+			};
+
+			return client.sendRequest(protocol.GetXEventSessionsRequest.type, params).then(
+				r => r.sessions,
+				e => {
+					client.logFailedRequest(protocol.GetXEventSessionsRequest.type, e);
+					return Promise.reject(e);
+				}
+			);
+		};
+
 		let connectSession = (sessionId: string): Thenable<boolean> => {
 			return undefined;
 		};
@@ -1283,6 +1342,16 @@ export class ProfilerFeature extends SqlOpsFeature<undefined> {
 				});
 			});
 		};
+
+		let registerOnProfilerSessionCreated = (handler: (response: sqlops.ProfilerSessionCreatedParams) => any): void => {
+			client.onNotification(protocol.ProfilerSessionCreatedNotification.type, (params: types.ProfilerSessionCreatedParams) => {
+				handler(<sqlops.ProfilerSessionCreatedParams>{
+					ownerUri: params.ownerUri,
+					sessionName: params.sessionName,
+					templateName: params.templateName
+				});
+			});
+		};
 		
 
 		return sqlops.dataprotocol.registerProfilerProvider({
@@ -1291,9 +1360,12 @@ export class ProfilerFeature extends SqlOpsFeature<undefined> {
 			disconnectSession,
 			registerOnSessionEventsAvailable,
 			registerOnSessionStopped,
+			registerOnProfilerSessionCreated,
+			createSession,
 			startSession,
 			stopSession,
-			pauseSession
+			pauseSession,
+			getXEventSessions
 		});
 	}
 }

@@ -843,6 +843,28 @@ export class TableMetadata {
 /**
  * Parameters to start a profiler session
  */
+export interface CreateXEventSessionParams {
+	/**
+	 * Session Owner URI
+	 */
+	ownerUri: string;
+
+	/**
+	 * Session name
+	 */
+	sessionName: string;
+
+	/**
+	 * Profiler Session template
+	 */
+	template: ProfilerSessionTemplate;
+}
+
+export interface CreateXEventSessionResponse {}
+
+/**
+ * Parameters to start a profiler session
+ */
 export interface StartProfilingParams {
 	/**
 	 * Session Owner URI
@@ -850,15 +872,12 @@ export interface StartProfilingParams {
 	ownerUri: string;
 
 	/**
-	 * Session options
+	 * Session name
 	 */
-	options: {};
+	sessionName: string;
 }
 
-export interface StartProfilingResponse {
-	succeeded: string;
-	errorMessage: string;
-}
+export interface StartProfilingResponse {}
 
 /**
  * Parameters to stop a profiler session
@@ -885,6 +904,23 @@ export interface PauseProfilingParams {
 export interface PauseProfilingResponse {}
 
 /**
+ * Parameters to get a list of XEvent sessions
+ */
+export interface GetXEventSessionsParams {
+	/**
+	 * Session Owner URI
+	 */
+	ownerUri: string;
+}
+
+export interface GetXEventSessionsResponse {
+	/**
+	 * List of all running XEvent Sessions on target server
+	 */
+	sessions: string[];
+}
+
+/**
  * Profiler Event
  */
 export interface ProfilerEvent {
@@ -902,6 +938,26 @@ export interface ProfilerEvent {
 	 * Event values
 	 */
 	values: {};
+}
+
+/**
+ * Profiler Session Template
+ */
+export interface ProfilerSessionTemplate {
+	/**
+	 * Template name
+	 */
+	name: string;
+
+	/**
+	 * Default view for template
+	 */
+	defaultView: string;
+
+	/**
+	 * TSQL for creating a session
+	 */
+	createStatement: string;
 }
 
 /**
@@ -937,4 +993,24 @@ export interface ProfilerSessionStoppedParams {
 	 * Stopped session Id
 	 */
 	sessionId: number;
+}
+
+/**
+ * Profiler session created notification parameters
+ */
+export interface ProfilerSessionCreatedParams {
+	/**
+	 * Session owner URI
+	 */
+	ownerUri: string;
+
+	/**
+	 * Created session name
+	 */
+	sessionName: string;
+
+	/**
+	 * Template used to create session
+	 */
+	templateName: string;
 }
