@@ -231,6 +231,13 @@ export namespace GetConnectionStringRequest {
 	export const type = new RequestType<GetConnectionStringParams, string, void, void>('connection/getconnectionstring');
 }
 
+// ------------------------------- < Get Connection String Request > ---------------------------------------
+
+// Get Connection String request callback declaration
+export namespace SerializeConnectionStringRequest {
+	export const type = new RequestType<string, types.ConnectionDetails, void, void>('connection/serializeconnectionstring');
+}
+
 // Language Flavor Changed ================================================================================
 
 /**
