@@ -129,17 +129,6 @@ export interface FeatureMetadataProvider {
 }
 
 /**
- * Parameters to initialize a connection to a database
- */
-export interface ConnectionDetails {
-
-	/**
-	 * connection options
-	 */
-	options: {};
-}
-
-/**
  * Summary that identifies a unique database connection.
  */
 export class ConnectionSummary {
@@ -788,7 +777,7 @@ export interface ScriptingParams {
 	/**
 	 * Connection details for the ScriptingParams
 	 */
-	connectionDetails: ConnectionDetails;
+	connectionDetails: sqlops.ConnectionInfo;
 
 	/**
 	 * Owner URI of the connection

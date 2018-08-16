@@ -241,11 +241,11 @@ export class ConnectionFeature extends SqlOpsFeature<undefined> {
 			);
 		};
 
-		let serializeConnectionString = (connectionString: string): Thenable<sqlops.ConnectionInfo> => {
-			return client.sendRequest(protocol.SerializeConnectionStringRequest.type, connectionString).then(
+		let buildConnectionInfo = (connectionString: string): Thenable<sqlops.ConnectionInfo> => {
+			return client.sendRequest(protocol.BuildConnectionInfoRequest.type, connectionString).then(
 				r => r,
 				e => {
-					client.logFailedRequest(protocol.SerializeConnectionStringRequest.type, e);
+					client.logFailedRequest(protocol.BuildConnectionInfoRequest.type, e);
 					return Promise.resolve(e)
 				}
 			)
@@ -287,7 +287,7 @@ export class ConnectionFeature extends SqlOpsFeature<undefined> {
 			changeDatabase,
 			listDatabases,
 			getConnectionString,
-			serializeConnectionString,
+			buildConnectionInfo,
 			rebuildIntelliSenseCache,
 			registerOnConnectionChanged,
 			registerOnIntelliSenseCacheComplete,

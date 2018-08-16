@@ -116,7 +116,7 @@ export interface ConnectParams {
 	/**
 	 * Details for creating the connection
 	 */
-	connection: types.ConnectionDetails;
+	connection: sqlops.ConnectionInfo;
 }
 
 
@@ -234,8 +234,8 @@ export namespace GetConnectionStringRequest {
 // ------------------------------- < Get Connection String Request > ---------------------------------------
 
 // Get Connection String request callback declaration
-export namespace SerializeConnectionStringRequest {
-	export const type = new RequestType<string, types.ConnectionDetails, void, void>('connection/serializeconnectionstring');
+export namespace BuildConnectionInfoRequest {
+	export const type = new RequestType<string, sqlops.ConnectionInfo, void, void>('connection/buildconnectioninfo');
 }
 
 // Language Flavor Changed ================================================================================
@@ -524,7 +524,7 @@ export namespace EditSubsetRequest {
 // ------------------------------- < Object Explorer Events > ------------------------------------
 
 export namespace ObjectExplorerCreateSessionRequest {
-	export const type = new RequestType<types.ConnectionDetails, types.CreateSessionResponse, void, void>('objectexplorer/createsession');
+	export const type = new RequestType<sqlops.ConnectionInfo, types.CreateSessionResponse, void, void>('objectexplorer/createsession');
 }
 
 export namespace ObjectExplorerExpandRequest {
