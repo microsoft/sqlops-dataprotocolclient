@@ -104,7 +104,7 @@ export interface ConnectParams {
     /**
      * Details for creating the connection
      */
-    connection: types.ConnectionDetails;
+    connection: sqlops.ConnectionInfo;
 }
 export declare namespace ConnectionRequest {
     const type: RequestType<ConnectParams, boolean, void, void>;
@@ -167,6 +167,9 @@ export declare class GetConnectionStringParams {
 }
 export declare namespace GetConnectionStringRequest {
     const type: RequestType<GetConnectionStringParams, string, void, void>;
+}
+export declare namespace BuildConnectionInfoRequest {
+    const type: RequestType<string, sqlops.ConnectionInfo, void, void>;
 }
 /**
  * Parameters to provide when sending a language flavor changed notification
@@ -343,7 +346,7 @@ export declare namespace EditSubsetRequest {
     const type: RequestType<sqlops.EditSubsetParams, sqlops.EditSubsetResult, void, void>;
 }
 export declare namespace ObjectExplorerCreateSessionRequest {
-    const type: RequestType<types.ConnectionDetails, types.CreateSessionResponse, void, void>;
+    const type: RequestType<sqlops.ConnectionInfo, types.CreateSessionResponse, void, void>;
 }
 export declare namespace ObjectExplorerExpandRequest {
     const type: RequestType<types.ExpandParams, boolean, void, void>;
