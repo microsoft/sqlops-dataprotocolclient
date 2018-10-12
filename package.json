@@ -22,6 +22,6 @@
   },
   "engines": {
     "vscode": "*",
-    "sqlops": "*"
+    "sqlops": "feat/resultStreaming"
   }
 }
