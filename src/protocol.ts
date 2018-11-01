@@ -352,8 +352,8 @@ export namespace QueryExecuteResultSetAvailableNotification {
 }
 
 // ------------------------------- < Query Resultset available notification > ------------------------------------
-export namespace QueryExecuteResultSetUpdateNotification {
-	export const type = new NotificationType<sqlops.QueryExecuteResultSetNotificationParams, void>('query/resultSetUpdate');
+export namespace QueryExecuteResultSetUpdatedNotification {
+	export const type = new NotificationType<sqlops.QueryExecuteResultSetNotificationParams, void>('query/resultSetUpdated');
 }
 
 // ------------------------------- < Query Message Notification > ------------------------------------

@@ -309,7 +309,7 @@ export class QueryFeature extends SqlOpsFeature<undefined> {
 		protocol.QueryExecuteBatchStartNotification.type,
 		protocol.QueryExecuteBatchCompleteNotification.type,
 		protocol.QueryExecuteResultSetAvailableNotification.type,
-		protocol.QueryExecuteResultSetUpdateNotification.type,
+		protocol.QueryExecuteResultSetUpdatedNotification.type,
 		protocol.QueryExecuteMessageNotification.type,
 		protocol.SaveResultsAsCsvRequest.type,
 		protocol.SaveResultsAsJsonRequest.type,
@@ -454,8 +454,8 @@ export class QueryFeature extends SqlOpsFeature<undefined> {
 			client.onNotification(protocol.QueryExecuteResultSetAvailableNotification.type, handler);
 		};
 
-		let registerOnResultSetUpdate = (handler: (resultSetInfo: sqlops.QueryExecuteResultSetNotificationParams) => any): void => {
-			client.onNotification(protocol.QueryExecuteResultSetUpdateNotification.type, handler);
+		let registerOnResultSetUpdated = (handler: (resultSetInfo: sqlops.QueryExecuteResultSetNotificationParams) => any): void => {
+			client.onNotification(protocol.QueryExecuteResultSetUpdatedNotification.type, handler);
 		}
 
 		let registerOnMessage = (handler: (message: sqlops.QueryExecuteMessageParams) => any): void => {
@@ -617,7 +617,7 @@ export class QueryFeature extends SqlOpsFeature<undefined> {
 			registerOnMessage,
 			registerOnQueryComplete,
 			registerOnResultSetAvailable,
-			registerOnResultSetUpdate,
+			registerOnResultSetUpdated,
 			revertCell,
 			revertRow,
 			runQuery,
