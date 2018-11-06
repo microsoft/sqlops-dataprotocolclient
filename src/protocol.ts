@@ -550,6 +550,10 @@ export namespace ObjectExplorerCreateSessionCompleteNotification {
 	export const type = new NotificationType<types.SessionCreatedParameters, void>('objectexplorer/sessioncreated');
 }
 
+export namespace ObjectExplorerSessionDisconnectedNotification {
+	export const type = new NotificationType<types.SessionDisconnectedParameters, void>('objectexplorer/sessiondisconnected');
+}
+
 export namespace ObjectExplorerExpandCompleteNotification {
 	export const type = new NotificationType<types.ExpandResponse, void>('objectexplorer/expandCompleted');
 }

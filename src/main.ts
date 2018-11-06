@@ -1001,6 +1001,10 @@ export class ObjectExplorerFeature extends SqlOpsFeature<undefined> {
 			client.onNotification(protocol.ObjectExplorerCreateSessionCompleteNotification.type, handler);
 		};
 
+		let registerOnSessionDisconnected = (handler: (response: sqlops.ObjectExplorerSession) => any): void => {
+			client.onNotification(protocol.ObjectExplorerSessionDisconnectedNotification.type, handler);
+		};
+
 		let registerOnExpandCompleted = (handler: (response: sqlops.ObjectExplorerExpandInfo) => any): void => {
 			client.onNotification(protocol.ObjectExplorerExpandCompleteNotification.type, handler);
 		};
@@ -1013,7 +1017,8 @@ export class ObjectExplorerFeature extends SqlOpsFeature<undefined> {
 			refreshNode,
 			findNodes,
 			registerOnExpandCompleted,
-			registerOnSessionCreated
+			registerOnSessionCreated,
+			registerOnSessionDisconnected
 		});
 	}
 }
