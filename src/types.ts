@@ -11,6 +11,12 @@ export interface SessionCreatedParameters {
 	errorMessage: string;
 }
 
+export interface SessionDisconnectedParameters {
+	success: boolean;
+	sessionId: string;
+	errorMessage: string;
+}
+
 export interface ExpandResponse {
 	nodePath: string;
 	sessionId: string;
