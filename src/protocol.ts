@@ -347,8 +347,13 @@ export namespace QueryExecuteBatchCompleteNotification {
 }
 
 // ------------------------------- < Query ResultSet Complete Notification > ------------------------------------
-export namespace QueryExecuteResultSetCompleteNotification {
-	export const type = new NotificationType<sqlops.QueryExecuteResultSetCompleteNotificationParams, void>('query/resultSetComplete');
+export namespace QueryExecuteResultSetAvailableNotification {
+	export const type = new NotificationType<sqlops.QueryExecuteResultSetNotificationParams, void>('query/resultSetAvailable');
+}
+
+// ------------------------------- < Query Resultset available notification > ------------------------------------
+export namespace QueryExecuteResultSetUpdatedNotification {
+	export const type = new NotificationType<sqlops.QueryExecuteResultSetNotificationParams, void>('query/resultSetUpdated');
 }
 
 // ------------------------------- < Query Message Notification > ------------------------------------
