@@ -363,6 +363,9 @@ export declare namespace ObjectExplorerFindNodesRequest {
 export declare namespace ObjectExplorerCreateSessionCompleteNotification {
     const type: NotificationType<types.SessionCreatedParameters, void>;
 }
+export declare namespace ObjectExplorerSessionDisconnectedNotification {
+    const type: NotificationType<types.SessionDisconnectedParameters, void>;
+}
 export declare namespace ObjectExplorerExpandCompleteNotification {
     const type: NotificationType<types.ExpandResponse, void>;
 }
