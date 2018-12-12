@@ -314,6 +314,7 @@ export class QueryFeature extends SqlOpsFeature<undefined> {
 		protocol.SaveResultsAsCsvRequest.type,
 		protocol.SaveResultsAsJsonRequest.type,
 		protocol.SaveResultsAsExcelRequest.type,
+		protocol.SaveResultsAsXmlRequest.type,
 		protocol.EditCommitRequest.type,
 		protocol.EditCreateRowRequest.type,
 		protocol.EditDeleteRowRequest.type,
@@ -485,6 +486,14 @@ export class QueryFeature extends SqlOpsFeature<undefined> {
 						undefined,
 						e => {
 							client.logFailedRequest(protocol.SaveResultsAsExcelRequest.type, e);
+							return Promise.reject(e);
+						}
+					);
+					case 'xml':
+					return client.sendRequest(protocol.SaveResultsAsXmlRequest.type, requestParams).then(
+						undefined,
+						e => {
+							client.logFailedRequest(protocol.SaveResultsAsXmlRequest.type, e);
 							return Promise.reject(e);
 						}
 					);
