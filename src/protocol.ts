@@ -681,6 +681,10 @@ export namespace GetXEventSessionsRequest {
 	export const type = new RequestType<types.GetXEventSessionsParams, types.GetXEventSessionsResponse, void, void>('profiler/getsessions');
 }
 
+export namespace FilterSessionRequest {
+	export const type = new RequestType<types.FilterSessionParams, types.FilterSessionResponse, void, void>('profiler/filter');
+}
+
 export namespace ProfilerEventsAvailableNotification {
 	export const type = new NotificationType<types.ProfilerEventsAvailableParams, void>('profiler/eventsavailable');
 }

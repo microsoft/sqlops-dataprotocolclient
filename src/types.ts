@@ -915,6 +915,16 @@ export interface GetXEventSessionsResponse {
 	sessions: string[];
 }
 
+export interface FilterSessionParams{
+	/**
+	 * Session Owner URI
+	 */
+	ownerUri: string;
+	filter: sqlops.ProfilerFilter;
+}
+
+export interface FilterSessionResponse {}
+
 /**
  * Profiler Event
  */

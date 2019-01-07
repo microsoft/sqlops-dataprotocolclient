@@ -1056,11 +1056,11 @@ export class ScriptingFeature extends SqlOpsFeature<undefined> {
 		let scriptAsOperation = (connectionUri: string, operation: sqlops.ScriptOperation, metadata: sqlops.ObjectMetadata, paramDetails: sqlops.ScriptingParamDetails): Thenable<sqlops.ScriptingResult> => {
 			return client.sendRequest(protocol.ScriptingRequest.type,
 				client.sqlc2p.asScriptingParams(connectionUri, operation, metadata, paramDetails)).then(
-				r => r,
-				e => {
-					client.logFailedRequest(protocol.ScriptingRequest.type, e);
-					return Promise.resolve(undefined);
-				}
+					r => r,
+					e => {
+						client.logFailedRequest(protocol.ScriptingRequest.type, e);
+						return Promise.resolve(undefined);
+					}
 				);
 		};
 
@@ -1264,7 +1264,7 @@ export class ProfilerFeature extends SqlOpsFeature<undefined> {
 	protected registerProvider(options: undefined): Disposable {
 		const client = this._client;
 
-		let createSession = (ownerUri: string, sessionName:string, template: sqlops.ProfilerSessionTemplate): Thenable<boolean> => {
+		let createSession = (ownerUri: string, sessionName: string, template: sqlops.ProfilerSessionTemplate): Thenable<boolean> => {
 			let params: types.CreateXEventSessionParams = {
 				ownerUri,
 				sessionName,
@@ -1337,6 +1337,20 @@ export class ProfilerFeature extends SqlOpsFeature<undefined> {
 			);
 		};
 
+		let filterSession = (ownerUri: string, filter: sqlops.ProfilerFilter): Thenable<boolean> => {
+			let params: types.FilterSessionParams = {
+				ownerUri: ownerUri,
+				filter: filter
+			};
+			return client.sendRequest(protocol.FilterSessionRequest.type, params).then(
+				r => true,
+				e => {
+					client.logFailedRequest(protocol.PauseProfilingRequest.type, e);
+					return Promise.reject(e);
+				}
+			);
+		};
+
 		let connectSession = (sessionId: string): Thenable<boolean> => {
 			return undefined;
 		};
@@ -1355,7 +1369,7 @@ export class ProfilerFeature extends SqlOpsFeature<undefined> {
 			});
 		};
 
-		
+
 		let registerOnSessionStopped = (handler: (response: sqlops.ProfilerSessionStoppedParams) => any): void => {
 			client.onNotification(protocol.ProfilerSessionStoppedNotification.type, (params: types.ProfilerSessionStoppedParams) => {
 				handler(<sqlops.ProfilerSessionStoppedParams>{
@@ -1374,7 +1388,7 @@ export class ProfilerFeature extends SqlOpsFeature<undefined> {
 				});
 			});
 		};
-		
+
 
 		return sqlops.dataprotocol.registerProfilerProvider({
 			providerId: client.providerId,
@@ -1387,7 +1401,8 @@ export class ProfilerFeature extends SqlOpsFeature<undefined> {
 			startSession,
 			stopSession,
 			pauseSession,
-			getXEventSessions
+			getXEventSessions,
+			filterSession
 		});
 	}
 }
