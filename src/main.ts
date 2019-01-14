@@ -489,7 +489,7 @@ export class QueryFeature extends SqlOpsFeature<undefined> {
 							return Promise.reject(e);
 						}
 					);
-					case 'xml':
+				case 'xml':
 					return client.sendRequest(protocol.SaveResultsAsXmlRequest.type, requestParams).then(
 						undefined,
 						e => {
