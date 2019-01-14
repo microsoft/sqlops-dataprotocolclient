@@ -239,10 +239,10 @@ export declare namespace QueryExecuteBatchCompleteNotification {
     const type: NotificationType<sqlops.QueryExecuteBatchNotificationParams, void>;
 }
 export declare namespace QueryExecuteResultSetAvailableNotification {
-    const type: NotificationType<any, void>;
+    const type: NotificationType<sqlops.QueryExecuteResultSetNotificationParams, void>;
 }
 export declare namespace QueryExecuteResultSetUpdatedNotification {
-    const type: NotificationType<any, void>;
+    const type: NotificationType<sqlops.QueryExecuteResultSetNotificationParams, void>;
 }
 export declare namespace QueryExecuteMessageNotification {
     const type: NotificationType<sqlops.QueryExecuteMessageParams, void>;
@@ -274,6 +274,9 @@ export declare namespace SaveResultsAsJsonRequest {
     const type: RequestType<sqlops.SaveResultsRequestParams, sqlops.SaveResultRequestResult, void, void>;
 }
 export declare namespace SaveResultsAsExcelRequest {
+    const type: RequestType<sqlops.SaveResultsRequestParams, sqlops.SaveResultRequestResult, void, void>;
+}
+export declare namespace SaveResultsAsXmlRequest {
     const type: RequestType<sqlops.SaveResultsRequestParams, sqlops.SaveResultRequestResult, void, void>;
 }
 export declare namespace SyntaxParseRequest {
