@@ -411,6 +411,13 @@ export namespace SaveResultsAsExcelRequest {
 }
 // --------------------------------- </ Save Results as Excel Request > ------------------------------------------
 
+// --------------------------------- < Save Results as Xml Request > ------------------------------------------
+// save results in Xml format
+export namespace SaveResultsAsXmlRequest {
+	export const type = new RequestType<sqlops.SaveResultsRequestParams, sqlops.SaveResultRequestResult, void, void>('query/saveXml');
+}
+// --------------------------------- </ Save Results as Xml Request > ------------------------------------------
+
 // ------------------------------- < T-SQL Syntax Parse > -----------------------------------
 export namespace SyntaxParseRequest {
 	export const type = new RequestType<sqlops.SyntaxParseParams, sqlops.SyntaxParseResult, void, void>('query/syntaxparse');
