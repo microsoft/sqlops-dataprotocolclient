@@ -1350,7 +1350,7 @@ export class ProfilerFeature extends SqlOpsFeature<undefined> {
 			return undefined;
 		};
 
-		let disconnectSession = (sessionId: string): Thenable<boolean> => {
+		let disconnectSession = (ownerUri: string): Thenable<boolean> => {
 			let params: types.DisconnectSessionParams = {
 				ownerUri: ownerUri
 			};
