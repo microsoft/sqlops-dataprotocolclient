@@ -453,6 +453,9 @@ export declare namespace PauseProfilingRequest {
 export declare namespace GetXEventSessionsRequest {
     const type: RequestType<types.GetXEventSessionsParams, types.GetXEventSessionsResponse, void, void>;
 }
+export declare namespace DisconnectSessionRequest {
+    const type: RequestType<types.DisconnectSessionParams, types.DisconnectSessionResponse, void, void>;
+}
 export declare namespace ProfilerEventsAvailableNotification {
     const type: NotificationType<types.ProfilerEventsAvailableParams, void>;
 }

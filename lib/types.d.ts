@@ -719,6 +719,14 @@ export interface GetXEventSessionsResponse {
      */
     sessions: string[];
 }
+export interface DisconnectSessionParams {
+    /**
+     * Session Owner URI
+     */
+    ownerUri: string;
+}
+export interface DisconnectSessionResponse {
+}
 /**
  * Profiler Event
  */
