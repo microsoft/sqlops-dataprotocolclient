@@ -1,6 +1,6 @@
 {
   "name": "dataprotocol-client",
-  "version": "0.2.11",
+  "version": "0.2.15",
   "description": "Client implementation for sqlops studio",
   "main": "lib/main",
   "typings": "lib/main",
