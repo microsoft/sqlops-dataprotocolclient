@@ -1350,8 +1350,17 @@ export class ProfilerFeature extends SqlOpsFeature<undefined> {
 			return undefined;
 		};
 
-		let disconnectSession = (sessionId: string): Thenable<boolean> => {
-			return undefined;
+		let disconnectSession = (ownerUri: string): Thenable<boolean> => {
+			let params: types.DisconnectSessionParams = {
+				ownerUri: ownerUri
+			};
+			return client.sendRequest(protocol.DisconnectSessionRequest.type, params).then(
+				r => true,
+				e => {
+					client.logFailedRequest(protocol.DisconnectSessionRequest.type, e);
+					return Promise.reject(e);
+				}
+			);
 		};
 
 		let registerOnSessionEventsAvailable = (handler: (response: sqlops.ProfilerSessionEvents) => any): void => {
