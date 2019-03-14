@@ -279,6 +279,10 @@ export class ConnectionFeature extends SqlOpsFeature<undefined> {
 			});
 		};
 
+		sqlops.dataprotocol.onDidChangeLanguageFlavor((params) => {
+            client.sendNotification(protocol.LanguageFlavorChangedNotification.type, params);
+        });
+
 		return sqlops.dataprotocol.registerConnectionProvider({
 			providerId: client.providerId,
 			connect,
