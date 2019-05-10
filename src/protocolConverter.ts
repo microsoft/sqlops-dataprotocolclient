@@ -1,13 +1,13 @@
-import * as sqlops from 'sqlops';
+import * as azdata from 'azdata';
 import * as types from './types';
 
 export interface Ip2c {
-	asProviderMetadata(params: types.MetadataQueryResult): sqlops.ProviderMetadata;
-	asServerCapabilities(result: types.CapabiltiesDiscoveryResult): sqlops.DataProtocolServerCapabilities;
+	asProviderMetadata(params: types.MetadataQueryResult): azdata.ProviderMetadata;
+	asServerCapabilities(result: types.CapabiltiesDiscoveryResult): azdata.DataProtocolServerCapabilities;
 }
 
-function asProviderMetadata(params: types.MetadataQueryResult): sqlops.ProviderMetadata {
-	let objectMetadata: sqlops.ObjectMetadata[] = [];
+function asProviderMetadata(params: types.MetadataQueryResult): azdata.ProviderMetadata {
+	let objectMetadata: azdata.ObjectMetadata[] = [];
 
 	if (!params.metadata || !params.metadata.length) {
 		return {
@@ -16,17 +16,17 @@ function asProviderMetadata(params: types.MetadataQueryResult): sqlops.ProviderM
 	}
 
 	for (let i = 0; i < params.metadata.length; ++i) {
-		let metadata: sqlops.ObjectMetadata = params.metadata[i];
+		let metadata: azdata.ObjectMetadata = params.metadata[i];
 
 		let metadataTypeName: string;
 		if (metadata.metadataTypeName) {
 			// Read from the provider since it's defined
 			metadataTypeName = metadata.metadataTypeName;
-		} else if (metadata.metadataType === sqlops.MetadataType.View) {
+		} else if (metadata.metadataType === azdata.MetadataType.View) {
 			metadataTypeName = 'View';
-		} else if (metadata.metadataType === sqlops.MetadataType.SProc) {
+		} else if (metadata.metadataType === azdata.MetadataType.SProc) {
 			metadataTypeName = 'StoredProcedure';
-		} else if (metadata.metadataType === sqlops.MetadataType.Function) {
+		} else if (metadata.metadataType === azdata.MetadataType.Function) {
 			metadataTypeName = 'Function';
 		} else {
 			metadataTypeName = 'Table';
@@ -46,30 +46,30 @@ function asProviderMetadata(params: types.MetadataQueryResult): sqlops.ProviderM
 	};
 }
 
-function asServiceOptionType(val: string): sqlops.ServiceOptionType {
+function asServiceOptionType(val: string): azdata.ServiceOptionType {
 	if (val === 'string') {
-		return sqlops.ServiceOptionType.string;
+		return azdata.ServiceOptionType.string;
 	} else if (val === 'multistring') {
-		return sqlops.ServiceOptionType.multistring;
+		return azdata.ServiceOptionType.multistring;
 	} else if (val === 'password') {
-		return sqlops.ServiceOptionType.password;
+		return azdata.ServiceOptionType.password;
 	} else if (val === 'number') {
-		return sqlops.ServiceOptionType.number;
+		return azdata.ServiceOptionType.number;
 	} else if (val === 'boolean') {
-		return sqlops.ServiceOptionType.boolean;
+		return azdata.ServiceOptionType.boolean;
 	} else if (val === 'category') {
-		return sqlops.ServiceOptionType.category;
+		return azdata.ServiceOptionType.category;
 	} else if (val === 'object') {
-		return sqlops.ServiceOptionType.object;
+		return azdata.ServiceOptionType.object;
 	}
 
 	// assume string for unknown value types
-	return sqlops.ServiceOptionType.string;
+	return azdata.ServiceOptionType.string;
 }
 
 
 
-function buildServiceOption(srcOption: types.ServiceOption): sqlops.ServiceOption {
+function buildServiceOption(srcOption: types.ServiceOption): azdata.ServiceOption {
 	return {
 		name: srcOption.name,
 		displayName: srcOption.displayName ? srcOption.displayName : srcOption.name,
@@ -85,8 +85,8 @@ function buildServiceOption(srcOption: types.ServiceOption): sqlops.ServiceOptio
 }
 
 
-function asServerCapabilities(result: types.CapabiltiesDiscoveryResult): sqlops.DataProtocolServerCapabilities {
-	let capabilities: sqlops.DataProtocolServerCapabilities = {
+function asServerCapabilities(result: types.CapabiltiesDiscoveryResult): azdata.DataProtocolServerCapabilities {
+	let capabilities: azdata.DataProtocolServerCapabilities = {
 		protocolVersion: result.capabilities.protocolVersion,
 		providerName: result.capabilities.providerName,
 		providerDisplayName: result.capabilities.providerDisplayName,
@@ -96,17 +96,17 @@ function asServerCapabilities(result: types.CapabiltiesDiscoveryResult): sqlops.
 	};
 
 	if (result.capabilities.adminServicesProvider) {
-		capabilities.adminServicesProvider = <sqlops.AdminServicesOptions>{
-			databaseInfoOptions: new Array<sqlops.ServiceOption>(),
-			databaseFileInfoOptions: new Array<sqlops.ServiceOption>(),
-			fileGroupInfoOptions: new Array<sqlops.ServiceOption>()
+		capabilities.adminServicesProvider = <azdata.AdminServicesOptions>{
+			databaseInfoOptions: new Array<azdata.ServiceOption>(),
+			databaseFileInfoOptions: new Array<azdata.ServiceOption>(),
+			fileGroupInfoOptions: new Array<azdata.ServiceOption>()
 		};
 
 		if (result.capabilities.adminServicesProvider.databaseInfoOptions
 			&& result.capabilities.adminServicesProvider.databaseInfoOptions.length > 0) {
 			for (let i = 0; i < result.capabilities.adminServicesProvider.databaseInfoOptions.length; ++i) {
 				let srcOption: any = result.capabilities.adminServicesProvider.databaseInfoOptions[i];
-				let descOption: sqlops.ServiceOption = buildServiceOption(srcOption);
+				let descOption: azdata.ServiceOption = buildServiceOption(srcOption);
 				capabilities.adminServicesProvider.databaseInfoOptions.push(descOption);
 			}
 		}
@@ -116,7 +116,7 @@ function asServerCapabilities(result: types.CapabiltiesDiscoveryResult): sqlops.
 			for (let i = 0; i < result.capabilities.adminServicesProvider.databaseFileInfoOptions.length; ++i) {
 				//let srcOption: types.ServiceOption = result.capabilities.adminServicesProvider.databaseFileInfoOptions[i];
 				let srcOption: any = result.capabilities.adminServicesProvider.databaseFileInfoOptions[i];
-				let descOption: sqlops.ServiceOption = buildServiceOption(srcOption);
+				let descOption: azdata.ServiceOption = buildServiceOption(srcOption);
 				capabilities.adminServicesProvider.databaseFileInfoOptions.push(descOption);
 			}
 		}
@@ -126,7 +126,7 @@ function asServerCapabilities(result: types.CapabiltiesDiscoveryResult): sqlops.
 			for (let i = 0; i < result.capabilities.adminServicesProvider.fileGroupInfoOptions.length; ++i) {
 				//let srcOption: types.ServiceOption = result.capabilities.adminServicesProvider.fileGroupInfoOptions[i];
 				let srcOption: any = result.capabilities.adminServicesProvider.fileGroupInfoOptions[i];
-				let descOption: sqlops.ServiceOption = buildServiceOption(srcOption);
+				let descOption: azdata.ServiceOption = buildServiceOption(srcOption);
 				capabilities.adminServicesProvider.fileGroupInfoOptions.push(descOption);
 			}
 		}
@@ -135,12 +135,12 @@ function asServerCapabilities(result: types.CapabiltiesDiscoveryResult): sqlops.
 	if (result.capabilities.connectionProvider
 		&& result.capabilities.connectionProvider.options
 		&& result.capabilities.connectionProvider.options.length > 0) {
-		capabilities.connectionProvider = <sqlops.ConnectionProviderOptions>{
-			options: new Array<sqlops.ConnectionOption>()
+		capabilities.connectionProvider = <azdata.ConnectionProviderOptions>{
+			options: new Array<azdata.ConnectionOption>()
 		};
 		for (let i = 0; i < result.capabilities.connectionProvider.options.length; ++i) {
 			let srcOption: any = result.capabilities.connectionProvider.options[i];
-			let descOption: sqlops.ConnectionOption = {
+			let descOption: azdata.ConnectionOption = {
 				name: srcOption.name,
 				displayName: srcOption.displayName ? srcOption.displayName : srcOption.name,
 				description: srcOption.description,
@@ -154,17 +154,17 @@ function asServerCapabilities(result: types.CapabiltiesDiscoveryResult): sqlops.
 			};
 
 			if (srcOption.specialValueType === 'serverName') {
-				descOption.specialValueType = sqlops.ConnectionOptionSpecialType.serverName;
+				descOption.specialValueType = azdata.ConnectionOptionSpecialType.serverName;
 			} else if (srcOption.specialValueType === 'databaseName') {
-				descOption.specialValueType = sqlops.ConnectionOptionSpecialType.databaseName;
+				descOption.specialValueType = azdata.ConnectionOptionSpecialType.databaseName;
 			} else if (srcOption.specialValueType === 'authType') {
-				descOption.specialValueType = sqlops.ConnectionOptionSpecialType.authType;
+				descOption.specialValueType = azdata.ConnectionOptionSpecialType.authType;
 			} else if (srcOption.specialValueType === 'userName') {
-				descOption.specialValueType = sqlops.ConnectionOptionSpecialType.userName;
+				descOption.specialValueType = azdata.ConnectionOptionSpecialType.userName;
 			} else if (srcOption.specialValueType === 'password') {
-				descOption.specialValueType = sqlops.ConnectionOptionSpecialType.password;
+				descOption.specialValueType = azdata.ConnectionOptionSpecialType.password;
 			} else if (srcOption.specialValueType === 'appName') {
-				descOption.specialValueType = sqlops.ConnectionOptionSpecialType.appName;
+				descOption.specialValueType = azdata.ConnectionOptionSpecialType.appName;
 			}
 
 			capabilities.connectionProvider.options.push(descOption);
@@ -174,7 +174,7 @@ function asServerCapabilities(result: types.CapabiltiesDiscoveryResult): sqlops.
 	if (result.capabilities.features
 		&& result.capabilities.features.length > 0) {
 		result.capabilities.features.forEach(feature => {
-			let descFeature: sqlops.FeatureMetadataProvider = {
+			let descFeature: azdata.FeatureMetadataProvider = {
 				enabled: feature.enabled,
 				featureName: feature.featureName,
 				optionsMetadata: []

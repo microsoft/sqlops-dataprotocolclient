@@ -6,7 +6,7 @@ import {
 import * as is from 'vscode-languageclient/lib/utils/is';
 import * as UUID from 'vscode-languageclient/lib/utils/uuid';
 
-import * as sqlops from 'sqlops';
+import * as azdata from 'azdata';
 
 import { c2p, Ic2p } from './codeConverter';
 
@@ -111,7 +111,7 @@ export class CapabilitiesFeature extends SqlOpsFeature<undefined> {
 	protected registerProvider(options: undefined): Disposable {
 		const client = this._client;
 
-		let getServerCapabilities = (cap: sqlops.DataProtocolClientCapabilities): Thenable<sqlops.DataProtocolServerCapabilities> => {
+		let getServerCapabilities = (cap: azdata.DataProtocolClientCapabilities): Thenable<azdata.DataProtocolServerCapabilities> => {
 			return client.sendRequest(protocol.CapabiltiesDiscoveryRequest.type, cap).then(
 				client.sqlp2c.asServerCapabilities,
 				e => {
@@ -121,7 +121,7 @@ export class CapabilitiesFeature extends SqlOpsFeature<undefined> {
 			);
 		};
 
-		return sqlops.dataprotocol.registerCapabilitiesServiceProvider({
+		return azdata.dataprotocol.registerCapabilitiesServiceProvider({
 			providerId: client.providerId,
 			getServerCapabilities
 		});
@@ -159,7 +159,7 @@ export class ConnectionFeature extends SqlOpsFeature<undefined> {
 
 	protected registerProvider(options: undefined): Disposable {
 		const client = this._client;
-		let connect = (connUri: string, connInfo: sqlops.ConnectionInfo): Thenable<boolean> => {
+		let connect = (connUri: string, connInfo: azdata.ConnectionInfo): Thenable<boolean> => {
 			return client.sendRequest(protocol.ConnectionRequest.type, client.sqlc2p.asConnectionParams(connUri, connInfo)).then(
 				r => r,
 				e => {
@@ -212,7 +212,7 @@ export class ConnectionFeature extends SqlOpsFeature<undefined> {
 			);
 		};
 
-		let listDatabases = (ownerUri: string): Thenable<sqlops.ListDatabasesResult> => {
+		let listDatabases = (ownerUri: string): Thenable<azdata.ListDatabasesResult> => {
 			let params: protocol.ListDatabasesParams = {
 				ownerUri
 			};
@@ -241,7 +241,7 @@ export class ConnectionFeature extends SqlOpsFeature<undefined> {
 			);
 		};
 
-		let buildConnectionInfo = (connectionString: string): Thenable<sqlops.ConnectionInfo> => {
+		let buildConnectionInfo = (connectionString: string): Thenable<azdata.ConnectionInfo> => {
 			return client.sendRequest(protocol.BuildConnectionInfoRequest.type, connectionString).then(
 				r => r,
 				e => {
@@ -260,7 +260,7 @@ export class ConnectionFeature extends SqlOpsFeature<undefined> {
 			return Promise.resolve();
 		};
 
-		let registerOnConnectionComplete = (handler: (connSummary: sqlops.ConnectionInfoSummary) => any): void => {
+		let registerOnConnectionComplete = (handler: (connSummary: azdata.ConnectionInfoSummary) => any): void => {
 			client.onNotification(protocol.ConnectionCompleteNotification.type, handler);
 		};
 
@@ -270,7 +270,7 @@ export class ConnectionFeature extends SqlOpsFeature<undefined> {
 			});
 		};
 
-		let registerOnConnectionChanged = (handler: (changedConnInfo: sqlops.ChangedConnectionInfo) => any): void => {
+		let registerOnConnectionChanged = (handler: (changedConnInfo: azdata.ChangedConnectionInfo) => any): void => {
 			client.onNotification(protocol.ConnectionChangedNotification.type, (params: protocol.ConnectionChangedParams) => {
 				handler({
 					connectionUri: params.ownerUri,
@@ -279,11 +279,11 @@ export class ConnectionFeature extends SqlOpsFeature<undefined> {
 			});
 		};
 
-		sqlops.dataprotocol.onDidChangeLanguageFlavor((params) => {
+		azdata.dataprotocol.onDidChangeLanguageFlavor((params) => {
             client.sendNotification(protocol.LanguageFlavorChangedNotification.type, params);
         });
 
-		return sqlops.dataprotocol.registerConnectionProvider({
+		return azdata.dataprotocol.registerConnectionProvider({
 			providerId: client.providerId,
 			connect,
 			disconnect,
@@ -348,7 +348,7 @@ export class QueryFeature extends SqlOpsFeature<undefined> {
 
 	protected registerProvider(options: undefined): Disposable {
 		const client = this._client;
-		let runQuery = (ownerUri: string, querySelection: sqlops.ISelectionData, executionPlanOptions?: sqlops.ExecutionPlanOptions): Thenable<void> => {
+		let runQuery = (ownerUri: string, querySelection: azdata.ISelectionData, executionPlanOptions?: azdata.ExecutionPlanOptions): Thenable<void> => {
 			let params: types.QueryExecuteParams = {
 				ownerUri,
 				querySelection,
@@ -363,7 +363,7 @@ export class QueryFeature extends SqlOpsFeature<undefined> {
 			);
 		};
 
-		let cancelQuery = (ownerUri: string): Thenable<sqlops.QueryCancelResult> => {
+		let cancelQuery = (ownerUri: string): Thenable<azdata.QueryCancelResult> => {
 			let params: protocol.QueryCancelParams = { ownerUri };
 			return client.sendRequest(protocol.QueryCancelRequest.type, params).then(
 				r => r,
@@ -400,8 +400,8 @@ export class QueryFeature extends SqlOpsFeature<undefined> {
 			);
 		};
 
-		let runQueryAndReturn = (ownerUri: string, queryString: string): Thenable<sqlops.SimpleExecuteResult> => {
-			let params: sqlops.SimpleExecuteParams = { ownerUri, queryString };
+		let runQueryAndReturn = (ownerUri: string, queryString: string): Thenable<azdata.SimpleExecuteResult> => {
+			let params: azdata.SimpleExecuteParams = { ownerUri, queryString };
 			return client.sendRequest(protocol.SimpleExecuteRequest.type, params).then(
 				r => r,
 				e => {
@@ -411,8 +411,8 @@ export class QueryFeature extends SqlOpsFeature<undefined> {
 			);
 		};
 
-		let parseSyntax = (ownerUri: string, query: string): Thenable<sqlops.SyntaxParseResult> => {
-			let params: sqlops.SyntaxParseParams = { ownerUri, query };
+		let parseSyntax = (ownerUri: string, query: string): Thenable<azdata.SyntaxParseResult> => {
+			let params: azdata.SyntaxParseParams = { ownerUri, query };
 			return client.sendRequest(protocol.SyntaxParseRequest.type, params).then(
 				r => r,
 				e => {
@@ -422,7 +422,7 @@ export class QueryFeature extends SqlOpsFeature<undefined> {
 			)
 		}
 
-		let getQueryRows = (rowData: sqlops.QueryExecuteSubsetParams): Thenable<sqlops.QueryExecuteSubsetResult> => {
+		let getQueryRows = (rowData: azdata.QueryExecuteSubsetParams): Thenable<azdata.QueryExecuteSubsetResult> => {
 			return client.sendRequest(protocol.QueryExecuteSubsetRequest.type, rowData).then(
 				r => r,
 				e => {
@@ -443,31 +443,31 @@ export class QueryFeature extends SqlOpsFeature<undefined> {
 			);
 		};
 
-		let registerOnQueryComplete = (handler: (result: sqlops.QueryExecuteCompleteNotificationResult) => any): void => {
+		let registerOnQueryComplete = (handler: (result: azdata.QueryExecuteCompleteNotificationResult) => any): void => {
 			client.onNotification(protocol.QueryExecuteCompleteNotification.type, handler);
 		};
 
-		let registerOnBatchStart = (handler: (batchInfo: sqlops.QueryExecuteBatchNotificationParams) => any): void => {
+		let registerOnBatchStart = (handler: (batchInfo: azdata.QueryExecuteBatchNotificationParams) => any): void => {
 			client.onNotification(protocol.QueryExecuteBatchStartNotification.type, handler);
 		};
 
-		let registerOnBatchComplete = (handler: (batchInfo: sqlops.QueryExecuteBatchNotificationParams) => any): void => {
+		let registerOnBatchComplete = (handler: (batchInfo: azdata.QueryExecuteBatchNotificationParams) => any): void => {
 			client.onNotification(protocol.QueryExecuteBatchCompleteNotification.type, handler);
 		};
 
-		let registerOnResultSetAvailable = (handler: (resultSetInfo: sqlops.QueryExecuteResultSetNotificationParams) => any): void => {
+		let registerOnResultSetAvailable = (handler: (resultSetInfo: azdata.QueryExecuteResultSetNotificationParams) => any): void => {
 			client.onNotification(protocol.QueryExecuteResultSetAvailableNotification.type, handler);
 		};
 
-		let registerOnResultSetUpdated = (handler: (resultSetInfo: sqlops.QueryExecuteResultSetNotificationParams) => any): void => {
+		let registerOnResultSetUpdated = (handler: (resultSetInfo: azdata.QueryExecuteResultSetNotificationParams) => any): void => {
 			client.onNotification(protocol.QueryExecuteResultSetUpdatedNotification.type, handler);
 		}
 
-		let registerOnMessage = (handler: (message: sqlops.QueryExecuteMessageParams) => any): void => {
+		let registerOnMessage = (handler: (message: azdata.QueryExecuteMessageParams) => any): void => {
 			client.onNotification(protocol.QueryExecuteMessageNotification.type, handler);
 		};
 
-		let saveResults = (requestParams: sqlops.SaveResultsRequestParams): Thenable<sqlops.SaveResultRequestResult> => {
+		let saveResults = (requestParams: azdata.SaveResultsRequestParams): Thenable<azdata.SaveResultRequestResult> => {
 			switch (requestParams.resultFormat) {
 				case 'csv':
 					return client.sendRequest(protocol.SaveResultsAsCsvRequest.type, requestParams).then(
@@ -508,7 +508,7 @@ export class QueryFeature extends SqlOpsFeature<undefined> {
 
 		// Edit Data Requests
 		let commitEdit = (ownerUri: string): Thenable<void> => {
-			let params: sqlops.EditCommitParams = { ownerUri };
+			let params: azdata.EditCommitParams = { ownerUri };
 			return client.sendRequest(protocol.EditCommitRequest.type, params).then(
 				r => undefined,
 				e => {
@@ -518,8 +518,8 @@ export class QueryFeature extends SqlOpsFeature<undefined> {
 			);
 		};
 
-		let createRow = (ownerUri: string): Thenable<sqlops.EditCreateRowResult> => {
-			let params: sqlops.EditCreateRowParams = { ownerUri: ownerUri };
+		let createRow = (ownerUri: string): Thenable<azdata.EditCreateRowResult> => {
+			let params: azdata.EditCreateRowParams = { ownerUri: ownerUri };
 			return client.sendRequest(protocol.EditCreateRowRequest.type, params).then(
 				r => r,
 				e => {
@@ -530,7 +530,7 @@ export class QueryFeature extends SqlOpsFeature<undefined> {
 		};
 
 		let deleteRow = (ownerUri: string, rowId: number): Thenable<void> => {
-			let params: sqlops.EditDeleteRowParams = { ownerUri, rowId };
+			let params: azdata.EditDeleteRowParams = { ownerUri, rowId };
 			return client.sendRequest(protocol.EditDeleteRowRequest.type, params).then(
 				r => undefined,
 				e => {
@@ -541,7 +541,7 @@ export class QueryFeature extends SqlOpsFeature<undefined> {
 		};
 
 		let disposeEdit = (ownerUri: string): Thenable<void> => {
-			let params: sqlops.EditDisposeParams = { ownerUri };
+			let params: azdata.EditDisposeParams = { ownerUri };
 			return client.sendRequest(protocol.EditDisposeRequest.type, params).then(
 				r => undefined,
 				e => {
@@ -552,8 +552,8 @@ export class QueryFeature extends SqlOpsFeature<undefined> {
 		};
 
 		let initializeEdit = (ownerUri: string, schemaName: string, objectName: string, objectType: string, LimitResults: number, queryString: string): Thenable<void> => {
-			let filters: sqlops.EditInitializeFiltering = { LimitResults };
-			let params: sqlops.EditInitializeParams = { ownerUri, schemaName, objectName, objectType, filters, queryString };
+			let filters: azdata.EditInitializeFiltering = { LimitResults };
+			let params: azdata.EditInitializeParams = { ownerUri, schemaName, objectName, objectType, filters, queryString };
 			return client.sendRequest(protocol.EditInitializeRequest.type, params).then(
 				r => undefined,
 				e => {
@@ -563,8 +563,8 @@ export class QueryFeature extends SqlOpsFeature<undefined> {
 			);
 		};
 
-		let revertCell = (ownerUri: string, rowId: number, columnId: number): Thenable<sqlops.EditRevertCellResult> => {
-			let params: sqlops.EditRevertCellParams = { ownerUri, rowId, columnId };
+		let revertCell = (ownerUri: string, rowId: number, columnId: number): Thenable<azdata.EditRevertCellResult> => {
+			let params: azdata.EditRevertCellParams = { ownerUri, rowId, columnId };
 			return client.sendRequest(protocol.EditRevertCellRequest.type, params).then(
 				r => r,
 				e => {
@@ -575,7 +575,7 @@ export class QueryFeature extends SqlOpsFeature<undefined> {
 		};
 
 		let revertRow = (ownerUri: string, rowId: number): Thenable<void> => {
-			let params: sqlops.EditRevertRowParams = { ownerUri, rowId };
+			let params: azdata.EditRevertRowParams = { ownerUri, rowId };
 			return client.sendRequest(protocol.EditRevertRowRequest.type, params).then(
 				r => undefined,
 				e => {
@@ -585,8 +585,8 @@ export class QueryFeature extends SqlOpsFeature<undefined> {
 			);
 		};
 
-		let updateCell = (ownerUri: string, rowId: number, columnId: number, newValue: string): Thenable<sqlops.EditUpdateCellResult> => {
-			let params: sqlops.EditUpdateCellParams = { ownerUri, rowId, columnId, newValue };
+		let updateCell = (ownerUri: string, rowId: number, columnId: number, newValue: string): Thenable<azdata.EditUpdateCellResult> => {
+			let params: azdata.EditUpdateCellParams = { ownerUri, rowId, columnId, newValue };
 			return client.sendRequest(protocol.EditUpdateCellRequest.type, params).then(
 				r => r,
 				e => {
@@ -596,7 +596,7 @@ export class QueryFeature extends SqlOpsFeature<undefined> {
 			);
 		};
 
-		let getEditRows = (rowData: sqlops.EditSubsetParams): Thenable<sqlops.EditSubsetResult> => {
+		let getEditRows = (rowData: azdata.EditSubsetParams): Thenable<azdata.EditSubsetResult> => {
 			return client.sendRequest(protocol.EditSubsetRequest.type, rowData).then(
 				r => r,
 				e => {
@@ -608,12 +608,12 @@ export class QueryFeature extends SqlOpsFeature<undefined> {
 
 		// Edit Data Event Handlers
 		let registerOnEditSessionReady = (handler: (ownerUri: string, success: boolean, message: string) => any): void => {
-			client.onNotification(protocol.EditSessionReadyNotification.type, (params: sqlops.EditSessionReadyParams) => {
+			client.onNotification(protocol.EditSessionReadyNotification.type, (params: azdata.EditSessionReadyParams) => {
 				handler(params.ownerUri, params.success, params.message);
 			});
 		};
 
-		return sqlops.dataprotocol.registerQueryProvider({
+		return azdata.dataprotocol.registerQueryProvider({
 			providerId: client.providerId,
 			cancelQuery,
 			commitEdit,
@@ -670,7 +670,7 @@ export class MetadataFeature extends SqlOpsFeature<undefined> {
 	protected registerProvider(options: undefined): Disposable {
 		const client = this._client;
 
-		let getMetadata = (ownerUri: string): Thenable<sqlops.ProviderMetadata> => {
+		let getMetadata = (ownerUri: string): Thenable<azdata.ProviderMetadata> => {
 			let params: types.MetadataQueryParams = { ownerUri };
 			return client.sendRequest(protocol.MetadataQueryRequest.type, params).then(
 				client.sqlp2c.asProviderMetadata,
@@ -692,7 +692,7 @@ export class MetadataFeature extends SqlOpsFeature<undefined> {
 			);
 		};
 
-		let getTableInfo = (ownerUri: string, metadata: sqlops.ObjectMetadata): Thenable<sqlops.ColumnMetadata[]> => {
+		let getTableInfo = (ownerUri: string, metadata: azdata.ObjectMetadata): Thenable<azdata.ColumnMetadata[]> => {
 			let params: protocol.TableMetadataParams = { objectName: metadata.name, ownerUri, schema: metadata.schema };
 			return client.sendRequest(protocol.TableMetadataRequest.type, params).then(
 				r => r.columns,
@@ -703,7 +703,7 @@ export class MetadataFeature extends SqlOpsFeature<undefined> {
 			);
 		};
 
-		let getViewInfo = (ownerUri: string, metadata: sqlops.ObjectMetadata): Thenable<sqlops.ColumnMetadata[]> => {
+		let getViewInfo = (ownerUri: string, metadata: azdata.ObjectMetadata): Thenable<azdata.ColumnMetadata[]> => {
 			let params: protocol.TableMetadataParams = { objectName: metadata.name, ownerUri, schema: metadata.schema };
 			return client.sendRequest(protocol.ViewMetadataRequest.type, params).then(
 				r => r.columns,
@@ -714,7 +714,7 @@ export class MetadataFeature extends SqlOpsFeature<undefined> {
 			);
 		};
 
-		return sqlops.dataprotocol.registerMetadataProvider({
+		return azdata.dataprotocol.registerMetadataProvider({
 			providerId: client.providerId,
 			getDatabases,
 			getMetadata,
@@ -750,7 +750,7 @@ export class AdminServicesFeature extends SqlOpsFeature<undefined> {
 	protected registerProvider(options: undefined): Disposable {
 		const client = this._client;
 
-		let createDatabase = (ownerUri: string, databaseInfo: sqlops.DatabaseInfo): Thenable<sqlops.CreateDatabaseResponse> => {
+		let createDatabase = (ownerUri: string, databaseInfo: azdata.DatabaseInfo): Thenable<azdata.CreateDatabaseResponse> => {
 			let params: types.CreateDatabaseParams = { ownerUri, databaseInfo };
 			return client.sendRequest(protocol.CreateDatabaseRequest.type, params).then(
 				r => r,
@@ -761,7 +761,7 @@ export class AdminServicesFeature extends SqlOpsFeature<undefined> {
 			);
 		};
 
-		let getDefaultDatabaseInfo = (ownerUri: string): Thenable<sqlops.DatabaseInfo> => {
+		let getDefaultDatabaseInfo = (ownerUri: string): Thenable<azdata.DatabaseInfo> => {
 			let params: types.DefaultDatabaseInfoParams = { ownerUri };
 			return client.sendRequest(protocol.DefaultDatabaseInfoRequest.type, params).then(
 				r => r.defaultDatabaseInfo,
@@ -772,7 +772,7 @@ export class AdminServicesFeature extends SqlOpsFeature<undefined> {
 			);
 		};
 
-		let getDatabaseInfo = (ownerUri: string): Thenable<sqlops.DatabaseInfo> => {
+		let getDatabaseInfo = (ownerUri: string): Thenable<azdata.DatabaseInfo> => {
 			let params: types.GetDatabaseInfoParams = { ownerUri };
 			return client.sendRequest(protocol.GetDatabaseInfoRequest.type, params).then(
 				r => r.databaseInfo,
@@ -783,7 +783,7 @@ export class AdminServicesFeature extends SqlOpsFeature<undefined> {
 			);
 		};
 
-		let createLogin = (ownerUri: string, loginInfo: sqlops.LoginInfo): Thenable<sqlops.CreateLoginResponse> => {
+		let createLogin = (ownerUri: string, loginInfo: azdata.LoginInfo): Thenable<azdata.CreateLoginResponse> => {
 			let params: types.CreateLoginParams = { ownerUri, loginInfo };
 			return client.sendRequest(protocol.CreateLoginRequest.type, params).then(
 				r => r,
@@ -794,7 +794,7 @@ export class AdminServicesFeature extends SqlOpsFeature<undefined> {
 			);
 		};
 
-		return sqlops.dataprotocol.registerAdminServicesProvider({
+		return azdata.dataprotocol.registerAdminServicesProvider({
 			providerId: client.providerId,
 			createDatabase,
 			createLogin,
@@ -828,7 +828,7 @@ export class BackupFeature extends SqlOpsFeature<undefined> {
 	protected registerProvider(options: undefined): Disposable {
 		const client = this._client;
 
-		let backup = (ownerUri: string, backupInfo: types.BackupInfo, taskExecutionMode: sqlops.TaskExecutionMode): Thenable<sqlops.BackupResponse> => {
+		let backup = (ownerUri: string, backupInfo: types.BackupInfo, taskExecutionMode: azdata.TaskExecutionMode): Thenable<azdata.BackupResponse> => {
 			let params: types.BackupParams = { ownerUri, backupInfo, taskExecutionMode };
 			return client.sendRequest(protocol.BackupRequest.type, params).then(
 				r => r,
@@ -839,7 +839,7 @@ export class BackupFeature extends SqlOpsFeature<undefined> {
 			);
 		};
 
-		let getBackupConfigInfo = (connectionUri: string): Thenable<sqlops.BackupConfigInfo> => {
+		let getBackupConfigInfo = (connectionUri: string): Thenable<azdata.BackupConfigInfo> => {
 			let params: types.DefaultDatabaseInfoParams = { ownerUri: connectionUri };
 			return client.sendRequest(protocol.BackupConfigInfoRequest.type, params).then(
 				r => r.backupConfigInfo,
@@ -850,7 +850,7 @@ export class BackupFeature extends SqlOpsFeature<undefined> {
 			);
 		};
 
-		return sqlops.dataprotocol.registerBackupProvider({
+		return azdata.dataprotocol.registerBackupProvider({
 			providerId: client.providerId,
 			backup,
 			getBackupConfigInfo
@@ -884,7 +884,7 @@ export class RestoreFeature extends SqlOpsFeature<undefined> {
 	protected registerProvider(options: undefined): Disposable {
 		const client = this._client;
 
-		let getRestorePlan = (ownerUri: string, restoreInfo: sqlops.RestoreInfo): Thenable<sqlops.RestorePlanResponse> => {
+		let getRestorePlan = (ownerUri: string, restoreInfo: azdata.RestoreInfo): Thenable<azdata.RestorePlanResponse> => {
 			let params: types.RestoreParams = { options: restoreInfo.options, ownerUri, taskExecutionMode: restoreInfo.taskExecutionMode };
 			return client.sendRequest(protocol.RestorePlanRequest.type, params).then(
 				r => r,
@@ -895,7 +895,7 @@ export class RestoreFeature extends SqlOpsFeature<undefined> {
 			);
 		};
 
-		let restore = (ownerUri: string, restoreInfo: sqlops.RestoreInfo): Thenable<sqlops.RestoreResponse> => {
+		let restore = (ownerUri: string, restoreInfo: azdata.RestoreInfo): Thenable<azdata.RestoreResponse> => {
 			let params: types.RestoreParams = { options: restoreInfo.options, ownerUri, taskExecutionMode: restoreInfo.taskExecutionMode };
 			return client.sendRequest(protocol.RestoreRequest.type, params).then(
 				r => r,
@@ -906,7 +906,7 @@ export class RestoreFeature extends SqlOpsFeature<undefined> {
 			);
 		};
 
-		let getRestoreConfigInfo = (ownerUri: string): Thenable<sqlops.RestoreConfigInfo> => {
+		let getRestoreConfigInfo = (ownerUri: string): Thenable<azdata.RestoreConfigInfo> => {
 			let params: types.RestoreConfigInfoRequestParams = { ownerUri };
 			return client.sendRequest(protocol.RestoreConfigInfoRequest.type, params).then(
 				r => r,
@@ -917,7 +917,7 @@ export class RestoreFeature extends SqlOpsFeature<undefined> {
 			);
 		};
 
-		let cancelRestorePlan = (ownerUri: string, restoreInfo: sqlops.RestoreInfo): Thenable<boolean> => {
+		let cancelRestorePlan = (ownerUri: string, restoreInfo: azdata.RestoreInfo): Thenable<boolean> => {
 			let params: types.RestoreParams = { options: restoreInfo.options, ownerUri, taskExecutionMode: restoreInfo.taskExecutionMode };
 			return client.sendRequest(protocol.CancelRestorePlanRequest.type, params).then(
 				r => r,
@@ -928,7 +928,7 @@ export class RestoreFeature extends SqlOpsFeature<undefined> {
 			);
 		};
 
-		return sqlops.dataprotocol.registerRestoreProvider({
+		return azdata.dataprotocol.registerRestoreProvider({
 			providerId: client.providerId,
 			cancelRestorePlan,
 			getRestoreConfigInfo,
@@ -966,7 +966,7 @@ export class ObjectExplorerFeature extends SqlOpsFeature<undefined> {
 
 	protected registerProvider(options: undefined): Disposable {
 		const client = this._client;
-		let createNewSession = (connInfo: sqlops.ConnectionInfo): Thenable<sqlops.ObjectExplorerSessionResponse> => {
+		let createNewSession = (connInfo: azdata.ConnectionInfo): Thenable<azdata.ObjectExplorerSessionResponse> => {
 			return client.sendRequest(protocol.ObjectExplorerCreateSessionRequest.type, connInfo).then(
 				r => r,
 				e => {
@@ -976,7 +976,7 @@ export class ObjectExplorerFeature extends SqlOpsFeature<undefined> {
 			);
 		};
 
-		let expandNode = (nodeInfo: sqlops.ExpandNodeInfo): Thenable<boolean> => {
+		let expandNode = (nodeInfo: azdata.ExpandNodeInfo): Thenable<boolean> => {
 			return client.sendRequest(protocol.ObjectExplorerExpandRequest.type, nodeInfo).then(
 				r => r,
 				e => {
@@ -986,7 +986,7 @@ export class ObjectExplorerFeature extends SqlOpsFeature<undefined> {
 			);
 		};
 
-		let refreshNode = (nodeInfo: sqlops.ExpandNodeInfo): Thenable<boolean> => {
+		let refreshNode = (nodeInfo: azdata.ExpandNodeInfo): Thenable<boolean> => {
 			return client.sendRequest(protocol.ObjectExplorerRefreshRequest.type, nodeInfo).then(
 				r => r,
 				e => {
@@ -996,7 +996,7 @@ export class ObjectExplorerFeature extends SqlOpsFeature<undefined> {
 			);
 		};
 
-		let closeSession = (closeSessionInfo: sqlops.ObjectExplorerCloseSessionInfo): Thenable<any> => {
+		let closeSession = (closeSessionInfo: azdata.ObjectExplorerCloseSessionInfo): Thenable<any> => {
 			return client.sendRequest(protocol.ObjectExplorerCloseSessionRequest.type, closeSessionInfo).then(
 				r => r,
 				e => {
@@ -1006,7 +1006,7 @@ export class ObjectExplorerFeature extends SqlOpsFeature<undefined> {
 			);
 		};
 
-		let findNodes = (findNodesInfo: sqlops.FindNodesInfo): Thenable<any> => {
+		let findNodes = (findNodesInfo: azdata.FindNodesInfo): Thenable<any> => {
 			return client.sendRequest(protocol.ObjectExplorerFindNodesRequest.type, findNodesInfo).then(
 				r => r,
 				e => {
@@ -1016,19 +1016,19 @@ export class ObjectExplorerFeature extends SqlOpsFeature<undefined> {
 			)
 		}
 
-		let registerOnSessionCreated = (handler: (response: sqlops.ObjectExplorerSession) => any): void => {
+		let registerOnSessionCreated = (handler: (response: azdata.ObjectExplorerSession) => any): void => {
 			client.onNotification(protocol.ObjectExplorerCreateSessionCompleteNotification.type, handler);
 		};
 
-		let registerOnSessionDisconnected = (handler: (response: sqlops.ObjectExplorerSession) => any): void => {
+		let registerOnSessionDisconnected = (handler: (response: azdata.ObjectExplorerSession) => any): void => {
 			client.onNotification(protocol.ObjectExplorerSessionDisconnectedNotification.type, handler);
 		};
 
-		let registerOnExpandCompleted = (handler: (response: sqlops.ObjectExplorerExpandInfo) => any): void => {
+		let registerOnExpandCompleted = (handler: (response: azdata.ObjectExplorerExpandInfo) => any): void => {
 			client.onNotification(protocol.ObjectExplorerExpandCompleteNotification.type, handler);
 		};
 
-		return sqlops.dataprotocol.registerObjectExplorerProvider({
+		return azdata.dataprotocol.registerObjectExplorerProvider({
 			providerId: client.providerId,
 			closeSession,
 			createNewSession,
@@ -1066,7 +1066,7 @@ export class ScriptingFeature extends SqlOpsFeature<undefined> {
 	protected registerProvider(options: undefined): Disposable {
 		const client = this._client;
 
-		let scriptAsOperation = (connectionUri: string, operation: sqlops.ScriptOperation, metadata: sqlops.ObjectMetadata, paramDetails: sqlops.ScriptingParamDetails): Thenable<sqlops.ScriptingResult> => {
+		let scriptAsOperation = (connectionUri: string, operation: azdata.ScriptOperation, metadata: azdata.ObjectMetadata, paramDetails: azdata.ScriptingParamDetails): Thenable<azdata.ScriptingResult> => {
 			return client.sendRequest(protocol.ScriptingRequest.type,
 				client.sqlc2p.asScriptingParams(connectionUri, operation, metadata, paramDetails)).then(
 				r => r,
@@ -1077,11 +1077,11 @@ export class ScriptingFeature extends SqlOpsFeature<undefined> {
 				);
 		};
 
-		let registerOnScriptingComplete = (handler: (scriptingCompleteResult: sqlops.ScriptingCompleteResult) => any): void => {
+		let registerOnScriptingComplete = (handler: (scriptingCompleteResult: azdata.ScriptingCompleteResult) => any): void => {
 			client.onNotification(protocol.ScriptingCompleteNotification.type, handler);
 		};
 
-		return sqlops.dataprotocol.registerScriptingProvider({
+		return azdata.dataprotocol.registerScriptingProvider({
 			providerId: client.providerId,
 			registerOnScriptingComplete,
 			scriptAsOperation
@@ -1115,7 +1115,7 @@ export class TaskServicesFeature extends SqlOpsFeature<undefined> {
 	protected registerProvider(options: undefined): Disposable {
 		const client = this._client;
 
-		let getAllTasks = (listTasksParams: sqlops.ListTasksParams): Thenable<sqlops.ListTasksResponse> => {
+		let getAllTasks = (listTasksParams: azdata.ListTasksParams): Thenable<azdata.ListTasksResponse> => {
 			return client.sendRequest(protocol.ListTasksRequest.type, listTasksParams).then(
 				r => r,
 				e => {
@@ -1126,7 +1126,7 @@ export class TaskServicesFeature extends SqlOpsFeature<undefined> {
 
 		};
 
-		let cancelTask = (cancelTaskParams: sqlops.CancelTaskParams): Thenable<boolean> => {
+		let cancelTask = (cancelTaskParams: azdata.CancelTaskParams): Thenable<boolean> => {
 			return client.sendRequest(protocol.CancelTaskRequest.type, cancelTaskParams).then(
 				r => r,
 				e => {
@@ -1136,15 +1136,15 @@ export class TaskServicesFeature extends SqlOpsFeature<undefined> {
 			);
 		};
 
-		let registerOnTaskCreated = (handler: (response: sqlops.TaskInfo) => any): void => {
+		let registerOnTaskCreated = (handler: (response: azdata.TaskInfo) => any): void => {
 			client.onNotification(protocol.TaskCreatedNotification.type, handler);
 		};
 
-		let registerOnTaskStatusChanged = (handler: (response: sqlops.TaskProgressInfo) => any): void => {
+		let registerOnTaskStatusChanged = (handler: (response: azdata.TaskProgressInfo) => any): void => {
 			client.onNotification(protocol.TaskStatusChangedNotification.type, handler);
 		};
 
-		return sqlops.dataprotocol.registerTaskServicesProvider({
+		return azdata.dataprotocol.registerTaskServicesProvider({
 			providerId: client.providerId,
 			cancelTask,
 			getAllTasks,
@@ -1194,7 +1194,7 @@ export class FileBrowserFeature extends SqlOpsFeature<undefined> {
 			);
 		};
 
-		let registerOnFileBrowserOpened = (handler: (response: sqlops.FileBrowserOpenedParams) => any): void => {
+		let registerOnFileBrowserOpened = (handler: (response: azdata.FileBrowserOpenedParams) => any): void => {
 			client.onNotification(protocol.FileBrowserOpenedNotification.type, handler);
 		};
 
@@ -1209,7 +1209,7 @@ export class FileBrowserFeature extends SqlOpsFeature<undefined> {
 			);
 		};
 
-		let registerOnFolderNodeExpanded = (handler: (response: sqlops.FileBrowserExpandedParams) => any): void => {
+		let registerOnFolderNodeExpanded = (handler: (response: azdata.FileBrowserExpandedParams) => any): void => {
 			client.onNotification(protocol.FileBrowserExpandedNotification.type, handler);
 		};
 
@@ -1224,11 +1224,11 @@ export class FileBrowserFeature extends SqlOpsFeature<undefined> {
 			);
 		};
 
-		let registerOnFilePathsValidated = (handler: (response: sqlops.FileBrowserValidatedParams) => any): void => {
+		let registerOnFilePathsValidated = (handler: (response: azdata.FileBrowserValidatedParams) => any): void => {
 			client.onNotification(protocol.FileBrowserValidatedNotification.type, handler);
 		};
 
-		let closeFileBrowser = (ownerUri: string): Thenable<sqlops.FileBrowserCloseResponse> => {
+		let closeFileBrowser = (ownerUri: string): Thenable<azdata.FileBrowserCloseResponse> => {
 			let params: types.FileBrowserCloseParams = { ownerUri };
 			return client.sendRequest(protocol.FileBrowserCloseRequest.type, params).then(
 				r => r,
@@ -1239,7 +1239,7 @@ export class FileBrowserFeature extends SqlOpsFeature<undefined> {
 			);
 		};
 
-		return sqlops.dataprotocol.registerFileBrowserProvider({
+		return azdata.dataprotocol.registerFileBrowserProvider({
 			providerId: client.providerId,
 			closeFileBrowser,
 			expandFolderNode,
@@ -1277,7 +1277,7 @@ export class ProfilerFeature extends SqlOpsFeature<undefined> {
 	protected registerProvider(options: undefined): Disposable {
 		const client = this._client;
 
-		let createSession = (ownerUri: string, sessionName:string, template: sqlops.ProfilerSessionTemplate): Thenable<boolean> => {
+		let createSession = (ownerUri: string, sessionName:string, template: azdata.ProfilerSessionTemplate): Thenable<boolean> => {
 			let params: types.CreateXEventSessionParams = {
 				ownerUri,
 				sessionName,
@@ -1367,9 +1367,9 @@ export class ProfilerFeature extends SqlOpsFeature<undefined> {
 			);
 		};
 
-		let registerOnSessionEventsAvailable = (handler: (response: sqlops.ProfilerSessionEvents) => any): void => {
+		let registerOnSessionEventsAvailable = (handler: (response: azdata.ProfilerSessionEvents) => any): void => {
 			client.onNotification(protocol.ProfilerEventsAvailableNotification.type, (params: types.ProfilerEventsAvailableParams) => {
-				handler(<sqlops.ProfilerSessionEvents>{
+				handler(<azdata.ProfilerSessionEvents>{
 					sessionId: params.ownerUri,
 					events: params.events,
 					eventsLost: params.eventsLost
@@ -1378,18 +1378,18 @@ export class ProfilerFeature extends SqlOpsFeature<undefined> {
 		};
 
 		
-		let registerOnSessionStopped = (handler: (response: sqlops.ProfilerSessionStoppedParams) => any): void => {
+		let registerOnSessionStopped = (handler: (response: azdata.ProfilerSessionStoppedParams) => any): void => {
 			client.onNotification(protocol.ProfilerSessionStoppedNotification.type, (params: types.ProfilerSessionStoppedParams) => {
-				handler(<sqlops.ProfilerSessionStoppedParams>{
+				handler(<azdata.ProfilerSessionStoppedParams>{
 					ownerUri: params.ownerUri,
 					sessionId: params.sessionId,
 				});
 			});
 		};
 
-		let registerOnProfilerSessionCreated = (handler: (response: sqlops.ProfilerSessionCreatedParams) => any): void => {
+		let registerOnProfilerSessionCreated = (handler: (response: azdata.ProfilerSessionCreatedParams) => any): void => {
 			client.onNotification(protocol.ProfilerSessionCreatedNotification.type, (params: types.ProfilerSessionCreatedParams) => {
-				handler(<sqlops.ProfilerSessionCreatedParams>{
+				handler(<azdata.ProfilerSessionCreatedParams>{
 					ownerUri: params.ownerUri,
 					sessionName: params.sessionName,
 					templateName: params.templateName
@@ -1398,7 +1398,7 @@ export class ProfilerFeature extends SqlOpsFeature<undefined> {
 		};
 		
 
-		return sqlops.dataprotocol.registerProfilerProvider({
+		return azdata.dataprotocol.registerProfilerProvider({
 			providerId: client.providerId,
 			connectSession,
 			disconnectSession,
