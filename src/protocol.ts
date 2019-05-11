@@ -1,7 +1,7 @@
 import { ClientCapabilities as VSClientCapabilities, RequestType, NotificationType } from 'vscode-languageclient';
 
 import * as types from './types';
-import * as sqlops from 'sqlops';
+import * as azdata from 'azdata';
 
 export interface ConnectionClientCapabilities {
 	connection?: {
@@ -116,7 +116,7 @@ export interface ConnectParams {
 	/**
 	 * Details for creating the connection
 	 */
-	connection: sqlops.ConnectionInfo;
+	connection: azdata.ConnectionInfo;
 }
 
 
@@ -212,7 +212,7 @@ export class ListDatabasesParams {
 
 // List databases request callback declaration
 export namespace ListDatabasesRequest {
-	export const type = new RequestType<ListDatabasesParams, sqlops.ListDatabasesResult, void, void>('connection/listdatabases');
+	export const type = new RequestType<ListDatabasesParams, azdata.ListDatabasesResult, void, void>('connection/listdatabases');
 }
 
 // ------------------------------- < Get Connection String Request > ---------------------------------------
@@ -235,7 +235,7 @@ export namespace GetConnectionStringRequest {
 
 // Get Connection String request callback declaration
 export namespace BuildConnectionInfoRequest {
-	export const type = new RequestType<string, sqlops.ConnectionInfo, void, void>('connection/buildconnectioninfo');
+	export const type = new RequestType<string, azdata.ConnectionInfo, void, void>('connection/buildconnectioninfo');
 }
 
 // Language Flavor Changed ================================================================================
@@ -268,7 +268,7 @@ export class TableMetadataParams {
 
 // Table metadata response format
 export class TableMetadataResult {
-	public columns: sqlops.ColumnMetadata[];
+	public columns: azdata.ColumnMetadata[];
 }
 
 // Table metadata request callback declaration
@@ -305,7 +305,7 @@ export namespace CapabiltiesDiscoveryRequest {
 // Query Execution ================================================================================
 // ------------------------------- < Query Cancellation Request > ------------------------------------
 export namespace QueryCancelRequest {
-	export const type = new RequestType<QueryCancelParams, sqlops.QueryCancelResult, void, void>('query/cancel');
+	export const type = new RequestType<QueryCancelParams, azdata.QueryCancelResult, void, void>('query/cancel');
 }
 
 export interface QueryCancelParams {
@@ -333,32 +333,32 @@ export interface QueryDisposeResult {
 
 // ------------------------------- < Query Execution Complete Notification > ------------------------------------
 export namespace QueryExecuteCompleteNotification {
-	export const type = new NotificationType<sqlops.QueryExecuteCompleteNotificationResult, void>('query/complete');
+	export const type = new NotificationType<azdata.QueryExecuteCompleteNotificationResult, void>('query/complete');
 }
 
 // ------------------------------- < Query Batch Start  Notification > ------------------------------------
 export namespace QueryExecuteBatchStartNotification {
-	export const type = new NotificationType<sqlops.QueryExecuteBatchNotificationParams, void>('query/batchStart');
+	export const type = new NotificationType<azdata.QueryExecuteBatchNotificationParams, void>('query/batchStart');
 }
 
 // ------------------------------- < Query Batch Complete Notification > ------------------------------------
 export namespace QueryExecuteBatchCompleteNotification {
-	export const type = new NotificationType<sqlops.QueryExecuteBatchNotificationParams, void>('query/batchComplete');
+	export const type = new NotificationType<azdata.QueryExecuteBatchNotificationParams, void>('query/batchComplete');
 }
 
 // ------------------------------- < Query ResultSet Complete Notification > ------------------------------------
 export namespace QueryExecuteResultSetAvailableNotification {
-	export const type = new NotificationType<sqlops.QueryExecuteResultSetNotificationParams, void>('query/resultSetAvailable');
+	export const type = new NotificationType<azdata.QueryExecuteResultSetNotificationParams, void>('query/resultSetAvailable');
 }
 
 // ------------------------------- < Query Resultset available notification > ------------------------------------
 export namespace QueryExecuteResultSetUpdatedNotification {
-	export const type = new NotificationType<sqlops.QueryExecuteResultSetNotificationParams, void>('query/resultSetUpdated');
+	export const type = new NotificationType<azdata.QueryExecuteResultSetNotificationParams, void>('query/resultSetUpdated');
 }
 
 // ------------------------------- < Query Message Notification > ------------------------------------
 export namespace QueryExecuteMessageNotification {
-	export const type = new NotificationType<sqlops.QueryExecuteMessageParams, void>('query/message');
+	export const type = new NotificationType<azdata.QueryExecuteMessageParams, void>('query/message');
 }
 
 // ------------------------------- < Query Execution Request > ------------------------------------
@@ -370,12 +370,12 @@ export interface QueryExecuteResult { }
 
 // ------------------------------- < Query Results Request > ------------------------------------
 export namespace QueryExecuteSubsetRequest {
-	export const type = new RequestType<sqlops.QueryExecuteSubsetParams, sqlops.QueryExecuteSubsetResult, void, void>('query/subset');
+	export const type = new RequestType<azdata.QueryExecuteSubsetParams, azdata.QueryExecuteSubsetResult, void, void>('query/subset');
 }
 
 export interface ResultSetSubset {
 	rowCount: number;
-	rows: sqlops.DbCellValue[][];
+	rows: azdata.DbCellValue[][];
 }
 
 // ------------------------------- < Execute Statement > ------------------------------------
@@ -393,40 +393,40 @@ export namespace QueryExecuteStatementRequest {
 
 // save results in csv format
 export namespace SaveResultsAsCsvRequest {
-	export const type = new RequestType<sqlops.SaveResultsRequestParams, sqlops.SaveResultRequestResult, void, void>('query/saveCsv');
+	export const type = new RequestType<azdata.SaveResultsRequestParams, azdata.SaveResultRequestResult, void, void>('query/saveCsv');
 }
 // --------------------------------- </ Save Results as CSV Request > ------------------------------------------
 
 // --------------------------------- < Save Results as JSON Request > ------------------------------------------
 // save results in json format
 export namespace SaveResultsAsJsonRequest {
-	export const type = new RequestType<sqlops.SaveResultsRequestParams, sqlops.SaveResultRequestResult, void, void>('query/saveJson');
+	export const type = new RequestType<azdata.SaveResultsRequestParams, azdata.SaveResultRequestResult, void, void>('query/saveJson');
 }
 // --------------------------------- </ Save Results as JSON Request > ------------------------------------------
 
 // --------------------------------- < Save Results as Excel Request > ------------------------------------------
 // save results in Excel format
 export namespace SaveResultsAsExcelRequest {
-	export const type = new RequestType<sqlops.SaveResultsRequestParams, sqlops.SaveResultRequestResult, void, void>('query/saveExcel');
+	export const type = new RequestType<azdata.SaveResultsRequestParams, azdata.SaveResultRequestResult, void, void>('query/saveExcel');
 }
 // --------------------------------- </ Save Results as Excel Request > ------------------------------------------
 
 // --------------------------------- < Save Results as Xml Request > ------------------------------------------
 // save results in Xml format
 export namespace SaveResultsAsXmlRequest {
-	export const type = new RequestType<sqlops.SaveResultsRequestParams, sqlops.SaveResultRequestResult, void, void>('query/saveXml');
+	export const type = new RequestType<azdata.SaveResultsRequestParams, azdata.SaveResultRequestResult, void, void>('query/saveXml');
 }
 // --------------------------------- </ Save Results as Xml Request > ------------------------------------------
 
 // ------------------------------- < T-SQL Syntax Parse > -----------------------------------
 export namespace SyntaxParseRequest {
-	export const type = new RequestType<sqlops.SyntaxParseParams, sqlops.SyntaxParseResult, void, void>('query/syntaxparse');
+	export const type = new RequestType<azdata.SyntaxParseParams, azdata.SyntaxParseResult, void, void>('query/syntaxparse');
 }
 
 // ------------------------------- < Execute and Return > -----------------------------------
 
 export namespace SimpleExecuteRequest {
-	export const type = new RequestType<sqlops.SimpleExecuteParams, sqlops.SimpleExecuteResult, void, void>('query/simpleexecute');
+	export const type = new RequestType<azdata.SimpleExecuteParams, azdata.SimpleExecuteResult, void, void>('query/simpleexecute');
 }
 
 // ------------------------------- < Execute String > ------------------------------------
@@ -448,7 +448,7 @@ export namespace MetadataQueryRequest {
 // ------------------------------- < Scripting Events > ------------------------------------
 
 export namespace ScriptingRequest {
-	export const type = new RequestType<types.ScriptingParams, sqlops.ScriptingResult, void, void>('scripting/script');
+	export const type = new RequestType<types.ScriptingParams, azdata.ScriptingResult, void, void>('scripting/script');
 }
 
 // ------------------------------- < Scripting Complete Event > ------------------------------------
@@ -469,74 +469,74 @@ export interface EditRowOperationParams extends EditSessionOperationParams {
 }
 
 export interface EditCellResult {
-	cell: sqlops.EditCell;
+	cell: azdata.EditCell;
 	isRowDirty: boolean;
 }
 
 // edit/commit --------------------------------------------------------------------------------
 export namespace EditCommitRequest {
-	export const type = new RequestType<sqlops.EditCommitParams, EditCommitResult, void, void>('edit/commit');
+	export const type = new RequestType<azdata.EditCommitParams, EditCommitResult, void, void>('edit/commit');
 }
 
 export interface EditCommitResult { }
 
 // edit/createRow -----------------------------------------------------------------------------
 export namespace EditCreateRowRequest {
-	export const type = new RequestType<sqlops.EditCreateRowParams, sqlops.EditCreateRowResult, void, void>('edit/createRow');
+	export const type = new RequestType<azdata.EditCreateRowParams, azdata.EditCreateRowResult, void, void>('edit/createRow');
 }
 
 // edit/deleteRow -----------------------------------------------------------------------------
 export namespace EditDeleteRowRequest {
-	export const type = new RequestType<sqlops.EditDeleteRowParams, EditDeleteRowResult, void, void>('edit/deleteRow');
+	export const type = new RequestType<azdata.EditDeleteRowParams, EditDeleteRowResult, void, void>('edit/deleteRow');
 }
 
 export interface EditDeleteRowResult { }
 
 // edit/dispose -------------------------------------------------------------------------------
 export namespace EditDisposeRequest {
-	export const type = new RequestType<sqlops.EditDisposeParams, EditDisposeResult, void, void>('edit/dispose');
+	export const type = new RequestType<azdata.EditDisposeParams, EditDisposeResult, void, void>('edit/dispose');
 }
 
 export interface EditDisposeResult { }
 
 // edit/initialize ----------------------------------------------------------------------------
 export namespace EditInitializeRequest {
-	export const type = new RequestType<sqlops.EditInitializeParams, EditInitializeResult, void, void>('edit/initialize');
+	export const type = new RequestType<azdata.EditInitializeParams, EditInitializeResult, void, void>('edit/initialize');
 }
 
 export interface EditInitializeResult { }
 
 // edit/revertCell --------------------------------------------------------------------------------
 export namespace EditRevertCellRequest {
-	export const type = new RequestType<sqlops.EditRevertCellParams, sqlops.EditRevertCellResult, void, void>('edit/revertCell');
+	export const type = new RequestType<azdata.EditRevertCellParams, azdata.EditRevertCellResult, void, void>('edit/revertCell');
 }
 
 // edit/revertRow -----------------------------------------------------------------------------
 export namespace EditRevertRowRequest {
-	export const type = new RequestType<sqlops.EditRevertRowParams, EditRevertRowResult, void, void>('edit/revertRow');
+	export const type = new RequestType<azdata.EditRevertRowParams, EditRevertRowResult, void, void>('edit/revertRow');
 }
 
 export interface EditRevertRowResult { }
 
 // edit/sessionReady Event --------------------------------------------------------------------
 export namespace EditSessionReadyNotification {
-	export const type = new NotificationType<sqlops.EditSessionReadyParams, void>('edit/sessionReady');
+	export const type = new NotificationType<azdata.EditSessionReadyParams, void>('edit/sessionReady');
 }
 
 // edit/updateCell ----------------------------------------------------------------------------
 export namespace EditUpdateCellRequest {
-	export const type = new RequestType<sqlops.EditUpdateCellParams, sqlops.EditUpdateCellResult, void, void>('edit/updateCell');
+	export const type = new RequestType<azdata.EditUpdateCellParams, azdata.EditUpdateCellResult, void, void>('edit/updateCell');
 }
 
 // edit/subset ------------------------------------------------------------------------------------
 export namespace EditSubsetRequest {
-	export const type = new RequestType<sqlops.EditSubsetParams, sqlops.EditSubsetResult, void, void>('edit/subset');
+	export const type = new RequestType<azdata.EditSubsetParams, azdata.EditSubsetResult, void, void>('edit/subset');
 }
 
 // ------------------------------- < Object Explorer Events > ------------------------------------
 
 export namespace ObjectExplorerCreateSessionRequest {
-	export const type = new RequestType<sqlops.ConnectionInfo, types.CreateSessionResponse, void, void>('objectexplorer/createsession');
+	export const type = new RequestType<azdata.ConnectionInfo, types.CreateSessionResponse, void, void>('objectexplorer/createsession');
 }
 
 export namespace ObjectExplorerExpandRequest {
@@ -573,28 +573,28 @@ export namespace ObjectExplorerExpandCompleteNotification {
 // ------------------------------- < Task Service Events > ------------------------------------
 
 export namespace ListTasksRequest {
-	export const type = new RequestType<sqlops.ListTasksParams, sqlops.ListTasksResponse, void, void>('tasks/listtasks');
+	export const type = new RequestType<azdata.ListTasksParams, azdata.ListTasksResponse, void, void>('tasks/listtasks');
 }
 
 export namespace CancelTaskRequest {
-	export const type = new RequestType<sqlops.CancelTaskParams, boolean, void, void>('tasks/canceltask');
+	export const type = new RequestType<azdata.CancelTaskParams, boolean, void, void>('tasks/canceltask');
 }
 
 // ------------------------------- < Task Service Events > ------------------------------------
 
 
 export namespace TaskStatusChangedNotification {
-	export const type = new NotificationType<sqlops.TaskProgressInfo, void>('tasks/statuschanged');
+	export const type = new NotificationType<azdata.TaskProgressInfo, void>('tasks/statuschanged');
 }
 
 export namespace TaskCreatedNotification {
-	export const type = new NotificationType<sqlops.TaskInfo, void>('tasks/newtaskcreated');
+	export const type = new NotificationType<azdata.TaskInfo, void>('tasks/newtaskcreated');
 }
 
 // ------------------------------- < Admin Service Events > ------------------------------------
 
 export namespace CreateDatabaseRequest {
-	export const type = new RequestType<types.CreateDatabaseParams, sqlops.CreateDatabaseResponse, void, void>('admin/createdatabase');
+	export const type = new RequestType<types.CreateDatabaseParams, azdata.CreateDatabaseResponse, void, void>('admin/createdatabase');
 }
 
 export namespace DefaultDatabaseInfoRequest {
@@ -602,7 +602,7 @@ export namespace DefaultDatabaseInfoRequest {
 }
 
 export namespace CreateLoginRequest {
-	export const type = new RequestType<types.CreateLoginParams, sqlops.CreateLoginResponse, void, void>('admin/createlogin');
+	export const type = new RequestType<types.CreateLoginParams, azdata.CreateLoginResponse, void, void>('admin/createlogin');
 }
 
 export namespace GetDatabaseInfoRequest {
@@ -612,7 +612,7 @@ export namespace GetDatabaseInfoRequest {
 // ------------------------------- < Disaster Recovery Events > ------------------------------------
 
 export namespace BackupRequest {
-	export const type = new RequestType<types.BackupParams, sqlops.BackupResponse, void, void>('backup/backup');
+	export const type = new RequestType<types.BackupParams, azdata.BackupResponse, void, void>('backup/backup');
 }
 
 export namespace BackupConfigInfoRequest {
@@ -620,11 +620,11 @@ export namespace BackupConfigInfoRequest {
 }
 
 export namespace RestoreRequest {
-	export const type = new RequestType<types.RestoreParams, sqlops.RestoreResponse, void, void>('restore/restore');
+	export const type = new RequestType<types.RestoreParams, azdata.RestoreResponse, void, void>('restore/restore');
 }
 
 export namespace RestorePlanRequest {
-	export const type = new RequestType<types.RestoreParams, sqlops.RestorePlanResponse, void, void>('restore/restoreplan');
+	export const type = new RequestType<types.RestoreParams, azdata.RestorePlanResponse, void, void>('restore/restoreplan');
 }
 
 export namespace CancelRestorePlanRequest {
@@ -642,7 +642,7 @@ export namespace FileBrowserOpenRequest {
 }
 
 export namespace FileBrowserOpenedNotification {
-	export const type = new NotificationType<sqlops.FileBrowserOpenedParams, void>('filebrowser/opencomplete');
+	export const type = new NotificationType<azdata.FileBrowserOpenedParams, void>('filebrowser/opencomplete');
 }
 
 export namespace FileBrowserExpandRequest {
@@ -650,7 +650,7 @@ export namespace FileBrowserExpandRequest {
 }
 
 export namespace FileBrowserExpandedNotification {
-	export const type = new NotificationType<sqlops.FileBrowserExpandedParams, void>('filebrowser/expandcomplete');
+	export const type = new NotificationType<azdata.FileBrowserExpandedParams, void>('filebrowser/expandcomplete');
 }
 
 export namespace FileBrowserValidateRequest {
@@ -658,11 +658,11 @@ export namespace FileBrowserValidateRequest {
 }
 
 export namespace FileBrowserValidatedNotification {
-	export const type = new NotificationType<sqlops.FileBrowserValidatedParams, void>('filebrowser/validatecomplete');
+	export const type = new NotificationType<azdata.FileBrowserValidatedParams, void>('filebrowser/validatecomplete');
 }
 
 export namespace FileBrowserCloseRequest {
-	export const type = new RequestType<types.FileBrowserCloseParams, sqlops.FileBrowserCloseResponse, void, void>('filebrowser/close');
+	export const type = new RequestType<types.FileBrowserCloseParams, azdata.FileBrowserCloseResponse, void, void>('filebrowser/close');
 }
 
 
