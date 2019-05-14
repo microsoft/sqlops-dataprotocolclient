@@ -439,6 +439,11 @@ export namespace QueryExecuteStringRequest {
 	export const type = new RequestType<QueryExecuteStringParams, QueryExecuteResult, void, void>('query/executeString');
 }
 
+// ------------------------------- < Query Options Request > ------------------------------------
+export namespace QueryExecutionOptionsRequest {
+	export const type = new RequestType<types.QueryExecutionOptionsParams, boolean, void, void>('query/setexecutionoptions');
+}
+
 // ------------------------------- < Metadata Events > ------------------------------------
 
 export namespace MetadataQueryRequest {

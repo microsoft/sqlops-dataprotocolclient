@@ -524,6 +524,11 @@ export interface QueryExecuteParams {
 	executionPlanOptions?: ExecutionPlanOptions;
 }
 
+export interface QueryExecutionOptionsParams {
+	ownerUri: string;
+	options: azdata.QueryExecutionOptions;
+}
+
 export class MetadataQueryParams {
 	/**
 	 * Owner URI of the connection that changed.
