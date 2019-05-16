@@ -315,6 +315,7 @@ export class QueryFeature extends SqlOpsFeature<undefined> {
 		protocol.QueryExecuteResultSetAvailableNotification.type,
 		protocol.QueryExecuteResultSetUpdatedNotification.type,
 		protocol.QueryExecuteMessageNotification.type,
+		protocol.QueryExecutionOptionsRequest.type,
 		protocol.SaveResultsAsCsvRequest.type,
 		protocol.SaveResultsAsJsonRequest.type,
 		protocol.SaveResultsAsExcelRequest.type,
@@ -506,6 +507,20 @@ export class QueryFeature extends SqlOpsFeature<undefined> {
 			}
 		};
 
+		let setQueryExecutionOptions = (ownerUri: string, options: azdata.QueryExecutionOptions): Thenable<void> => {
+			let params: types.QueryExecutionOptionsParams = {
+				ownerUri: ownerUri,
+				options: options
+			};
+			return client.sendRequest(protocol.QueryExecutionOptionsRequest.type, params).then(
+				r => undefined,
+				e => {
+					client.logFailedRequest(protocol.QueryExecutionOptionsRequest.type, e);
+					return Promise.reject(e);
+				}
+			);
+		};
+
 		// Edit Data Requests
 		let commitEdit = (ownerUri: string): Thenable<void> => {
 			let params: azdata.EditCommitParams = { ownerUri };
@@ -623,6 +638,7 @@ export class QueryFeature extends SqlOpsFeature<undefined> {
 			disposeQuery,
 			getEditRows,
 			getQueryRows,
+			setQueryExecutionOptions,
 			initializeEdit,
 			registerOnBatchComplete,
 			registerOnBatchStart,
