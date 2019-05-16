@@ -1,4 +1,4 @@
-import * as sqlops from 'sqlops';
+import * as azdata from 'azdata';
 export interface CreateSessionResponse {
     sessionId: string;
 }
@@ -26,7 +26,7 @@ export interface NodeInfo {
     nodeStatus: string;
     label: string;
     isLeaf: boolean;
-    metadata: sqlops.ObjectMetadata;
+    metadata: azdata.ObjectMetadata;
     errorMessage: string;
 }
 export interface ExpandParams {
@@ -199,30 +199,30 @@ export declare class ServerInfo {
     osVersion: string;
 }
 export declare class CapabiltiesDiscoveryResult {
-    capabilities: sqlops.DataProtocolServerCapabilities;
+    capabilities: azdata.DataProtocolServerCapabilities;
 }
 export interface CreateDatabaseParams {
     ownerUri: string;
-    databaseInfo: sqlops.DatabaseInfo;
+    databaseInfo: azdata.DatabaseInfo;
 }
 export interface DefaultDatabaseInfoParams {
     ownerUri: string;
 }
 export interface DefaultDatabaseInfoResponse {
-    defaultDatabaseInfo: sqlops.DatabaseInfo;
+    defaultDatabaseInfo: azdata.DatabaseInfo;
 }
 export interface GetDatabaseInfoResponse {
-    databaseInfo: sqlops.DatabaseInfo;
+    databaseInfo: azdata.DatabaseInfo;
 }
 export interface GetDatabaseInfoParams {
     ownerUri: string;
 }
 export interface BackupConfigInfoResponse {
-    backupConfigInfo: sqlops.BackupConfigInfo;
+    backupConfigInfo: azdata.BackupConfigInfo;
 }
 export interface CreateLoginParams {
     ownerUri: string;
-    loginInfo: sqlops.LoginInfo;
+    loginInfo: azdata.LoginInfo;
 }
 export interface BackupInfo {
     ownerUri: string;
@@ -259,12 +259,12 @@ export interface BackupInfo {
 export interface BackupParams {
     ownerUri: string;
     backupInfo: BackupInfo;
-    taskExecutionMode: sqlops.TaskExecutionMode;
+    taskExecutionMode: azdata.TaskExecutionMode;
 }
 export interface RestoreParams {
     ownerUri: string;
     options: {};
-    taskExecutionMode: sqlops.TaskExecutionMode;
+    taskExecutionMode: azdata.TaskExecutionMode;
 }
 export interface RestoreConfigInfoRequestParams {
     ownerUri: string;
@@ -336,7 +336,7 @@ export interface ResultSetSummary {
 export interface BatchSummary {
     hasError: boolean;
     id: number;
-    selection: sqlops.ISelectionData;
+    selection: azdata.ISelectionData;
     resultSetSummaries: ResultSetSummary[];
     executionElapsed: string;
     executionEnd: string;
@@ -385,10 +385,10 @@ export interface IResultMessage {
     message: string;
 }
 export interface EditRow {
-    cells: sqlops.DbCellValue[];
+    cells: azdata.DbCellValue[];
     id: number;
     isDirty: boolean;
-    state: sqlops.EditRowState;
+    state: azdata.EditRowState;
 }
 export interface ExecutionPlanOptions {
     includeEstimatedExecutionPlanXml?: boolean;
@@ -396,8 +396,12 @@ export interface ExecutionPlanOptions {
 }
 export interface QueryExecuteParams {
     ownerUri: string;
-    querySelection: sqlops.ISelectionData;
+    querySelection: azdata.ISelectionData;
     executionPlanOptions?: ExecutionPlanOptions;
+}
+export interface QueryExecutionOptionsParams {
+    ownerUri: string;
+    options: azdata.QueryExecutionOptions;
 }
 export declare class MetadataQueryParams {
     /**
@@ -406,7 +410,7 @@ export declare class MetadataQueryParams {
     ownerUri: string;
 }
 export declare class MetadataQueryResult {
-    metadata: sqlops.ObjectMetadata[];
+    metadata: azdata.ObjectMetadata[];
 }
 export interface ScriptOptions {
     /**
@@ -506,7 +510,7 @@ export interface ScriptOptions {
      */
     scripUseDatabase?: boolean;
     /**
-     * Generate script that contains schema only or schema and sqlops.
+     * Generate script that contains schema only or schema and azdata.
      */
     typeOfDataToScript: string;
     /**
@@ -608,7 +612,7 @@ export interface ScriptingParams {
     /**
      * Connection details for the ScriptingParams
      */
-    connectionDetails: sqlops.ConnectionInfo;
+    connectionDetails: azdata.ConnectionInfo;
     /**
      * Owner URI of the connection
      */
@@ -621,7 +625,7 @@ export interface ScriptingParams {
     /**
      * Operation associated with the script request
      */
-    operation: sqlops.ScriptOperation;
+    operation: azdata.ScriptOperation;
 }
 export interface ScriptingCompleteParams {
     /**
@@ -646,7 +650,7 @@ export interface ScriptingCompleteParams {
     success: boolean;
 }
 export declare class TableMetadata {
-    columns: sqlops.ColumnMetadata[];
+    columns: azdata.ColumnMetadata[];
 }
 /**
  * Parameters to start a profiler session
