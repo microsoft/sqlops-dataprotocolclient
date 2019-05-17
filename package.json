@@ -7,8 +7,8 @@
   "scripts": {
     "compile": "tsc -p ./src",
     "watch": "tsc -w -p ./src",
-	"prepare": "node ./node_modules/vscode/bin/install && node ./node_modules/sqlops/bin/install && npm run compile",
-	"tslint": "tslint --project src/tsconfig.json --config tslint.json --rules-dir node_modules/tslint-microsoft-contrib"
+    "prepare": "node ./node_modules/vscode/bin/install && node ./node_modules/sqlops/bin/install && npm run compile",
+    "tslint": "tslint --project src/tsconfig.json --config tslint.json --rules-dir node_modules/tslint-microsoft-contrib"
   },
   "author": "Microsoft",
   "license": "ISC",
@@ -17,8 +17,8 @@
   },
   "devDependencies": {
     "@types/node": "^8.5.2",
-	"sqlops": "github:anthonydresser/vscode-extension-vscode",
-	"tslint": "^5.16.0",
+    "sqlops": "github:anthonydresser/vscode-extension-vscode",
+    "tslint": "^5.16.0",
     "tslint-microsoft-contrib": "^5.2.0",
     "typescript": "2.6.2",
     "vscode": "1.1.5"
