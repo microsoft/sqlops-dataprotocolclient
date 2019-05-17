@@ -82,7 +82,7 @@ export interface ClientCapabilities extends VSClientCapabilities {
 	connection?: ConnectionClientCapabilities;
 }
 
-//---- Refresh IntelliSense ----------------------------------------
+// ---- Refresh IntelliSense ----------------------------------------
 
 /**
  * Notification sent when the an IntelliSense cache invalidation is requested

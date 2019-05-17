@@ -1,6 +1,6 @@
 import {
 	LanguageClient, ServerOptions, LanguageClientOptions as VSLanguageClientOptions, DynamicFeature, ServerCapabilities, RegistrationData,
-	RPCMessageType, Disposable,
+	RPCMessageType, Disposable
 } from 'vscode-languageclient';
 
 import * as is from 'vscode-languageclient/lib/utils/is';
@@ -22,7 +22,7 @@ function ensure<T, K extends keyof T>(target: T, key: K): T[K] {
 }
 
 export interface ISqlOpsFeature {
-	new (client: SqlOpsDataClient);
+	new(client: SqlOpsDataClient);
 }
 
 export interface ClientOptions extends VSLanguageClientOptions {
@@ -246,10 +246,10 @@ export class ConnectionFeature extends SqlOpsFeature<undefined> {
 				r => r,
 				e => {
 					client.logFailedRequest(protocol.BuildConnectionInfoRequest.type, e);
-					return Promise.resolve(e)
+					return Promise.resolve(e);
 				}
-			)
-		}
+			);
+		};
 
 		let rebuildIntelliSenseCache = (ownerUri: string): Thenable<void> => {
 			let params: protocol.RebuildIntelliSenseParams = {
@@ -415,8 +415,8 @@ export class QueryFeature extends SqlOpsFeature<undefined> {
 					client.logFailedRequest(protocol.SyntaxParseRequest.type, e);
 					return Promise.reject(e);
 				}
-			)
-		}
+			);
+		};
 
 		let getQueryRows = (rowData: sqlops.QueryExecuteSubsetParams): Thenable<sqlops.QueryExecuteSubsetResult> => {
 			return client.sendRequest(protocol.QueryExecuteSubsetRequest.type, rowData).then(
@@ -457,7 +457,7 @@ export class QueryFeature extends SqlOpsFeature<undefined> {
 
 		let registerOnResultSetUpdated = (handler: (resultSetInfo: sqlops.QueryExecuteResultSetNotificationParams) => any): void => {
 			client.onNotification(protocol.QueryExecuteResultSetUpdatedNotification.type, handler);
-		}
+		};
 
 		let registerOnMessage = (handler: (message: sqlops.QueryExecuteMessageParams) => any): void => {
 			client.onNotification(protocol.QueryExecuteMessageNotification.type, handler);
@@ -547,7 +547,13 @@ export class QueryFeature extends SqlOpsFeature<undefined> {
 			);
 		};
 
-		let initializeEdit = (ownerUri: string, schemaName: string, objectName: string, objectType: string, LimitResults: number, queryString: string): Thenable<void> => {
+		let initializeEdit = (
+				ownerUri: string,
+				schemaName: string,
+				objectName: string,
+				objectType: string,
+				LimitResults: number,
+				queryString: string): Thenable<void> => {
 			let filters: sqlops.EditInitializeFiltering = { LimitResults };
 			let params: sqlops.EditInitializeParams = { ownerUri, schemaName, objectName, objectType, filters, queryString };
 			return client.sendRequest(protocol.EditInitializeRequest.type, params).then(
@@ -1009,8 +1015,8 @@ export class ObjectExplorerFeature extends SqlOpsFeature<undefined> {
 					client.logFailedRequest(protocol.ObjectExplorerFindNodesRequest.type, e);
 					return Promise.resolve(undefined);
 				}
-			)
-		}
+			);
+		};
 
 		let registerOnSessionCreated = (handler: (response: sqlops.ObjectExplorerSession) => any): void => {
 			client.onNotification(protocol.ObjectExplorerCreateSessionCompleteNotification.type, handler);
@@ -1062,14 +1068,18 @@ export class ScriptingFeature extends SqlOpsFeature<undefined> {
 	protected registerProvider(options: undefined): Disposable {
 		const client = this._client;
 
-		let scriptAsOperation = (connectionUri: string, operation: sqlops.ScriptOperation, metadata: sqlops.ObjectMetadata, paramDetails: sqlops.ScriptingParamDetails): Thenable<sqlops.ScriptingResult> => {
+		let scriptAsOperation = (
+				connectionUri: string,
+				operation: sqlops.ScriptOperation,
+				metadata: sqlops.ObjectMetadata,
+				paramDetails: sqlops.ScriptingParamDetails): Thenable<sqlops.ScriptingResult> => {
 			return client.sendRequest(protocol.ScriptingRequest.type,
 				client.sqlc2p.asScriptingParams(connectionUri, operation, metadata, paramDetails)).then(
-				r => r,
-				e => {
-					client.logFailedRequest(protocol.ScriptingRequest.type, e);
-					return Promise.resolve(undefined);
-				}
+					r => r,
+					e => {
+						client.logFailedRequest(protocol.ScriptingRequest.type, e);
+						return Promise.resolve(undefined);
+					}
 				);
 		};
 
@@ -1273,7 +1283,7 @@ export class ProfilerFeature extends SqlOpsFeature<undefined> {
 	protected registerProvider(options: undefined): Disposable {
 		const client = this._client;
 
-		let createSession = (ownerUri: string, sessionName:string, template: sqlops.ProfilerSessionTemplate): Thenable<boolean> => {
+		let createSession = (ownerUri: string, sessionName: string, template: sqlops.ProfilerSessionTemplate): Thenable<boolean> => {
 			let params: types.CreateXEventSessionParams = {
 				ownerUri,
 				sessionName,
@@ -1287,7 +1297,7 @@ export class ProfilerFeature extends SqlOpsFeature<undefined> {
 					return Promise.reject(e);
 				}
 			);
-		}
+		};
 
 		let startSession = (ownerUri: string, sessionName: string): Thenable<boolean> => {
 			let params: types.StartProfilingParams = {
@@ -1373,12 +1383,12 @@ export class ProfilerFeature extends SqlOpsFeature<undefined> {
 			});
 		};
 
-		
+
 		let registerOnSessionStopped = (handler: (response: sqlops.ProfilerSessionStoppedParams) => any): void => {
 			client.onNotification(protocol.ProfilerSessionStoppedNotification.type, (params: types.ProfilerSessionStoppedParams) => {
 				handler(<sqlops.ProfilerSessionStoppedParams>{
 					ownerUri: params.ownerUri,
-					sessionId: params.sessionId,
+					sessionId: params.sessionId
 				});
 			});
 		};
@@ -1392,7 +1402,7 @@ export class ProfilerFeature extends SqlOpsFeature<undefined> {
 				});
 			});
 		};
-		
+
 
 		return sqlops.dataprotocol.registerProfilerProvider({
 			providerId: client.providerId,
@@ -1464,7 +1474,7 @@ export class SqlOpsDataClient extends LanguageClient {
 		this.registerSqlopsFeatures(features || SqlOpsDataClient.defaultFeatures);
 	}
 
-	private registerSqlopsFeatures(features: Array<ISqlOpsFeature>) {
+	private registerSqlopsFeatures(features: Array<ISqlOpsFeature>): void {
 		features.map(f => {
 			this.registerFeature(new f(this));
 		});

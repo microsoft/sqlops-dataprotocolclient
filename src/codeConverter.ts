@@ -5,7 +5,11 @@ import * as types from './types';
 export interface Ic2p {
 	asConnectionParams(connectionUri: string, connectionInfo: sqlops.ConnectionInfo): proto.ConnectParams;
 	asExecutionPlanOptions(planOptions: sqlops.ExecutionPlanOptions): types.ExecutionPlanOptions;
-	asScriptingParams(connectionUri: string, operation: sqlops.ScriptOperation, metadata: sqlops.ObjectMetadata, paramDetails: sqlops.ScriptingParamDetails): types.ScriptingParams;
+	asScriptingParams(
+		connectionUri: string,
+		operation: sqlops.ScriptOperation,
+		metadata: sqlops.ObjectMetadata,
+		paramDetails: sqlops.ScriptingParamDetails): types.ScriptingParams;
 }
 
 function asConnectionParams(ownerUri: string, connInfo: sqlops.ConnectionInfo): proto.ConnectParams {
@@ -24,7 +28,11 @@ function asExecutionPlanOptions(planOptions: sqlops.ExecutionPlanOptions): types
 	};
 }
 
-function asScriptingParams(ownerURI: string, operation: sqlops.ScriptOperation, metadata: sqlops.ObjectMetadata, paramDetails: sqlops.ScriptingParamDetails): types.ScriptingParams {
+function asScriptingParams(
+		ownerURI: string,
+		operation: sqlops.ScriptOperation,
+		metadata: sqlops.ObjectMetadata,
+		paramDetails: sqlops.ScriptingParamDetails): types.ScriptingParams {
 	let scriptingObject: types.ScriptingObject = {
 		type: metadata.metadataTypeName,
 		schema: metadata.schema,
