@@ -13,7 +13,7 @@
   "author": "Microsoft",
   "license": "ISC",
   "dependencies": {
-    "vscode-languageclient": "3.5.1"
+    "vscode-languageclient": "5.2.1"
   },
   "devDependencies": {
     "@types/node": "^8.5.2",
