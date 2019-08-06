@@ -1,6 +1,6 @@
 import {
 	LanguageClient, ServerOptions, LanguageClientOptions as VSLanguageClientOptions, DynamicFeature, ServerCapabilities, RegistrationData,
-	RPCMessageType, Disposable,
+	RPCMessageType, Disposable
 } from 'vscode-languageclient';
 
 import * as is from 'vscode-languageclient/lib/utils/is';
@@ -246,10 +246,10 @@ export class ConnectionFeature extends SqlOpsFeature<undefined> {
 				r => r,
 				e => {
 					client.logFailedRequest(protocol.BuildConnectionInfoRequest.type, e);
-					return Promise.resolve(e)
+					return Promise.resolve(e);
 				}
-			)
-		}
+			);
+		};
 
 		let rebuildIntelliSenseCache = (ownerUri: string): Thenable<void> => {
 			let params: protocol.RebuildIntelliSenseParams = {
@@ -280,8 +280,8 @@ export class ConnectionFeature extends SqlOpsFeature<undefined> {
 		};
 
 		azdata.dataprotocol.onDidChangeLanguageFlavor((params) => {
-            client.sendNotification(protocol.LanguageFlavorChangedNotification.type, params);
-        });
+			client.sendNotification(protocol.LanguageFlavorChangedNotification.type, params);
+		});
 
 		return azdata.dataprotocol.registerConnectionProvider({
 			providerId: client.providerId,
@@ -420,8 +420,8 @@ export class QueryFeature extends SqlOpsFeature<undefined> {
 					client.logFailedRequest(protocol.SyntaxParseRequest.type, e);
 					return Promise.reject(e);
 				}
-			)
-		}
+			);
+		};
 
 		let getQueryRows = (rowData: azdata.QueryExecuteSubsetParams): Thenable<azdata.QueryExecuteSubsetResult> => {
 			return client.sendRequest(protocol.QueryExecuteSubsetRequest.type, rowData).then(
@@ -462,7 +462,7 @@ export class QueryFeature extends SqlOpsFeature<undefined> {
 
 		let registerOnResultSetUpdated = (handler: (resultSetInfo: azdata.QueryExecuteResultSetNotificationParams) => any): void => {
 			client.onNotification(protocol.QueryExecuteResultSetUpdatedNotification.type, handler);
-		}
+		};
 
 		let registerOnMessage = (handler: (message: azdata.QueryExecuteMessageParams) => any): void => {
 			client.onNotification(protocol.QueryExecuteMessageNotification.type, handler);
@@ -507,10 +507,10 @@ export class QueryFeature extends SqlOpsFeature<undefined> {
 			}
 		};
 
-		let setQueryExecutionOptions = (ownerUri: string, options: azdata.QueryExecutionOptions): Thenable<void> => {
+		let setQueryExecutionOptions = (ownerUri: string, queryExecutionOptions: azdata.QueryExecutionOptions): Thenable<void> => {
 			let params: types.QueryExecutionOptionsParams = {
 				ownerUri: ownerUri,
-				options: options
+				options: queryExecutionOptions
 			};
 			return client.sendRequest(protocol.QueryExecutionOptionsRequest.type, params).then(
 				r => undefined,
@@ -566,7 +566,13 @@ export class QueryFeature extends SqlOpsFeature<undefined> {
 			);
 		};
 
-		let initializeEdit = (ownerUri: string, schemaName: string, objectName: string, objectType: string, LimitResults: number, queryString: string): Thenable<void> => {
+		let initializeEdit = (
+				ownerUri: string,
+				schemaName: string,
+				objectName: string,
+				objectType: string,
+				LimitResults: number,
+				queryString: string): Thenable<void> => {
 			let filters: azdata.EditInitializeFiltering = { LimitResults };
 			let params: azdata.EditInitializeParams = { ownerUri, schemaName, objectName, objectType, filters, queryString };
 			return client.sendRequest(protocol.EditInitializeRequest.type, params).then(
@@ -1029,8 +1035,8 @@ export class ObjectExplorerFeature extends SqlOpsFeature<undefined> {
 					client.logFailedRequest(protocol.ObjectExplorerFindNodesRequest.type, e);
 					return Promise.resolve(undefined);
 				}
-			)
-		}
+			);
+		};
 
 		let registerOnSessionCreated = (handler: (response: azdata.ObjectExplorerSession) => any): void => {
 			client.onNotification(protocol.ObjectExplorerCreateSessionCompleteNotification.type, handler);
@@ -1082,7 +1088,11 @@ export class ScriptingFeature extends SqlOpsFeature<undefined> {
 	protected registerProvider(options: undefined): Disposable {
 		const client = this._client;
 
-		let scriptAsOperation = (connectionUri: string, operation: azdata.ScriptOperation, metadata: azdata.ObjectMetadata, paramDetails: azdata.ScriptingParamDetails): Thenable<azdata.ScriptingResult> => {
+		let scriptAsOperation = (
+				connectionUri: string,
+				operation: azdata.ScriptOperation,
+				metadata: azdata.ObjectMetadata,
+				paramDetails: azdata.ScriptingParamDetails): Thenable<azdata.ScriptingResult> => {
 			return client.sendRequest(protocol.ScriptingRequest.type,
 				client.sqlc2p.asScriptingParams(connectionUri, operation, metadata, paramDetails)).then(
 				r => r,
@@ -1293,7 +1303,7 @@ export class ProfilerFeature extends SqlOpsFeature<undefined> {
 	protected registerProvider(options: undefined): Disposable {
 		const client = this._client;
 
-		let createSession = (ownerUri: string, sessionName:string, template: azdata.ProfilerSessionTemplate): Thenable<boolean> => {
+		let createSession = (ownerUri: string, sessionName: string, template: azdata.ProfilerSessionTemplate): Thenable<boolean> => {
 			let params: types.CreateXEventSessionParams = {
 				ownerUri,
 				sessionName,
@@ -1307,7 +1317,7 @@ export class ProfilerFeature extends SqlOpsFeature<undefined> {
 					return Promise.reject(e);
 				}
 			);
-		}
+		};
 
 		let startSession = (ownerUri: string, sessionName: string): Thenable<boolean> => {
 			let params: types.StartProfilingParams = {
@@ -1393,12 +1403,12 @@ export class ProfilerFeature extends SqlOpsFeature<undefined> {
 			});
 		};
 
-		
+
 		let registerOnSessionStopped = (handler: (response: azdata.ProfilerSessionStoppedParams) => any): void => {
 			client.onNotification(protocol.ProfilerSessionStoppedNotification.type, (params: types.ProfilerSessionStoppedParams) => {
 				handler(<azdata.ProfilerSessionStoppedParams>{
 					ownerUri: params.ownerUri,
-					sessionId: params.sessionId,
+					sessionId: params.sessionId
 				});
 			});
 		};
@@ -1412,7 +1422,7 @@ export class ProfilerFeature extends SqlOpsFeature<undefined> {
 				});
 			});
 		};
-		
+
 
 		return azdata.dataprotocol.registerProfilerProvider({
 			providerId: client.providerId,
@@ -1484,7 +1494,7 @@ export class SqlOpsDataClient extends LanguageClient {
 		this.registerSqlopsFeatures(features || SqlOpsDataClient.defaultFeatures);
 	}
 
-	private registerSqlopsFeatures(features: Array<ISqlOpsFeature>) {
+	private registerSqlopsFeatures(features: Array<ISqlOpsFeature>): void {
 		features.map(f => {
 			this.registerFeature(new f(this));
 		});

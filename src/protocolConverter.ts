@@ -80,7 +80,7 @@ function buildServiceOption(srcOption: types.ServiceOption): azdata.ServiceOptio
 		isRequired: srcOption.isRequired,
 		isArray: srcOption.isArray,
 		objectType: srcOption.objectType,
-		valueType: asServiceOptionType(srcOption.valueType),
+		valueType: asServiceOptionType(srcOption.valueType)
 	};
 }
 
@@ -114,7 +114,6 @@ function asServerCapabilities(result: types.CapabiltiesDiscoveryResult): azdata.
 		if (result.capabilities.adminServicesProvider.databaseFileInfoOptions
 			&& result.capabilities.adminServicesProvider.databaseFileInfoOptions.length > 0) {
 			for (let i = 0; i < result.capabilities.adminServicesProvider.databaseFileInfoOptions.length; ++i) {
-				//let srcOption: types.ServiceOption = result.capabilities.adminServicesProvider.databaseFileInfoOptions[i];
 				let srcOption: any = result.capabilities.adminServicesProvider.databaseFileInfoOptions[i];
 				let descOption: azdata.ServiceOption = buildServiceOption(srcOption);
 				capabilities.adminServicesProvider.databaseFileInfoOptions.push(descOption);
@@ -124,7 +123,6 @@ function asServerCapabilities(result: types.CapabiltiesDiscoveryResult): azdata.
 		if (result.capabilities.adminServicesProvider.fileGroupInfoOptions
 			&& result.capabilities.adminServicesProvider.fileGroupInfoOptions.length > 0) {
 			for (let i = 0; i < result.capabilities.adminServicesProvider.fileGroupInfoOptions.length; ++i) {
-				//let srcOption: types.ServiceOption = result.capabilities.adminServicesProvider.fileGroupInfoOptions[i];
 				let srcOption: any = result.capabilities.adminServicesProvider.fileGroupInfoOptions[i];
 				let descOption: azdata.ServiceOption = buildServiceOption(srcOption);
 				capabilities.adminServicesProvider.fileGroupInfoOptions.push(descOption);

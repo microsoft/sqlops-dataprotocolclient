@@ -7,18 +7,21 @@
   "scripts": {
     "compile": "tsc -p ./src",
     "watch": "tsc -w -p ./src",
-    "prepare": "node ./node_modules/vscode/bin/install && node ./node_modules/azdata/bin/install && npm run compile"
+    "prepare": "node ./node_modules/vscode/bin/install && node ./node_modules/azdata/bin/install && npm run compile",
+    "tslint": "tslint --project src/tsconfig.json --config tslint.json --rules-dir node_modules/tslint-microsoft-contrib"
   },
   "author": "Microsoft",
   "license": "ISC",
   "dependencies": {
-    "vscode-languageclient": "3.5.1"
+    "vscode-languageclient": "5.2.1"
   },
   "devDependencies": {
     "@types/node": "^8.5.2",
     "azdata": "github:microsoft/azdata-extension-azdata",
+    "tslint": "^5.16.0",
+    "tslint-microsoft-contrib": "^6.0.0",
     "typescript": "2.6.2",
-    "vscode": "1.1.5"
+    "vscode": "1.1.34"
   },
   "engines": {
     "vscode": "*",
