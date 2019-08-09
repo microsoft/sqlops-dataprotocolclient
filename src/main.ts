@@ -22,7 +22,7 @@ function ensure<T, K extends keyof T>(target: T, key: K): T[K] {
 }
 
 export interface ISqlOpsFeature {
-	new (client: SqlOpsDataClient);
+	new(client: SqlOpsDataClient);
 }
 
 export interface ClientOptions extends VSLanguageClientOptions {
@@ -261,7 +261,10 @@ export class ConnectionFeature extends SqlOpsFeature<undefined> {
 		};
 
 		let registerOnConnectionComplete = (handler: (connSummary: azdata.ConnectionInfoSummary) => any): void => {
-			client.onNotification(protocol.ConnectionCompleteNotification.type, handler);
+			client.registerNotificationListener(protocol.ConnectionCompleteNotification.type.method, handler);
+			client.onNotification(protocol.ConnectionCompleteNotification.type, (connSummary: azdata.ConnectionInfoSummary) => {
+				client.getNotificationListeners(protocol.ConnectionCompleteNotification.type.method).forEach(l => l(connSummary));
+			});
 		};
 
 		let registerOnIntelliSenseCacheComplete = (handler: (connectionUri: string) => any): void => {
@@ -567,12 +570,12 @@ export class QueryFeature extends SqlOpsFeature<undefined> {
 		};
 
 		let initializeEdit = (
-				ownerUri: string,
-				schemaName: string,
-				objectName: string,
-				objectType: string,
-				LimitResults: number,
-				queryString: string): Thenable<void> => {
+			ownerUri: string,
+			schemaName: string,
+			objectName: string,
+			objectType: string,
+			LimitResults: number,
+			queryString: string): Thenable<void> => {
 			let filters: azdata.EditInitializeFiltering = { LimitResults };
 			let params: azdata.EditInitializeParams = { ownerUri, schemaName, objectName, objectType, filters, queryString };
 			return client.sendRequest(protocol.EditInitializeRequest.type, params).then(
@@ -1089,17 +1092,17 @@ export class ScriptingFeature extends SqlOpsFeature<undefined> {
 		const client = this._client;
 
 		let scriptAsOperation = (
-				connectionUri: string,
-				operation: azdata.ScriptOperation,
-				metadata: azdata.ObjectMetadata,
-				paramDetails: azdata.ScriptingParamDetails): Thenable<azdata.ScriptingResult> => {
+			connectionUri: string,
+			operation: azdata.ScriptOperation,
+			metadata: azdata.ObjectMetadata,
+			paramDetails: azdata.ScriptingParamDetails): Thenable<azdata.ScriptingResult> => {
 			return client.sendRequest(protocol.ScriptingRequest.type,
 				client.sqlc2p.asScriptingParams(connectionUri, operation, metadata, paramDetails)).then(
-				r => r,
-				e => {
-					client.logFailedRequest(protocol.ScriptingRequest.type, e);
-					return Promise.resolve(undefined);
-				}
+					r => r,
+					e => {
+						client.logFailedRequest(protocol.ScriptingRequest.type, e);
+						return Promise.resolve(undefined);
+					}
 				);
 		};
 
@@ -1460,6 +1463,7 @@ export class SqlOpsDataClient extends LanguageClient {
 		ProfilerFeature
 	];
 
+	private notificationListeners: { [key: string]: types.Func[] };
 	private _sqlc2p: Ic2p;
 	private _sqlp2c: Ip2c;
 	private _providerId: string;
@@ -1491,6 +1495,7 @@ export class SqlOpsDataClient extends LanguageClient {
 		}
 		this._sqlc2p = c2p;
 		this._sqlp2c = p2c;
+		this.notificationListeners = {};
 		this.registerSqlopsFeatures(features || SqlOpsDataClient.defaultFeatures);
 	}
 
@@ -1498,5 +1503,17 @@ export class SqlOpsDataClient extends LanguageClient {
 		features.map(f => {
 			this.registerFeature(new f(this));
 		});
+	}
+
+	public registerNotificationListener(method: string, listener: types.Func): void {
+		if (this.notificationListeners[method] === undefined) {
+			this.notificationListeners[method] = [];
+		}
+
+		this.notificationListeners[method].push(listener);
+	}
+
+	public getNotificationListeners(method: string): types.Func[] {
+		return this.notificationListeners[method];
 	}
 }

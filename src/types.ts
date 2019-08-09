@@ -1,5 +1,6 @@
 import * as azdata from 'azdata';
 
+export type Func = (...args: any[]) => any;
 export interface CreateSessionResponse {
 	sessionId: string;
 }
