@@ -22,7 +22,7 @@ function ensure<T, K extends keyof T>(target: T, key: K): T[K] {
 }
 
 export interface ISqlOpsFeature {
-	new(client: SqlOpsDataClient);
+	new (client: SqlOpsDataClient);
 }
 
 export interface ClientOptions extends VSLanguageClientOptions {
