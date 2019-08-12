@@ -22,7 +22,7 @@ function ensure<T, K extends keyof T>(target: T, key: K): T[K] {
 }
 
 export interface ISqlOpsFeature {
-	new (client: SqlOpsDataClient);
+	new(client: SqlOpsDataClient);
 }
 
 export interface ClientOptions extends VSLanguageClientOptions {
@@ -268,17 +268,19 @@ export class ConnectionFeature extends SqlOpsFeature<undefined> {
 		};
 
 		let registerOnIntelliSenseCacheComplete = (handler: (connectionUri: string) => any): void => {
+			client.registerNotificationListener(protocol.IntelliSenseReadyNotification.type.method, handler);
 			client.onNotification(protocol.IntelliSenseReadyNotification.type, (params: types.IntelliSenseReadyParams) => {
-				handler(params.ownerUri);
+				client.getNotificationListeners(protocol.IntelliSenseReadyNotification.type.method).forEach(l => l(params.ownerUri));
 			});
 		};
 
 		let registerOnConnectionChanged = (handler: (changedConnInfo: azdata.ChangedConnectionInfo) => any): void => {
+			client.registerNotificationListener(protocol.ConnectionChangedNotification.type.method, handler);
 			client.onNotification(protocol.ConnectionChangedNotification.type, (params: protocol.ConnectionChangedParams) => {
-				handler({
+				client.getNotificationListeners(protocol.ConnectionChangedNotification.type.method).forEach(l => l({
 					connectionUri: params.ownerUri,
 					connection: params.connection
-				});
+				}));
 			});
 		};
 
@@ -448,27 +450,45 @@ export class QueryFeature extends SqlOpsFeature<undefined> {
 		};
 
 		let registerOnQueryComplete = (handler: (result: azdata.QueryExecuteCompleteNotificationResult) => any): void => {
-			client.onNotification(protocol.QueryExecuteCompleteNotification.type, handler);
+			client.registerNotificationListener(protocol.QueryExecuteCompleteNotification.type.method, handler);
+			client.onNotification(protocol.QueryExecuteCompleteNotification.type, (params: azdata.QueryExecuteCompleteNotificationResult) => {
+				client.getNotificationListeners(protocol.QueryExecuteBatchCompleteNotification.type.method).forEach(l => l(params));
+			});
 		};
 
 		let registerOnBatchStart = (handler: (batchInfo: azdata.QueryExecuteBatchNotificationParams) => any): void => {
-			client.onNotification(protocol.QueryExecuteBatchStartNotification.type, handler);
+			client.registerNotificationListener(protocol.QueryExecuteBatchStartNotification.type.method, handler);
+			client.onNotification(protocol.QueryExecuteBatchStartNotification.type, (params: azdata.QueryExecuteBatchNotificationParams) => {
+				client.getNotificationListeners(protocol.QueryExecuteBatchStartNotification.type.method).forEach(l => l(params));
+			});
 		};
 
 		let registerOnBatchComplete = (handler: (batchInfo: azdata.QueryExecuteBatchNotificationParams) => any): void => {
-			client.onNotification(protocol.QueryExecuteBatchCompleteNotification.type, handler);
+			client.registerNotificationListener(protocol.QueryExecuteBatchCompleteNotification.type.method, handler);
+			client.onNotification(protocol.QueryExecuteBatchCompleteNotification.type, (params: azdata.QueryExecuteBatchNotificationParams) => {
+				client.getNotificationListeners(protocol.QueryExecuteBatchCompleteNotification.type.method).forEach(l => l(params));
+			});
 		};
 
 		let registerOnResultSetAvailable = (handler: (resultSetInfo: azdata.QueryExecuteResultSetNotificationParams) => any): void => {
-			client.onNotification(protocol.QueryExecuteResultSetAvailableNotification.type, handler);
+			client.registerNotificationListener(protocol.QueryExecuteResultSetAvailableNotification.type.method, handler);
+			client.onNotification(protocol.QueryExecuteResultSetAvailableNotification.type, (params: azdata.QueryExecuteResultSetNotificationParams) => {
+				client.getNotificationListeners(protocol.QueryExecuteResultSetAvailableNotification.type.method).forEach(l => l(params));
+			});
 		};
 
 		let registerOnResultSetUpdated = (handler: (resultSetInfo: azdata.QueryExecuteResultSetNotificationParams) => any): void => {
-			client.onNotification(protocol.QueryExecuteResultSetUpdatedNotification.type, handler);
+			client.registerNotificationListener(protocol.QueryExecuteResultSetUpdatedNotification.type.method, handler);
+			client.onNotification(protocol.QueryExecuteResultSetUpdatedNotification.type, (params: azdata.QueryExecuteResultSetNotificationParams) => {
+				client.getNotificationListeners(protocol.QueryExecuteResultSetUpdatedNotification.type.method).forEach(l => l(params));
+			});
 		};
 
 		let registerOnMessage = (handler: (message: azdata.QueryExecuteMessageParams) => any): void => {
-			client.onNotification(protocol.QueryExecuteMessageNotification.type, handler);
+			client.registerNotificationListener(protocol.QueryExecuteMessageNotification.type.method, handler);
+			client.onNotification(protocol.QueryExecuteMessageNotification.type, (params: azdata.QueryExecuteMessageParams) => {
+				client.getNotificationListeners(protocol.QueryExecuteMessageNotification.type.method).forEach(l => l(params));
+			});
 		};
 
 		let saveResults = (requestParams: azdata.SaveResultsRequestParams): Thenable<azdata.SaveResultRequestResult> => {
@@ -632,8 +652,9 @@ export class QueryFeature extends SqlOpsFeature<undefined> {
 
 		// Edit Data Event Handlers
 		let registerOnEditSessionReady = (handler: (ownerUri: string, success: boolean, message: string) => any): void => {
+			client.registerNotificationListener(protocol.EditSessionReadyNotification.type.method, handler);
 			client.onNotification(protocol.EditSessionReadyNotification.type, (params: azdata.EditSessionReadyParams) => {
-				handler(params.ownerUri, params.success, params.message);
+				client.getNotificationListeners(protocol.EditSessionReadyNotification.type.method).forEach(l => l(params.ownerUri, params.success, params.message));
 			});
 		};
 
@@ -1042,15 +1063,24 @@ export class ObjectExplorerFeature extends SqlOpsFeature<undefined> {
 		};
 
 		let registerOnSessionCreated = (handler: (response: azdata.ObjectExplorerSession) => any): void => {
-			client.onNotification(protocol.ObjectExplorerCreateSessionCompleteNotification.type, handler);
+			client.registerNotificationListener(protocol.ObjectExplorerCreateSessionCompleteNotification.type.method, handler);
+			client.onNotification(protocol.ObjectExplorerCreateSessionCompleteNotification.type, (params: azdata.ObjectExplorerSession) => {
+				client.getNotificationListeners(protocol.ObjectExplorerCreateSessionCompleteNotification.type.method).forEach(l => l(params));
+			});
 		};
 
 		let registerOnSessionDisconnected = (handler: (response: azdata.ObjectExplorerSession) => any): void => {
-			client.onNotification(protocol.ObjectExplorerSessionDisconnectedNotification.type, handler);
+			client.registerNotificationListener(protocol.ObjectExplorerSessionDisconnectedNotification.type.method, handler);
+			client.onNotification(protocol.ObjectExplorerSessionDisconnectedNotification.type, (params: azdata.ObjectExplorerSession) => {
+				client.getNotificationListeners(protocol.ObjectExplorerSessionDisconnectedNotification.type.method).forEach(l => l(params));
+			});
 		};
 
 		let registerOnExpandCompleted = (handler: (response: azdata.ObjectExplorerExpandInfo) => any): void => {
-			client.onNotification(protocol.ObjectExplorerExpandCompleteNotification.type, handler);
+			client.registerNotificationListener(protocol.ObjectExplorerExpandCompleteNotification.type.method, handler);
+			client.onNotification(protocol.ObjectExplorerExpandCompleteNotification.type, (params: azdata.ObjectExplorerExpandInfo) => {
+				client.getNotificationListeners(protocol.ObjectExplorerExpandCompleteNotification.type.method).forEach(l => l(params));
+			});
 		};
 
 		return azdata.dataprotocol.registerObjectExplorerProvider({
@@ -1107,7 +1137,10 @@ export class ScriptingFeature extends SqlOpsFeature<undefined> {
 		};
 
 		let registerOnScriptingComplete = (handler: (scriptingCompleteResult: azdata.ScriptingCompleteResult) => any): void => {
-			client.onNotification(protocol.ScriptingCompleteNotification.type, handler);
+			client.registerNotificationListener(protocol.ScriptingCompleteNotification.type.method, handler);
+			client.onNotification(protocol.ScriptingCompleteNotification.type, (params: azdata.ScriptingCompleteResult) => {
+				client.getNotificationListeners(protocol.ScriptingCompleteNotification.type.method).forEach(l => l(params));
+			});
 		};
 
 		return azdata.dataprotocol.registerScriptingProvider({
@@ -1166,11 +1199,17 @@ export class TaskServicesFeature extends SqlOpsFeature<undefined> {
 		};
 
 		let registerOnTaskCreated = (handler: (response: azdata.TaskInfo) => any): void => {
-			client.onNotification(protocol.TaskCreatedNotification.type, handler);
+			client.registerNotificationListener(protocol.TaskCreatedNotification.type.method, handler);
+			client.onNotification(protocol.TaskCreatedNotification.type, (params: azdata.TaskInfo) => {
+				client.getNotificationListeners(protocol.TaskCreatedNotification.type.method).forEach(l => l(params));
+			});
 		};
 
 		let registerOnTaskStatusChanged = (handler: (response: azdata.TaskProgressInfo) => any): void => {
-			client.onNotification(protocol.TaskStatusChangedNotification.type, handler);
+			client.registerNotificationListener(protocol.TaskStatusChangedNotification.type.method, handler);
+			client.onNotification(protocol.TaskStatusChangedNotification.type, (params: azdata.TaskProgressInfo) => {
+				client.getNotificationListeners(protocol.TaskStatusChangedNotification.type.method).forEach(l => l(params));
+			});
 		};
 
 		return azdata.dataprotocol.registerTaskServicesProvider({
@@ -1224,7 +1263,10 @@ export class FileBrowserFeature extends SqlOpsFeature<undefined> {
 		};
 
 		let registerOnFileBrowserOpened = (handler: (response: azdata.FileBrowserOpenedParams) => any): void => {
-			client.onNotification(protocol.FileBrowserOpenedNotification.type, handler);
+			client.registerNotificationListener(protocol.FileBrowserOpenedNotification.type.method, handler);
+			client.onNotification(protocol.FileBrowserOpenedNotification.type, (params: azdata.FileBrowserOpenedParams) => {
+				client.getNotificationListeners(protocol.FileBrowserOpenedNotification.type.method).forEach(l => l(params));
+			});
 		};
 
 		let expandFolderNode = (ownerUri: string, expandPath: string): Thenable<boolean> => {
@@ -1239,7 +1281,10 @@ export class FileBrowserFeature extends SqlOpsFeature<undefined> {
 		};
 
 		let registerOnFolderNodeExpanded = (handler: (response: azdata.FileBrowserExpandedParams) => any): void => {
-			client.onNotification(protocol.FileBrowserExpandedNotification.type, handler);
+			client.registerNotificationListener(protocol.FileBrowserExpandedNotification.type.method, handler);
+			client.onNotification(protocol.FileBrowserExpandedNotification.type, (params: azdata.FileBrowserExpandedParams) => {
+				client.getNotificationListeners(protocol.FileBrowserExpandedNotification.type.method).forEach(l => l(params));
+			});
 		};
 
 		let validateFilePaths = (ownerUri: string, serviceType: string, selectedFiles: string[]): Thenable<boolean> => {
@@ -1254,7 +1299,10 @@ export class FileBrowserFeature extends SqlOpsFeature<undefined> {
 		};
 
 		let registerOnFilePathsValidated = (handler: (response: azdata.FileBrowserValidatedParams) => any): void => {
-			client.onNotification(protocol.FileBrowserValidatedNotification.type, handler);
+			client.registerNotificationListener(protocol.FileBrowserValidatedNotification.type.method, handler);
+			client.onNotification(protocol.FileBrowserValidatedNotification.type, (params: azdata.FileBrowserValidatedParams) => {
+				client.getNotificationListeners(protocol.FileBrowserValidatedNotification.type.method).forEach(l => l(params));
+			});
 		};
 
 		let closeFileBrowser = (ownerUri: string): Thenable<azdata.FileBrowserCloseResponse> => {
@@ -1397,31 +1445,40 @@ export class ProfilerFeature extends SqlOpsFeature<undefined> {
 		};
 
 		let registerOnSessionEventsAvailable = (handler: (response: azdata.ProfilerSessionEvents) => any): void => {
+			client.registerNotificationListener(protocol.ProfilerEventsAvailableNotification.type.method, handler);
 			client.onNotification(protocol.ProfilerEventsAvailableNotification.type, (params: types.ProfilerEventsAvailableParams) => {
-				handler(<azdata.ProfilerSessionEvents>{
-					sessionId: params.ownerUri,
-					events: params.events,
-					eventsLost: params.eventsLost
+				client.getNotificationListeners(protocol.ProfilerEventsAvailableNotification.type.method).forEach(l => {
+					l(<azdata.ProfilerSessionEvents>{
+						sessionId: params.ownerUri,
+						events: params.events,
+						eventsLost: params.eventsLost
+					});
 				});
 			});
 		};
 
 
 		let registerOnSessionStopped = (handler: (response: azdata.ProfilerSessionStoppedParams) => any): void => {
+			client.registerNotificationListener(protocol.ProfilerSessionStoppedNotification.type.method, handler);
 			client.onNotification(protocol.ProfilerSessionStoppedNotification.type, (params: types.ProfilerSessionStoppedParams) => {
-				handler(<azdata.ProfilerSessionStoppedParams>{
-					ownerUri: params.ownerUri,
-					sessionId: params.sessionId
+				client.getNotificationListeners(protocol.ProfilerSessionStoppedNotification.type.method).forEach(l => {
+					l(<azdata.ProfilerSessionStoppedParams>{
+						ownerUri: params.ownerUri,
+						sessionId: params.sessionId
+					});
 				});
 			});
 		};
 
 		let registerOnProfilerSessionCreated = (handler: (response: azdata.ProfilerSessionCreatedParams) => any): void => {
+			client.registerNotificationListener(protocol.ProfilerSessionCreatedNotification.type.method, handler);
 			client.onNotification(protocol.ProfilerSessionCreatedNotification.type, (params: types.ProfilerSessionCreatedParams) => {
-				handler(<azdata.ProfilerSessionCreatedParams>{
-					ownerUri: params.ownerUri,
-					sessionName: params.sessionName,
-					templateName: params.templateName
+				client.getNotificationListeners(protocol.ProfilerSessionCreatedNotification.type.method).forEach(l => {
+					l(<azdata.ProfilerSessionCreatedParams>{
+						ownerUri: params.ownerUri,
+						sessionName: params.sessionName,
+						templateName: params.templateName
+					});
 				});
 			});
 		};
