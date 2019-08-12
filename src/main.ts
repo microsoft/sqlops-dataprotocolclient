@@ -1448,11 +1448,11 @@ export class ProfilerFeature extends SqlOpsFeature<undefined> {
 			client.registerNotificationListener(protocol.ProfilerEventsAvailableNotification.type.method, handler);
 			client.onNotification(protocol.ProfilerEventsAvailableNotification.type, (params: types.ProfilerEventsAvailableParams) => {
 				client.getNotificationListeners(protocol.ProfilerEventsAvailableNotification.type.method).forEach(l => {
-					l(<azdata.ProfilerSessionEvents>{
+					l({
 						sessionId: params.ownerUri,
 						events: params.events,
 						eventsLost: params.eventsLost
-					});
+					} as azdata.ProfilerSessionEvents);
 				});
 			});
 		};
@@ -1462,10 +1462,10 @@ export class ProfilerFeature extends SqlOpsFeature<undefined> {
 			client.registerNotificationListener(protocol.ProfilerSessionStoppedNotification.type.method, handler);
 			client.onNotification(protocol.ProfilerSessionStoppedNotification.type, (params: types.ProfilerSessionStoppedParams) => {
 				client.getNotificationListeners(protocol.ProfilerSessionStoppedNotification.type.method).forEach(l => {
-					l(<azdata.ProfilerSessionStoppedParams>{
+					l({
 						ownerUri: params.ownerUri,
 						sessionId: params.sessionId
-					});
+					} as azdata.ProfilerSessionStoppedParams);
 				});
 			});
 		};
@@ -1474,11 +1474,11 @@ export class ProfilerFeature extends SqlOpsFeature<undefined> {
 			client.registerNotificationListener(protocol.ProfilerSessionCreatedNotification.type.method, handler);
 			client.onNotification(protocol.ProfilerSessionCreatedNotification.type, (params: types.ProfilerSessionCreatedParams) => {
 				client.getNotificationListeners(protocol.ProfilerSessionCreatedNotification.type.method).forEach(l => {
-					l(<azdata.ProfilerSessionCreatedParams>{
+					l({
 						ownerUri: params.ownerUri,
 						sessionName: params.sessionName,
 						templateName: params.templateName
-					});
+					} as azdata.ProfilerSessionCreatedParams);
 				});
 			});
 		};
