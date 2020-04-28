@@ -214,7 +214,7 @@ export class ConnectionFeature extends SqlOpsFeature<undefined> {
 
 		let listDatabases = (ownerUri: string): Thenable<azdata.ListDatabasesResult> => {
 			let params: protocol.ListDatabasesParams = {
-				ownerUri: ownerUri
+				ownerUri
 			};
 
 			return client.sendRequest(protocol.ListDatabasesRequest.type, params).then(
@@ -709,9 +709,7 @@ export class MetadataFeature extends SqlOpsFeature<undefined> {
 				includeDetails: true
 			};
 			return client.sendRequest(protocol.ListDatabasesRequest.type, params).then(
-				r => {
-					return r.databaseNames ? r.databaseNames : r.databases;
-				},
+				r => { return r.databaseNames ? r.databaseNames : r.databases; },
 				e => {
 					client.logFailedRequest(protocol.ListDatabasesRequest.type, e);
 					return Promise.resolve(undefined);
