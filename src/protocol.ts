@@ -208,6 +208,7 @@ export namespace ChangeDatabaseRequest {
 export class ListDatabasesParams {
 	// Connection information to use for querying master
 	public ownerUri: string;
+	public includeDetails?: boolean;
 }
 
 // List databases request callback declaration
