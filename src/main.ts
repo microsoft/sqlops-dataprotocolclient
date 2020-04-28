@@ -703,7 +703,7 @@ export class MetadataFeature extends SqlOpsFeature<undefined> {
 			);
 		};
 
-		let getDatabases = (ownerUri: string): Thenable<string[] | azdata.DatabaseDetail[]> => {
+		let getDatabases = (ownerUri: string): Thenable<string[] | azdata.DatabaseInfo[]> => {
 			let params: protocol.ListDatabasesParams = {
 				ownerUri: ownerUri,
 				includeDetails: true
