@@ -22,7 +22,7 @@ function ensure<T, K extends keyof T>(target: T, key: K): T[K] {
 }
 
 export interface ISqlOpsFeature {
-	new (client: SqlOpsDataClient);
+	new(client: SqlOpsDataClient);
 }
 
 export interface ClientOptions extends VSLanguageClientOptions {
@@ -567,12 +567,12 @@ export class QueryFeature extends SqlOpsFeature<undefined> {
 		};
 
 		let initializeEdit = (
-				ownerUri: string,
-				schemaName: string,
-				objectName: string,
-				objectType: string,
-				LimitResults: number,
-				queryString: string): Thenable<void> => {
+			ownerUri: string,
+			schemaName: string,
+			objectName: string,
+			objectType: string,
+			LimitResults: number,
+			queryString: string): Thenable<void> => {
 			let filters: azdata.EditInitializeFiltering = { LimitResults };
 			let params: azdata.EditInitializeParams = { ownerUri, schemaName, objectName, objectType, filters, queryString };
 			return client.sendRequest(protocol.EditInitializeRequest.type, params).then(
@@ -703,10 +703,13 @@ export class MetadataFeature extends SqlOpsFeature<undefined> {
 			);
 		};
 
-		let getDatabases = (ownerUri: string): Thenable<string[]> => {
-			let params: protocol.ListDatabasesParams = { ownerUri };
+		let getDatabases = (ownerUri: string): Thenable<string[] | azdata.DatabaseInfo[]> => {
+			let params: protocol.ListDatabasesParams = {
+				ownerUri: ownerUri,
+				includeDetails: true
+			};
 			return client.sendRequest(protocol.ListDatabasesRequest.type, params).then(
-				r => r.databaseNames,
+				r => { return r.databaseNames ? r.databaseNames : r.databases; },
 				e => {
 					client.logFailedRequest(protocol.ListDatabasesRequest.type, e);
 					return Promise.resolve(undefined);
@@ -1089,17 +1092,17 @@ export class ScriptingFeature extends SqlOpsFeature<undefined> {
 		const client = this._client;
 
 		let scriptAsOperation = (
-				connectionUri: string,
-				operation: azdata.ScriptOperation,
-				metadata: azdata.ObjectMetadata,
-				paramDetails: azdata.ScriptingParamDetails): Thenable<azdata.ScriptingResult> => {
+			connectionUri: string,
+			operation: azdata.ScriptOperation,
+			metadata: azdata.ObjectMetadata,
+			paramDetails: azdata.ScriptingParamDetails): Thenable<azdata.ScriptingResult> => {
 			return client.sendRequest(protocol.ScriptingRequest.type,
 				client.sqlc2p.asScriptingParams(connectionUri, operation, metadata, paramDetails)).then(
-				r => r,
-				e => {
-					client.logFailedRequest(protocol.ScriptingRequest.type, e);
-					return Promise.resolve(undefined);
-				}
+					r => r,
+					e => {
+						client.logFailedRequest(protocol.ScriptingRequest.type, e);
+						return Promise.resolve(undefined);
+					}
 				);
 		};
 

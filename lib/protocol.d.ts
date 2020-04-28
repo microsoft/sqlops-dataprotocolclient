@@ -157,6 +157,7 @@ export declare namespace ChangeDatabaseRequest {
 }
 export declare class ListDatabasesParams {
     ownerUri: string;
+    includeDetails?: boolean;
 }
 export declare namespace ListDatabasesRequest {
     const type: RequestType<ListDatabasesParams, azdata.ListDatabasesResult, void, void>;
