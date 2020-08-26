@@ -8,6 +8,13 @@ yarn
 yarn run watch
 ```
 
+# Create a release
+New releases need to be created off the release branch, the release branch contains the lib folder.
+1. make the changes in the main branch
+1. cherry-pick the changes to release branch and build it, lib folder will be updated
+1. commit the changes to release branch
+1. create a release: https://github.com/microsoft/sqlops-dataprotocolclient/releases, the source will be included automatically. 
+
 # Contributing
 
 This project welcomes contributions and suggestions.  Most contributions require you to agree to a

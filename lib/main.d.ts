@@ -102,13 +102,6 @@ export declare class FileBrowserFeature extends SqlOpsFeature<undefined> {
     initialize(capabilities: ServerCapabilities): void;
     protected registerProvider(options: undefined): Disposable;
 }
-export declare class ProfilerFeature extends SqlOpsFeature<undefined> {
-    private static readonly messagesTypes;
-    constructor(client: SqlOpsDataClient);
-    fillClientCapabilities(capabilities: protocol.ClientCapabilities): void;
-    initialize(capabilities: ServerCapabilities): void;
-    protected registerProvider(options: undefined): Disposable;
-}
 /**
  *
  */
