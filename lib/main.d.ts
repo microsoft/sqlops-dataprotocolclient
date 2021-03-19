@@ -17,7 +17,7 @@ export declare abstract class SqlOpsFeature<T> implements DynamicFeature<T> {
     private _message;
     protected _providers: Map<string, Disposable>;
     constructor(_client: SqlOpsDataClient, _message: RPCMessageType | RPCMessageType[]);
-    readonly messages: RPCMessageType | RPCMessageType[];
+    get messages(): RPCMessageType | RPCMessageType[];
     abstract fillClientCapabilities(capabilities: protocol.ClientCapabilities): void;
     abstract initialize(capabilities: ServerCapabilities): void;
     register(messages: RPCMessageType | RPCMessageType[], data: RegistrationData<T>): void;
@@ -110,10 +110,10 @@ export declare class SqlOpsDataClient extends LanguageClient {
     private _sqlc2p;
     private _sqlp2c;
     private _providerId;
-    readonly sqlc2p: Ic2p;
-    readonly sqlp2c: Ip2c;
-    readonly providerId: string;
+    get sqlc2p(): Ic2p;
+    get sqlp2c(): Ip2c;
+    get providerId(): string;
     constructor(name: string, serverOptions: ServerOptions, clientOptions: ClientOptions, forceDebug?: boolean);
     constructor(id: string, name: string, serverOptions: ServerOptions, clientOptions: ClientOptions, forceDebug?: boolean);
-    private registerSqlopsFeatures(features);
+    private registerSqlopsFeatures;
 }

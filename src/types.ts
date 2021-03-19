@@ -14,6 +14,7 @@ export interface SessionCreatedParameters {
 export interface SessionDisconnectedParameters {
 	success: boolean;
 	sessionId: string;
+	rootNode: NodeInfo;
 	errorMessage: string;
 }
 
@@ -257,6 +258,10 @@ export class ServerInfo {
 	 * The Operating System version string of the machine running the SQL Server instance.
 	 */
 	public osVersion: string;
+	/**
+	 * options for all new server properties.
+	 */
+	public options: { [key: string]: any };
 }
 
 export class CapabiltiesDiscoveryResult {

@@ -11,6 +11,7 @@ export interface SessionCreatedParameters {
 export interface SessionDisconnectedParameters {
     success: boolean;
     sessionId: string;
+    rootNode: NodeInfo;
     errorMessage: string;
 }
 export interface ExpandResponse {
@@ -197,6 +198,12 @@ export declare class ServerInfo {
      * The Operating System version string of the machine running the SQL Server instance.
      */
     osVersion: string;
+    /**
+     * options for all new server properties.
+     */
+    options: {
+        [key: string]: any;
+    };
 }
 export declare class CapabiltiesDiscoveryResult {
     capabilities: azdata.DataProtocolServerCapabilities;
