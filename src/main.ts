@@ -7,7 +7,7 @@ import * as is from 'vscode-languageclient/lib/utils/is';
 import * as UUID from 'vscode-languageclient/lib/utils/uuid';
 
 import * as azdata from 'azdata';
-
+import { ExtensionContext } from 'vscode';
 import { c2p, Ic2p } from './codeConverter';
 
 import * as protocol from './protocol';
@@ -22,7 +22,7 @@ function ensure<T, K extends keyof T>(target: T, key: K): T[K] {
 }
 
 export interface ISqlOpsFeature {
-	new(client: SqlOpsDataClient);
+	new(client: SqlOpsDataClient, appContext?: ExtensionContext);
 }
 
 export interface ClientOptions extends VSLanguageClientOptions {
