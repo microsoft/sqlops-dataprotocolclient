@@ -326,6 +326,26 @@ export interface QueryDisposeParams {
 export interface QueryDisposeResult {
 }
 
+// ------------------------------- < Query Rename Request > ------------------------------------
+
+export namespace QueryRenameRequest {
+	export const type = new RequestType<QueryRenameParams, QueryRenameResult, void, void>('query/rename');
+}
+
+/**
+ * Parameters to provide when renaming a query (during a save in Azure Data Studio)
+ */
+ export interface QueryRenameParams {
+	newOwnerUri: string;
+	originalOwnerUri: string;
+}
+
+/**
+ * Result received upon successful disposal of a query
+ */
+ export interface QueryRenameResult {
+}
+
 // ------------------------------- < Query Execution Complete Notification > ------------------------------------
 export namespace QueryExecuteCompleteNotification {
 	export const type = new NotificationType<azdata.QueryExecuteCompleteNotificationResult, void>('query/complete');

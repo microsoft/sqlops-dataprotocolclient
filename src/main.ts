@@ -309,6 +309,7 @@ export class QueryFeature extends SqlOpsFeature<undefined> {
 		protocol.SimpleExecuteRequest.type,
 		protocol.QueryExecuteSubsetRequest.type,
 		protocol.QueryDisposeRequest.type,
+		protocol.QueryRenameRequest.type,
 		protocol.QueryExecuteCompleteNotification.type,
 		protocol.QueryExecuteBatchStartNotification.type,
 		protocol.QueryExecuteBatchCompleteNotification.type,
@@ -439,6 +440,17 @@ export class QueryFeature extends SqlOpsFeature<undefined> {
 				r => undefined,
 				e => {
 					client.logFailedRequest(protocol.QueryDisposeRequest.type, e);
+					return Promise.reject(e);
+				}
+			);
+		};
+
+		let renameQuery = (newOwnerUri: string, originalOwnerUri: string): Thenable<void> => {
+			let params: protocol.QueryRenameParams = { newOwnerUri, originalOwnerUri };
+			return client.sendRequest(protocol.QueryRenameRequest.type, params).then(
+				r => undefined,
+				e => {
+					client.logFailedRequest(protocol.QueryRenameRequest.type, e);
 					return Promise.reject(e);
 				}
 			);
@@ -642,6 +654,7 @@ export class QueryFeature extends SqlOpsFeature<undefined> {
 			deleteRow,
 			disposeEdit,
 			disposeQuery,
+			renameQuery,
 			getEditRows,
 			getQueryRows,
 			setQueryExecutionOptions,
