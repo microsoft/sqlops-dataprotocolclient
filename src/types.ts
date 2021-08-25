@@ -732,6 +732,11 @@ export interface ScriptingObject {
 	 * The database object name
 	 */
 	name: string;
+
+	/**
+	 * The parent object name which is needed for scripting subobjects like triggers or indexes
+	 */
+	parentName: string;
 }
 
 export interface ScriptingParams {
