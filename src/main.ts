@@ -309,7 +309,7 @@ export class QueryFeature extends SqlOpsFeature<undefined> {
 		protocol.SimpleExecuteRequest.type,
 		protocol.QueryExecuteSubsetRequest.type,
 		protocol.QueryDisposeRequest.type,
-		protocol.QueryRenameRequest.type,
+		protocol.QueryChangeConnectionUriNotification.type,
 		protocol.QueryExecuteCompleteNotification.type,
 		protocol.QueryExecuteBatchStartNotification.type,
 		protocol.QueryExecuteBatchCompleteNotification.type,
@@ -445,15 +445,14 @@ export class QueryFeature extends SqlOpsFeature<undefined> {
 			);
 		};
 
-		let renameQuery = (newOwnerUri: string, originalOwnerUri: string): Thenable<void> => {
-			let params: protocol.QueryRenameParams = { newOwnerUri, originalOwnerUri };
-			return client.sendRequest(protocol.QueryRenameRequest.type, params).then(
-				r => undefined,
-				e => {
-					client.logFailedRequest(protocol.QueryRenameRequest.type, e);
-					return Promise.reject(e);
-				}
-			);
+		let changeConnectionUriForQuery = (newOwnerUri: string, originalOwnerUri: string): Thenable<void> => {
+			let params: protocol.QueryChangeConnectionUriParams = {
+				newOwnerUri,
+				originalOwnerUri
+			};
+
+			client.sendNotification(protocol.QueryChangeConnectionUriNotification.type, params);
+			return Promise.resolve();
 		};
 
 		let registerOnQueryComplete = (handler: (result: azdata.QueryExecuteCompleteNotificationResult) => any): void => {
@@ -654,7 +653,7 @@ export class QueryFeature extends SqlOpsFeature<undefined> {
 			deleteRow,
 			disposeEdit,
 			disposeQuery,
-			renameQuery,
+			changeConnectionUriForQuery,
 			getEditRows,
 			getQueryRows,
 			setQueryExecutionOptions,

@@ -328,22 +328,16 @@ export interface QueryDisposeResult {
 
 // ------------------------------- < Query Rename Request > ------------------------------------
 
-export namespace QueryRenameRequest {
-	export const type = new RequestType<QueryRenameParams, QueryRenameResult, void, void>('query/rename');
+export namespace QueryChangeConnectionUriNotification {
+	export const type = new NotificationType<QueryChangeConnectionUriParams, void>('query/changeConnectionUri');
 }
 
 /**
  * Parameters to provide when changing the uri associated with a query.
  */
- export interface QueryRenameParams {
+ export interface QueryChangeConnectionUriParams {
 	newOwnerUri: string;
 	originalOwnerUri: string;
-}
-
-/**
- * Result received upon query having its uri reassigned in STS.
- */
- export interface QueryRenameResult {
 }
 
 // ------------------------------- < Query Execution Complete Notification > ------------------------------------
