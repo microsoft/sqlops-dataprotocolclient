@@ -333,7 +333,7 @@ export namespace QueryRenameRequest {
 }
 
 /**
- * Parameters to provide when renaming a query (during a save in Azure Data Studio)
+ * Parameters to provide when changing the uri associated with a query.
  */
  export interface QueryRenameParams {
 	newOwnerUri: string;
@@ -341,7 +341,7 @@ export namespace QueryRenameRequest {
 }
 
 /**
- * Result received upon successful disposal of a query
+ * Result received upon query having its uri reassigned in STS.
  */
  export interface QueryRenameResult {
 }
