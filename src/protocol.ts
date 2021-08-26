@@ -326,7 +326,7 @@ export interface QueryDisposeParams {
 export interface QueryDisposeResult {
 }
 
-// ------------------------------- < Query Rename Request > ------------------------------------
+// ------------------------------- < Query Change Connection Uri Notification > ------------------------------------
 
 export namespace QueryChangeConnectionUriNotification {
 	export const type = new NotificationType<QueryChangeConnectionUriParams, void>('query/changeConnectionUri');
@@ -335,7 +335,7 @@ export namespace QueryChangeConnectionUriNotification {
 /**
  * Parameters to provide when changing the uri associated with a query.
  */
- export interface QueryChangeConnectionUriParams {
+ export class QueryChangeConnectionUriParams {
 	newOwnerUri: string;
 	originalOwnerUri: string;
 }
