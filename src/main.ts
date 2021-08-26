@@ -309,7 +309,7 @@ export class QueryFeature extends SqlOpsFeature<undefined> {
 		protocol.SimpleExecuteRequest.type,
 		protocol.QueryExecuteSubsetRequest.type,
 		protocol.QueryDisposeRequest.type,
-		protocol.QueryChangeConnectionUriNotification.type,
+		protocol.QueryChangeUriNotification.type,
 		protocol.QueryExecuteCompleteNotification.type,
 		protocol.QueryExecuteBatchStartNotification.type,
 		protocol.QueryExecuteBatchCompleteNotification.type,
@@ -445,13 +445,13 @@ export class QueryFeature extends SqlOpsFeature<undefined> {
 			);
 		};
 
-		let changeConnectionUriForQuery = (newOwnerUri: string, originalOwnerUri: string): Thenable<void> => {
-			let params: protocol.QueryChangeConnectionUriParams = {
+		let changeUriForQuery = (newOwnerUri: string, originalOwnerUri: string): Thenable<void> => {
+			let params: protocol.QueryChangeUriParams = {
 				newOwnerUri,
 				originalOwnerUri
 			};
 
-			client.sendNotification(protocol.QueryChangeConnectionUriNotification.type, params);
+			client.sendNotification(protocol.QueryChangeUriNotification.type, params);
 			return Promise.resolve();
 		};
 
@@ -653,7 +653,7 @@ export class QueryFeature extends SqlOpsFeature<undefined> {
 			deleteRow,
 			disposeEdit,
 			disposeQuery,
-			changeConnectionUriForQuery,
+			ChangeUriForQuery,
 			getEditRows,
 			getQueryRows,
 			setQueryExecutionOptions,
