@@ -328,14 +328,14 @@ export interface QueryDisposeResult {
 
 // ------------------------------- < Query Change Connection Uri Notification > ------------------------------------
 
-export namespace QueryChangeUriNotification {
-	export const type = new NotificationType<QueryChangeUriParams, void>('query/ChangeUri');
+export namespace QueryChangeConnectionUriNotification {
+	export const type = new NotificationType<QueryChangeConnectionUriParams, void>('query/changeConnectionUri');
 }
 
 /**
  * Parameters to provide when changing the uri associated with a query.
  */
- export class QueryChangeUriParams {
+ export class QueryChangeConnectionUriParams {
 	newOwnerUri: string;
 	originalOwnerUri: string;
 }
