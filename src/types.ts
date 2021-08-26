@@ -737,6 +737,11 @@ export interface ScriptingObject {
 	 * The parent object name which is needed for scripting subobjects like triggers or indexes
 	 */
 	parentName: string;
+
+	/**
+	 * The parent object type name such as Table, View, etc.
+	 */
+	 parentTypeName: string;
 }
 
 export interface ScriptingParams {

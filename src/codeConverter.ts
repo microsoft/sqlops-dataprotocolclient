@@ -39,7 +39,8 @@ function asScriptingParams(
 		name: metadata.name,
 		// cast to any since azdata needs to be updated to pickup this new field
 		// TODO: remove cast once updated azdata is published (8/24/2021 - karlb)
-		parentName: (<any>metadata).parentName
+		parentName: (<any>metadata).parentName,
+		parentTypeName: (<any>metadata).parentTypeName
 	};
 	let targetDatabaseEngineEdition = paramDetails.targetDatabaseEngineEdition;
 	let targetDatabaseEngineType = paramDetails.targetDatabaseEngineType;
