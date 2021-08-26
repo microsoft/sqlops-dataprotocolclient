@@ -931,8 +931,8 @@ declare module 'azdata' {
 
 	export interface QueryProvider {
 		/**
-			 * Change the URI associated with the specified connection.
-			 */
+		 * Change the URI associated with the specified connection.
+		 */
 		changeConnectionUriForQuery(newUri: string, oldUri: string): Thenable<void>;
 	}
 }
