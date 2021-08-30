@@ -445,7 +445,7 @@ export class QueryFeature extends SqlOpsFeature<undefined> {
 			);
 		};
 
-		let changeConnectionUri = (newOwnerUri: string, originalOwnerUri: string): Thenable<void> => {
+		let notifyConnectionUriChanged = (newOwnerUri: string, originalOwnerUri: string): Thenable<void> => {
 			let params: protocol.ConnectionUriChangedParams = {
 				newOwnerUri,
 				originalOwnerUri
@@ -653,7 +653,7 @@ export class QueryFeature extends SqlOpsFeature<undefined> {
 			deleteRow,
 			disposeEdit,
 			disposeQuery,
-			changeConnectionUri,
+			notifyConnectionUriChanged,
 			getEditRows,
 			getQueryRows,
 			setQueryExecutionOptions,
