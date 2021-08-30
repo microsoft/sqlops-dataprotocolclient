@@ -309,7 +309,7 @@ export class QueryFeature extends SqlOpsFeature<undefined> {
 		protocol.SimpleExecuteRequest.type,
 		protocol.QueryExecuteSubsetRequest.type,
 		protocol.QueryDisposeRequest.type,
-		protocol.QueryChangeConnectionUriNotification.type,
+		protocol.ConnectionUriChangedNotification.type,
 		protocol.QueryExecuteCompleteNotification.type,
 		protocol.QueryExecuteBatchStartNotification.type,
 		protocol.QueryExecuteBatchCompleteNotification.type,
@@ -446,12 +446,12 @@ export class QueryFeature extends SqlOpsFeature<undefined> {
 		};
 
 		let changeConnectionUri = (newOwnerUri: string, originalOwnerUri: string): Thenable<void> => {
-			let params: protocol.QueryChangeConnectionUriParams = {
+			let params: protocol.ConnectionUriChangedParams = {
 				newOwnerUri,
 				originalOwnerUri
 			};
 
-			client.sendNotification(protocol.QueryChangeConnectionUriNotification.type, params);
+			client.sendNotification(protocol.ConnectionUriChangedNotification.type, params);
 			return Promise.resolve();
 		};
 
