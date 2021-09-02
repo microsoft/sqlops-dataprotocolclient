@@ -326,6 +326,20 @@ export interface QueryDisposeParams {
 export interface QueryDisposeResult {
 }
 
+// ------------------------------- < Connection Uri Changed Notification > ------------------------------------
+
+export namespace ConnectionUriChangedNotification {
+	export const type = new NotificationType<ConnectionUriChangedParams, void>('query/connectionUriChanged');
+}
+
+/**
+ * Parameters to provide when changing the uri associated with a query.
+ */
+ export class ConnectionUriChangedParams {
+	newOwnerUri: string;
+	originalOwnerUri: string;
+}
+
 // ------------------------------- < Query Execution Complete Notification > ------------------------------------
 export namespace QueryExecuteCompleteNotification {
 	export const type = new NotificationType<azdata.QueryExecuteCompleteNotificationResult, void>('query/complete');
