@@ -309,6 +309,7 @@ export class QueryFeature extends SqlOpsFeature<undefined> {
 		protocol.SimpleExecuteRequest.type,
 		protocol.QueryExecuteSubsetRequest.type,
 		protocol.QueryDisposeRequest.type,
+		protocol.ConnectionUriChangedNotification.type,
 		protocol.QueryExecuteCompleteNotification.type,
 		protocol.QueryExecuteBatchStartNotification.type,
 		protocol.QueryExecuteBatchCompleteNotification.type,
@@ -442,6 +443,16 @@ export class QueryFeature extends SqlOpsFeature<undefined> {
 					return Promise.reject(e);
 				}
 			);
+		};
+
+		let connectionUriChanged = (newOwnerUri: string, originalOwnerUri: string): Thenable<void> => {
+			let params: protocol.ConnectionUriChangedParams = {
+				newOwnerUri,
+				originalOwnerUri
+			};
+
+			client.sendNotification(protocol.ConnectionUriChangedNotification.type, params);
+			return Promise.resolve();
 		};
 
 		let registerOnQueryComplete = (handler: (result: azdata.QueryExecuteCompleteNotificationResult) => any): void => {
@@ -642,6 +653,7 @@ export class QueryFeature extends SqlOpsFeature<undefined> {
 			deleteRow,
 			disposeEdit,
 			disposeQuery,
+			connectionUriChanged,
 			getEditRows,
 			getQueryRows,
 			setQueryExecutionOptions,
