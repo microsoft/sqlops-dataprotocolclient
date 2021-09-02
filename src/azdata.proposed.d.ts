@@ -949,7 +949,7 @@ declare module 'azdata' {
 		connectionUriChanged(newUri: string, oldUri: string): Thenable<void>;
 	}
 
-	// Temporary workaround for no AccountSecurityToken in 1.32 azdata release.
+	// Temporary workaround for no AccountSecurityToken in 1.32 azdata release. (remove after 1.33 release)
 
 	export namespace accounts {
 		/**
