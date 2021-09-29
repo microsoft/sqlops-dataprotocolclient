@@ -335,7 +335,7 @@ export namespace ConnectionUriChangedNotification {
 /**
  * Parameters to provide when changing the uri associated with a query.
  */
- export class ConnectionUriChangedParams {
+export class ConnectionUriChangedParams {
 	newOwnerUri: string;
 	originalOwnerUri: string;
 }
