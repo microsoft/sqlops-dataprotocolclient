@@ -1,0 +1,25 @@
+name: CI
+
+on:
+  push:
+    branches: [ master, release ]
+  pull_request:
+    branches: [ master, release ]
+
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Install dependencies
+        run: yarn --frozen-lockfile
+
+      - name: Build
+        run: yarn compile
+
+      - name: Lint
+        run: yarn tslint
