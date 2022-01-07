@@ -509,6 +509,7 @@ export interface IResultMessage {
 	isError: boolean;
 	time: string;
 	message: string;
+	hasRowCount?: boolean;
 }
 
 export interface EditRow {
