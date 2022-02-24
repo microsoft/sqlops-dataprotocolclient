@@ -1,6 +1,6 @@
 {
   "name": "dataprotocol-client",
-  "version": "1.2.4",
+  "version": "1.2.5",
   "description": "Client data protocol implementation for Azure Data Studio",
   "main": "lib/main",
   "typings": "lib/main",
