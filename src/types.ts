@@ -296,6 +296,14 @@ export interface BackupConfigInfoResponse {
 	backupConfigInfo: azdata.BackupConfigInfo;
 }
 
+export interface CreateSasParams {
+	blobContainerUri: string;
+}
+
+export interface CreateSasResponse {
+	sharedAccessSignature: string;
+}
+
 export interface CreateLoginParams {
 	ownerUri: string;
 

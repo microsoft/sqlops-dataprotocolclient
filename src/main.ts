@@ -844,7 +844,8 @@ export class AdminServicesFeature extends SqlOpsFeature<undefined> {
 export class BackupFeature extends SqlOpsFeature<undefined> {
 	private static readonly messagesTypes: RPCMessageType[] = [
 		protocol.BackupRequest.type,
-		protocol.BackupConfigInfoRequest.type
+		protocol.BackupConfigInfoRequest.type,
+		protocol.CreateSasRequest.type
 	];
 
 	constructor(client: SqlOpsDataClient) {
@@ -887,10 +888,22 @@ export class BackupFeature extends SqlOpsFeature<undefined> {
 			);
 		};
 
+		let createSas = (blobContainerUri: string): Thenable<azdata.CreateSasResponse> => {
+			let params: types.CreateSasParams = { blobContainerUri };
+			return client.sendRequest(protocol.CreateSasRequest.type, params).then(
+				r => r.sharedAccessSignature,
+				e => {
+					client.logFailedRequest(protocol.BackupConfigInfoRequest.type, e);
+					return Promise.resolve(undefined);
+				}
+			)
+		}
+
 		return azdata.dataprotocol.registerBackupProvider({
 			providerId: client.providerId,
 			backup,
-			getBackupConfigInfo
+			getBackupConfigInfo,
+			createSas
 		});
 	}
 }

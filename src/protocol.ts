@@ -633,6 +633,10 @@ export namespace BackupConfigInfoRequest {
 	export const type = new RequestType<types.DefaultDatabaseInfoParams, types.BackupConfigInfoResponse, void, void>('backup/backupconfiginfo');
 }
 
+export namespace CreateSasRequest {
+	export const type = new RequestType<types.CreateSasParams, types.CreateSasResponse, void, void>('backup/createsas');
+}
+
 export namespace RestoreRequest {
 	export const type = new RequestType<types.RestoreParams, azdata.RestoreResponse, void, void>('restore/restore');
 }
