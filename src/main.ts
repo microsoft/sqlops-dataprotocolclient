@@ -888,16 +888,16 @@ export class BackupFeature extends SqlOpsFeature<undefined> {
 			);
 		};
 
-		let createSas = (blobContainerUri: string): Thenable<azdata.CreateSasResponse> => {
-			let params: types.CreateSasParams = { blobContainerUri };
+		let createSas = (ownerUri: string, blobContainerUri: string, blobContainerKey: string, storageAccountName: string): Thenable<azdata.CreateSasResponse> => {
+			let params: types.CreateSasParams = { ownerUri, blobContainerUri, blobContainerKey, storageAccountName };
 			return client.sendRequest(protocol.CreateSasRequest.type, params).then(
-				r => r.sharedAccessSignature,
+				r => r,
 				e => {
-					client.logFailedRequest(protocol.BackupConfigInfoRequest.type, e);
+					client.logFailedRequest(protocol.CreateSasRequest.type, e);
 					return Promise.resolve(undefined);
 				}
-			)
-		}
+			);
+		};
 
 		return azdata.dataprotocol.registerBackupProvider({
 			providerId: client.providerId,

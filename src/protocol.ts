@@ -634,7 +634,7 @@ export namespace BackupConfigInfoRequest {
 }
 
 export namespace CreateSasRequest {
-	export const type = new RequestType<types.CreateSasParams, types.CreateSasResponse, void, void>('backup/createsas');
+	export const type = new RequestType<types.CreateSasParams, azdata.CreateSasResponse, void, void>('backup/createsas');
 }
 
 export namespace RestoreRequest {
