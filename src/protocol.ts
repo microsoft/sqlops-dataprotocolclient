@@ -70,6 +70,12 @@ export interface ConnectionClientCapabilities {
 		 */
 		dynamicRegistration?: boolean;
 	};
+	blob?: {
+		/**
+		 *
+		 */
+		 dynamicRegistration?: boolean;
+	};
 }
 
 export interface ClientCapabilities extends VSClientCapabilities {
@@ -634,7 +640,7 @@ export namespace BackupConfigInfoRequest {
 }
 
 export namespace CreateSasRequest {
-	export const type = new RequestType<types.CreateSasParams, azdata.CreateSasResponse, void, void>('backup/createsas');
+	export const type = new RequestType<types.CreateSasParams, azdata.CreateSasResponse, void, void>('blob/createsas');
 }
 
 export namespace RestoreRequest {

@@ -303,7 +303,6 @@ export interface CreateSasParams {
 	storageAccountName: string;
 }
 
-
 export interface CreateSasResponse {
 	sharedAccessSignature: string;
 }
