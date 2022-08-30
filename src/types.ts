@@ -170,12 +170,12 @@ export class ConnectionCompleteParams {
 	public connectionId: string;
 
 	/**
-	 * any diagnostic messages return from the service host.
+	 * Full stack trace from the engine and service host.
 	 */
 	public messages: string;
 
 	/**
-	 * Error message returned from the engine, if any.
+	 * Main error message(s) returned from the engine and service host, if any.
 	 */
 	public errorMessage: string;
 
