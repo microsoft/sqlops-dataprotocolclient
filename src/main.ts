@@ -319,6 +319,7 @@ export class QueryFeature extends SqlOpsFeature<undefined> {
 		protocol.QueryExecutionOptionsRequest.type,
 		protocol.SaveResultsAsCsvRequest.type,
 		protocol.SaveResultsAsJsonRequest.type,
+		protocol.SaveResultsAsMarkdownRequest.type,
 		protocol.SaveResultsAsExcelRequest.type,
 		protocol.SaveResultsAsXmlRequest.type,
 		protocol.EditCommitRequest.type,
@@ -494,6 +495,14 @@ export class QueryFeature extends SqlOpsFeature<undefined> {
 						undefined,
 						e => {
 							client.logFailedRequest(protocol.SaveResultsAsJsonRequest.type, e);
+							return Promise.reject(e);
+						}
+					);
+				case 'markdown':
+					return client.sendRequest(protocol.SaveResultsAsMarkdownRequest.type, requestParams).then (
+						undefined,
+						e => {
+							client.logFailedRequest(protocol.SaveResultsAsMarkdownRequest.type, e);
 							return Promise.reject(e);
 						}
 					);
