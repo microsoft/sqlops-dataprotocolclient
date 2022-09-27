@@ -121,29 +121,37 @@ export declare class ConnectionCompleteParams {
      */
     ownerUri: string;
     /**
-     * connection id returned from service host.
+     * Connection id returned from service host, if the connection was successful.
      */
-    connectionId: string;
+    connectionId?: string | undefined;
     /**
-     * any diagnostic messages return from the service host.
+     * Additional optional detailed error messages from the engine or service host, if an error occurred.
      */
-    messages: string;
+    messages?: string | undefined;
     /**
-     * Error message returned from the engine, if any.
+     * Error message returned from the engine or service host, if an error occurred.
      */
-    errorMessage: string;
+    errorMessage?: string | undefined;
     /**
-     * Error number returned from the engine, if any.
+     * Error number returned from the engine or server host, if an error occurred.
      */
-    errorNumber: number;
+    errorNumber?: number | undefined;
     /**
-     * Information about the connected server.
+     * Information about the connected server, if the connection was successful.
      */
-    serverInfo: ServerInfo;
+    serverInfo?: ServerInfo | undefined;
     /**
-     * information about the actual connection established
+     * Information about the actual connection established, if the connection was successful.
      */
-    connectionSummary: ConnectionSummary;
+    connectionSummary?: ConnectionSummary | undefined;
+    /**
+     * Whether the server version is supported by the provider. Default is to assume true.
+     */
+    isSupportedVersion?: boolean | undefined;
+    /**
+     * Additional optional message with details about why the version isn't supported.
+     */
+    unsupportedVersionMessage?: string | undefined;
 }
 /**
  * Update event parameters

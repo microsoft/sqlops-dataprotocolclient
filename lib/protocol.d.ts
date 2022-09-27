@@ -278,6 +278,9 @@ export declare namespace SaveResultsAsCsvRequest {
 export declare namespace SaveResultsAsJsonRequest {
     const type: RequestType<azdata.SaveResultsRequestParams, azdata.SaveResultRequestResult, void, void>;
 }
+export declare namespace SaveResultsAsMarkdownRequest {
+    const type: RequestType<azdata.SaveResultsRequestParams, azdata.SaveResultRequestResult, void, void>;
+}
 export declare namespace SaveResultsAsExcelRequest {
     const type: RequestType<azdata.SaveResultsRequestParams, azdata.SaveResultRequestResult, void, void>;
 }
