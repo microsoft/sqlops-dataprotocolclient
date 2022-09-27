@@ -418,7 +418,7 @@ export namespace SaveResultsAsJsonRequest {
 export namespace SaveResultsAsMarkdownRequest {
 	export const type = new RequestType<azdata.SaveResultsRequestParams, azdata.SaveResultRequestResult, void, void>('query/saveMarkdown');
 }
-// --------------------------------- </ Save Results as JSON Request > ------------------------------------------
+// --------------------------------- </ Save Results as Markdown Request > -----------------------------------------
 
 // --------------------------------- < Save Results as Excel Request > ------------------------------------------
 // save results in Excel format
