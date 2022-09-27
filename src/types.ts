@@ -165,34 +165,44 @@ export class ConnectionCompleteParams {
 	public ownerUri: string;
 
 	/**
-	 * connection id returned from service host.
+	 * Connection id returned from service host, if the connection was successful.
 	 */
-	public connectionId: string;
+	public connectionId?: string | undefined;
 
 	/**
-	 * any diagnostic messages return from the service host.
+	 * Additional optional detailed error messages from the engine or service host, if an error occurred.
 	 */
-	public messages: string;
+	public messages?: string | undefined;
 
 	/**
-	 * Error message returned from the engine, if any.
+	 * Error message returned from the engine or service host, if an error occurred.
 	 */
-	public errorMessage: string;
+	public errorMessage?: string | undefined;
 
 	/**
-	 * Error number returned from the engine, if any.
+	 * Error number returned from the engine or server host, if an error occurred.
 	 */
-	public errorNumber: number;
+	public errorNumber?: number | undefined;
 
 	/**
-	 * Information about the connected server.
+	 * Information about the connected server, if the connection was successful.
 	 */
-	public serverInfo: ServerInfo;
+	public serverInfo?: ServerInfo | undefined;
 
 	/**
-	 * information about the actual connection established
+	 * Information about the actual connection established, if the connection was successful.
 	 */
-	public connectionSummary: ConnectionSummary;
+	public connectionSummary?: ConnectionSummary | undefined;
+
+	/**
+	 * Whether the server version is supported by the provider. Default is to assume true.
+	 */
+	public isSupportedVersion?: boolean | undefined;
+
+	/**
+	 * Additional optional message with details about why the version isn't supported.
+	 */
+	public unsupportedVersionMessage?: string | undefined;
 }
 
 /**
