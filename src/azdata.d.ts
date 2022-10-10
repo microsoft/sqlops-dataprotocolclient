@@ -202,6 +202,13 @@ declare module 'azdata' {
 		 * @param showDashboard Whether to show the dashboard for the connection upon success. Default is true
 		 */
 		export function connect(connectionProfile: IConnectionProfile, saveConnection?: boolean, showDashboard?: boolean): Thenable<ConnectionResult>;
+		
+		/**
+		 * Attempts to change password for the given connection profile on the server.
+		 * @param connectionProfile The {@link IConnectionProfile} containing the information for the connection
+		 * @param newPassword Password to change the connection profile's account to
+		 */
+		 export function changePassword(connectionProfile: IConnectionProfile, newPassword: string): Thenable<PasswordChangeResult>;
 
 		/**
 		 * Supported connection event types
@@ -5465,6 +5472,22 @@ declare module 'azdata' {
 		 */
 		errorCode?: number | undefined;
 	}
+
+	export interface PasswordChangeResult {
+		/**
+		 * Whether the password change was successful
+		 */
+		connected: boolean;
+		/**
+		 * The error message if the password change was unsuccessful
+		 */
+		errorMessage?: string | undefined;
+		/**
+		 * The error code number associated with the error if the password change was unsuccessful.
+		 */
+		errorCode?: number | undefined;
+	}
+
 
 	export namespace nb {
 		/**
