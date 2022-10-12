@@ -215,6 +215,7 @@ declare module 'azdata' {
 		 */
 		export type ConnectionEventType =
 			| 'onConnect'
+			| 'onChangePassword'
 			| 'onDisconnect'
 			| 'onConnectionChanged';
 
@@ -571,6 +572,8 @@ declare module 'azdata' {
 		connect(connectionUri: string, connectionInfo: ConnectionInfo): Thenable<boolean>;
 
 		disconnect(connectionUri: string): Thenable<boolean>;
+		
+		changePassword(connectionUri: string, connectionInfo: ConnectionInfo, newPassword: string);
 
 		cancelConnect(connectionUri: string): Thenable<boolean>;
 

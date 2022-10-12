@@ -150,6 +150,35 @@ export namespace ConnectionChangedNotification {
 	export const type = new NotificationType<ConnectionChangedParams, void>('connection/connectionchanged');
 }
 
+// ------------------------------- < Password Change for Connection Event > -------------------------------------
+
+/**
+ * Connection request message format
+ */
+ export interface ChangePasswordParams {
+	/**
+	 * URI identifying the owner of the connection
+	 */
+	ownerUri: string;
+
+	/**
+	 * Details for creating the connection
+	 */
+	connection: azdata.ConnectionInfo;
+
+	/**
+	 * New password to change to.
+	 */
+	newPassword: string
+}
+
+
+// Connection request message callback declaration
+export namespace ChangePasswordRequest {
+	export const type = new RequestType<ChangePasswordParams, boolean, void, void>('connection/changepassword');
+}
+
+
 // ------------------------------- < Disconnect Request > -------------------------------------------
 
 // Disconnect request message format
