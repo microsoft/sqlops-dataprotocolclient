@@ -573,7 +573,7 @@ declare module 'azdata' {
 
 		disconnect(connectionUri: string): Thenable<boolean>;
 		
-		changePassword(connectionUri: string, connectionInfo: ConnectionInfo, newPassword: string);
+		changePassword(connectionUri: string, connectionInfo: ConnectionInfo, newPassword: string): Thenable<boolean>;
 
 		cancelConnect(connectionUri: string): Thenable<boolean>;
 
