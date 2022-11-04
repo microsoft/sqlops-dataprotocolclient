@@ -1122,7 +1122,7 @@ export class ScriptingFeature extends SqlOpsFeature<undefined> {
 					r => r,
 					e => {
 						client.logFailedRequest(protocol.ScriptingRequest.type, e);
-						return Promise.resolve(undefined);
+						return Promise.reject(e);
 					}
 				);
 		};
