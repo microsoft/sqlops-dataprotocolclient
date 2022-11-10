@@ -5480,15 +5480,15 @@ declare module 'azdata' {
 		/**
 		 * Whether the password change was successful
 		 */
-		connected: boolean;
+		result: boolean;
 		/**
 		 * The error message if the password change was unsuccessful
 		 */
-		errorMessage?: string | undefined;
+		messages?: string | undefined;
 		/**
-		 * The error code number associated with the error if the password change was unsuccessful.
+		 * More details for the error for a failed password change
 		 */
-		errorCode?: number | undefined;
+		errorMessage?: string | undefined;
 	}
 
 
