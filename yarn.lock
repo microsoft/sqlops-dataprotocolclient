@@ -18,15 +18,22 @@
     esutils "^2.0.2"
     js-tokens "^4.0.0"
 
+"@types/azdata@^1.40.0":
+  version "1.40.0"
+  resolved "https://registry.yarnpkg.com/@types/azdata/-/azdata-1.40.0.tgz#0a454d9261a6eadbb70692515184bcea5bbb9d61"
+  integrity sha512-CGsuH9wY6616UGskR1bMd3KcOTHhh43dQz9ruSji3EmzUG6EYJCE+6D3+UZ6M+Ub73XzDeYXobe/rk+fGkaYlg==
+  dependencies:
+    "@types/vscode" "*"
+
 "@types/node@^12.11.7":
   version "12.20.6"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-12.20.6.tgz#7b73cce37352936e628c5ba40326193443cfba25"
   integrity sha512-sRVq8d+ApGslmkE9e3i+D3gFGk7aZHAT+G4cIpIEdLJYPsWiSPwcAnJEjddLQQDqV3Ra2jOclX/Sv6YrvGYiWA==
 
-"@types/vscode@^1.51.0":
-  version "1.54.0"
-  resolved "https://registry.yarnpkg.com/@types/vscode/-/vscode-1.54.0.tgz#d28e3b3614054b2d6543c29412f60a986cabd9bb"
-  integrity sha512-sHHw9HG4bTrnKhLGgmEiOS88OLO/2RQytUN4COX9Djv81zc0FSZsSiYaVyjNidDzUSpXsySKBkZ31lk2/FbdCg==
+"@types/vscode@*", "@types/vscode@^1.67.0":
+  version "1.73.1"
+  resolved "https://registry.yarnpkg.com/@types/vscode/-/vscode-1.73.1.tgz#f2b198dca65c693c4570475aca04a34ad773609d"
+  integrity sha512-eArfOrAoZVV+Ao9zQOCaFNaeXj4kTCD+bGS2gyNgIFZH9xVMuLMlRrEkhb22NyxycFWKV1UyTh03vhaVHmqVMg==
 
 ansi-styles@^3.2.1:
   version "3.2.1"
