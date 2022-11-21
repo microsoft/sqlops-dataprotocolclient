@@ -148,6 +148,21 @@ declare module 'azdata' {
 		dataTypeName: string;
 	}
 
+	export interface PasswordChangeResult {
+		/**
+		 * Whether the password change was successful
+		 */
+		result: boolean;
+		/**
+		 * The error message if the password change was unsuccessful
+		 */
+		messages?: string | undefined;
+		/**
+		 * More details for the error for a failed password change
+		 */
+		errorMessage?: string | undefined;
+	}
+
 	/**
 	 * The parameters for start data serialization request.
 	 */
@@ -385,6 +400,10 @@ declare module 'azdata' {
 		title: string;
 	}
 
+	export interface ConnectionProvider extends DataProvider {
+		changePassword(connectionUri: string, connectionInfo: ConnectionInfo, newPassword: string): Thenable<boolean>;
+	}
+
 	export interface IConnectionProfile extends ConnectionInfo {
 		/**
 		 * The type of authentication to use when connecting
@@ -425,6 +444,13 @@ declare module 'azdata' {
 			 */
 			None = 'None'
 		}
+
+		/**
+		 * Attempts to change password for the given connection profile on the server.
+		 * @param connectionProfile The {@link IConnectionProfile} containing the information for the connection
+		 * @param newPassword Password to change the connection profile's account to
+		 */
+		export function changePassword(connectionProfile: IConnectionProfile, newPassword: string): Thenable<PasswordChangeResult>;
 	}
 
 	/*
