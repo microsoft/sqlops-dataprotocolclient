@@ -176,8 +176,8 @@ export class ConnectionFeature extends SqlOpsFeature<undefined> {
 				connection: {
 					options: connInfo.options
 				},
-				newPassword,
-			}
+				newPassword
+			};
 			return client.sendRequest(protocol.ChangePasswordRequest.type, params).then(
 				r => r,
 				e => {

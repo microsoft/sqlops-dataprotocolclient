@@ -155,7 +155,7 @@ export namespace ConnectionChangedNotification {
 /**
  * Connection request message format
  */
- export interface ChangePasswordParams {
+export interface ChangePasswordParams {
 	/**
 	 * URI identifying the owner of the connection
 	 */
@@ -169,7 +169,7 @@ export namespace ConnectionChangedNotification {
 	/**
 	 * New password to change to.
 	 */
-	newPassword: string
+	newPassword: string;
 }
 
 
