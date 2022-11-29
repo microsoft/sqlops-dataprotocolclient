@@ -9,6 +9,7 @@ export interface SessionCreatedParameters {
 	sessionId: string;
 	rootNode: NodeInfo;
 	errorMessage: string;
+	errorNumber: number;
 }
 
 export interface SessionDisconnectedParameters {
