@@ -154,11 +154,11 @@ declare module 'azdata' {
 		 */
 		result: boolean;
 		/**
-		 * The error message if the password change was unsuccessful
-		 */
-		messages?: string | undefined;
-		/**
 		 * More details for the error for a failed password change
+		 */
+		errorDetails?: string | undefined;
+		/**
+		 * Brief error description if the password change was unsuccessful
 		 */
 		errorMessage?: string | undefined;
 	}
