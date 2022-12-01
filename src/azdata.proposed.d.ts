@@ -148,17 +148,6 @@ declare module 'azdata' {
 		dataTypeName: string;
 	}
 
-	export interface PasswordChangeResult {
-		/**
-		 * Whether the password change was successful
-		 */
-		result: boolean;
-		/**
-		 * Error message if the password change was unsuccessful
-		 */
-		errorMessage?: string | undefined;
-	}
-
 	/**
 	 * The parameters for start data serialization request.
 	 */
@@ -397,7 +386,21 @@ declare module 'azdata' {
 	}
 
 	export interface ConnectionProvider extends DataProvider {
+		/**
+		 * Changes the password for a connection profile.
+		 */
 		changePassword(connectionUri: string, connectionInfo: ConnectionInfo, newPassword: string): Thenable<PasswordChangeResult>;
+	}
+
+	export interface PasswordChangeResult {
+		/**
+		 * Whether the password change was successful
+		 */
+		result: boolean;
+		/**
+		 * Error message if the password change was unsuccessful
+		 */
+		errorMessage?: string | undefined;
 	}
 
 	export interface IConnectionProfile extends ConnectionInfo {
