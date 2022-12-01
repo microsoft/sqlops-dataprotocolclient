@@ -397,7 +397,7 @@ declare module 'azdata' {
 	}
 
 	export interface ConnectionProvider extends DataProvider {
-		changePassword(connectionUri: string, connectionInfo: ConnectionInfo, newPassword: string): Thenable<boolean>;
+		changePassword(connectionUri: string, connectionInfo: ConnectionInfo, newPassword: string): Thenable<PasswordChangeResult>;
 	}
 
 	export interface IConnectionProfile extends ConnectionInfo {
