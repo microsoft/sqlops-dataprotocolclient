@@ -175,7 +175,7 @@ export interface ChangePasswordParams {
 
 // Connection request message callback declaration
 export namespace ChangePasswordRequest {
-	export const type = new RequestType<ChangePasswordParams, boolean, void, void>('connection/changepassword');
+	export const type = new RequestType<ChangePasswordParams, azdata.PasswordChangeResult, void, void>('connection/changepassword');
 }
 
 

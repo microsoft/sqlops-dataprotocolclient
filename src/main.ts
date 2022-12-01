@@ -170,7 +170,7 @@ export class ConnectionFeature extends SqlOpsFeature<undefined> {
 			);
 		};
 
-		let changePassword = (ownerUri: string, connInfo: azdata.ConnectionInfo, newPassword: string): Thenable<boolean> => {
+		let changePassword = (ownerUri: string, connInfo: azdata.ConnectionInfo, newPassword: string): Thenable<azdata.PasswordChangeResult> => {
 			let params: protocol.ChangePasswordParams = {
 				ownerUri,
 				connection: {
