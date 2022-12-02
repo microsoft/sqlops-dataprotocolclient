@@ -18,24 +18,24 @@ export interface CreateSessionResponse {
  */
 export interface SessionCreatedParameters {
 	/**
-	* Whether the session was created successfully.
-	*/
+	 * Whether the session was created successfully.
+	 */
 	success: boolean;
 	/**
-	* The ID of the session.
-	*/
+	 * The ID of the session.
+	 */
 	sessionId: string;
 	/**
-	* The root node for the session, if it was created successfully.
-	*/
+	 * The root node for the session, if it was created successfully.
+	 */
 	rootNode: NodeInfo;
 	/**
-	* Error message for the failure, if the session was not created successfully.
-	*/
+	 * Error message for the failure, if the session was not created successfully.
+	 */
 	errorMessage?: string | undefined;
 	/**
-	* Error number for the failure, if the session was not created successfully.
-	*/
+	 * Error number for the failure, if the session was not created successfully.
+	 */
 	errorNumber?: number | undefined;
 }
 
