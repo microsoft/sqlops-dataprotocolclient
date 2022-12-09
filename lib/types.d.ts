@@ -1,12 +1,40 @@
 import * as azdata from 'azdata';
+/**
+ * Contains success information, a sessionId to be used when requesting
+ * expansion of nodes, and a root node to display for this area
+ */
 export interface CreateSessionResponse {
+    /**
+     * Unique Id to use when sending any requests for objects in the tree
+     * under the node
+     */
     sessionId: string;
 }
+/**
+ * Information returned from a createSessionRequest. Contains success information, a sessionId to be used
+ * when requesting expansion of nodes, and a root node to display for this area
+ */
 export interface SessionCreatedParameters {
+    /**
+     * Whether the session was created successfully.
+     */
     success: boolean;
+    /**
+     * The ID of the session.
+     */
     sessionId: string;
+    /**
+     * The root node for the session, if it was created successfully.
+     */
     rootNode: NodeInfo;
-    errorMessage: string;
+    /**
+     * Error message for the failure, if the session was not created successfully.
+     */
+    errorMessage?: string | undefined;
+    /**
+     * Error number for the failure, if the session was not created successfully.
+     */
+    errorNumber?: number | undefined;
 }
 export interface SessionDisconnectedParameters {
     success: boolean;
