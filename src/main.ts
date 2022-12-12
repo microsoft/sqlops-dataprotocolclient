@@ -307,14 +307,14 @@ export class ConnectionFeature extends SqlOpsFeature<undefined> {
 			disconnect,
 			cancelConnect,
 			changeDatabase,
+			changePassword,
 			listDatabases,
 			getConnectionString,
 			buildConnectionInfo,
 			rebuildIntelliSenseCache,
 			registerOnConnectionChanged,
 			registerOnIntelliSenseCacheComplete,
-			registerOnConnectionComplete,
-			changePassword
+			registerOnConnectionComplete
 		});
 	}
 }
