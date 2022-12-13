@@ -125,6 +125,26 @@ export declare class ConnectionChangedParams {
 export declare namespace ConnectionChangedNotification {
     const type: NotificationType<ConnectionChangedParams, void>;
 }
+/**
+ * Connection request message format
+ */
+export interface ChangePasswordParams {
+    /**
+     * URI identifying the owner of the connection
+     */
+    ownerUri: string;
+    /**
+     * Details for creating the connection
+     */
+    connection: azdata.ConnectionInfo;
+    /**
+     * New password to change to.
+     */
+    newPassword: string;
+}
+export declare namespace ChangePasswordRequest {
+    const type: RequestType<ChangePasswordParams, azdata.PasswordChangeResult, void, void>;
+}
 export declare class DisconnectParams {
     ownerUri: string;
 }

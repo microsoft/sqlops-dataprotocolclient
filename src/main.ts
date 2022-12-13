@@ -139,7 +139,8 @@ export class ConnectionFeature extends SqlOpsFeature<undefined> {
 		protocol.ChangeDatabaseRequest.type,
 		protocol.ListDatabasesRequest.type,
 		protocol.GetConnectionStringRequest.type,
-		protocol.LanguageFlavorChangedNotification.type
+		protocol.LanguageFlavorChangedNotification.type,
+		protocol.ChangePasswordRequest.type
 	];
 
 	constructor(client: SqlOpsDataClient) {
@@ -164,6 +165,23 @@ export class ConnectionFeature extends SqlOpsFeature<undefined> {
 				r => r,
 				e => {
 					client.logFailedRequest(protocol.ConnectionRequest.type, e);
+					return Promise.resolve(false);
+				}
+			);
+		};
+
+		let changePassword = (ownerUri: string, connInfo: azdata.ConnectionInfo, newPassword: string): Thenable<azdata.PasswordChangeResult> => {
+			let params: protocol.ChangePasswordParams = {
+				ownerUri,
+				connection: {
+					options: connInfo.options
+				},
+				newPassword
+			};
+			return client.sendRequest(protocol.ChangePasswordRequest.type, params).then(
+				r => r,
+				e => {
+					client.logFailedRequest(protocol.ChangePasswordRequest.type, e);
 					return Promise.resolve(false);
 				}
 			);
@@ -289,6 +307,7 @@ export class ConnectionFeature extends SqlOpsFeature<undefined> {
 			disconnect,
 			cancelConnect,
 			changeDatabase,
+			changePassword,
 			listDatabases,
 			getConnectionString,
 			buildConnectionInfo,
