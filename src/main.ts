@@ -1,6 +1,6 @@
 import {
 	LanguageClient, ServerOptions, LanguageClientOptions as VSLanguageClientOptions, DynamicFeature, ServerCapabilities, RegistrationData,
-	RPCMessageType, Disposable
+	RPCMessageType, Disposable, RequestType
 } from 'vscode-languageclient';
 
 import * as is from 'vscode-languageclient/lib/utils/is';
@@ -1380,5 +1380,28 @@ export class SqlOpsDataClient extends LanguageClient {
 		features.map(f => {
 			this.registerFeature(new f(this));
 		});
+	}
+}
+
+/**
+ * Base class containing shared code to reduce boilerplate for services
+ */
+export abstract class BaseService {
+	constructor(protected readonly client: SqlOpsDataClient) { }
+
+	/**
+	 * Sends the specified request and logs the failure through the client if one occurs before rethrowing.
+	 * @param type RequestType, typically in the format 'contracts.DoThingRequest.type'
+	 * @param params parameters to be passed to the request
+	 * @returns result from the request
+	 */
+	protected runWithErrorHandling<P, R, E, RO>(type: RequestType<P, R, E, RO>, params: P): Thenable<R> {
+		return this.client.sendRequest(type, params).then(
+			(result) => { return result; },
+			(error) => {
+				this.client.logFailedRequest(type, error);
+				return Promise.reject(error);
+			}
+		);
 	}
 }
