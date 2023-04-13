@@ -1400,7 +1400,7 @@ export abstract class BaseService {
 			(result) => { return result; },
 			(error) => {
 				this.client.logFailedRequest(type, error);
-				throw error;
+				return Promise.reject(error);
 			}
 		)
 	}
