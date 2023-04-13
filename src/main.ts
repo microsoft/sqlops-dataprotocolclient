@@ -1390,7 +1390,7 @@ export abstract class BaseService {
 	constructor(protected readonly client: SqlOpsDataClient) { }
 
 	/**
-	 * Sends the specified request and logs the failure through the client if one occurs before rethrowing. 
+	 * Sends the specified request and logs the failure through the client if one occurs before rethrowing.
 	 * @param type RequestType, typically in the format 'contracts.DoThingRequest.type'
 	 * @param params parameters to be passed to the request
 	 * @returns result from the request
