@@ -1396,11 +1396,12 @@ export abstract class BaseService {
 	 * @returns result from the request
 	 */
 	protected runWithErrorHandling<P, R, E, RO>(type: RequestType<P, R, E, RO>, params: P): Thenable<R> {
-		try {
-			return this.client.sendRequest(type, params);
-		} catch (e) {
-			this.client.logFailedRequest(type, e);
-			throw e;
-		}
+		return this.client.sendRequest(type, params).then(
+			(result) => { return result; },
+			(error) => {
+				this.client.logFailedRequest(type, error);
+				throw error;
+			}
+		)
 	}
 }
