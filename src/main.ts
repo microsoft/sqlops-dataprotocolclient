@@ -1402,6 +1402,6 @@ export abstract class BaseService {
 				this.client.logFailedRequest(type, error);
 				return Promise.reject(error);
 			}
-		)
+		);
 	}
 }
