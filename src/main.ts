@@ -1395,7 +1395,7 @@ export abstract class BaseService {
 	 * @param params parameters to be passed to the request
 	 * @returns result from the request
 	 */
-	protected async runWithErrorHandling<P, R, E, RO>(type: RequestType<P, R, E, RO>, params: P): Promise<R> {
+	protected async runWithErrorHandling<P, R, E, RO>(type: RequestType<P, R, E, RO>, params: P): Thenable<R> {
 		try {
 			const result = await this.client.sendRequest(type, params);
 			return result;
