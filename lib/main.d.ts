@@ -1,4 +1,4 @@
-import { LanguageClient, ServerOptions, LanguageClientOptions as VSLanguageClientOptions, DynamicFeature, ServerCapabilities, RegistrationData, RPCMessageType, Disposable } from 'vscode-languageclient';
+import { LanguageClient, ServerOptions, LanguageClientOptions as VSLanguageClientOptions, DynamicFeature, ServerCapabilities, RegistrationData, RPCMessageType, Disposable, RequestType } from 'vscode-languageclient';
 import { Ic2p } from './codeConverter';
 import * as protocol from './protocol';
 import { Ip2c } from './protocolConverter';
@@ -116,4 +116,18 @@ export declare class SqlOpsDataClient extends LanguageClient {
     constructor(name: string, serverOptions: ServerOptions, clientOptions: ClientOptions, forceDebug?: boolean);
     constructor(id: string, name: string, serverOptions: ServerOptions, clientOptions: ClientOptions, forceDebug?: boolean);
     private registerSqlopsFeatures;
+}
+/**
+ * Base class containing shared code to reduce boilerplate for services
+ */
+export declare abstract class BaseService {
+    protected readonly client: SqlOpsDataClient;
+    constructor(client: SqlOpsDataClient);
+    /**
+     * Sends the specified request and logs the failure through the client if one occurs before rethrowing.
+     * @param type RequestType, typically in the format 'contracts.DoThingRequest.type'
+     * @param params parameters to be passed to the request
+     * @returns result from the request
+     */
+    protected runWithErrorHandling<P, R, E, RO>(type: RequestType<P, R, E, RO>, params: P): Thenable<R>;
 }
