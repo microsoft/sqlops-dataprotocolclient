@@ -289,12 +289,7 @@ export class ConnectionFeature extends SqlOpsFeature<undefined> {
 		};
 
 		let registerOnConnectionChanged = (handler: (changedConnInfo: azdata.ChangedConnectionInfo) => any): void => {
-			client.onNotification(protocol.ConnectionChangedNotification.type, (params: protocol.ConnectionChangedParams) => {
-				handler({
-					connectionUri: params.ownerUri,
-					connection: params.connection
-				});
-			});
+			client.onNotification(protocol.ConnectionChangedNotification.type, handler);
 		};
 
 		azdata.dataprotocol.onDidChangeLanguageFlavor((params) => {
