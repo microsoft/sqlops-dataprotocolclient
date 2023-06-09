@@ -289,12 +289,7 @@ export class ConnectionFeature extends SqlOpsFeature<undefined> {
 		};
 
 		let registerOnConnectionChanged = (handler: (changedConnInfo: azdata.ChangedConnectionInfo) => any): void => {
-			client.onNotification(protocol.ConnectionChangedNotification.type, (params: protocol.ConnectionChangedParams) => {
-				handler({
-					connectionUri: params.ownerUri,
-					connection: params.connection
-				});
-			});
+			client.onNotification(protocol.ConnectionChangedNotification.type, handler);
 		};
 
 		azdata.dataprotocol.onDidChangeLanguageFlavor((params) => {
@@ -341,6 +336,7 @@ export class QueryFeature extends SqlOpsFeature<undefined> {
 		protocol.SaveResultsAsMarkdownRequest.type,
 		protocol.SaveResultsAsExcelRequest.type,
 		protocol.SaveResultsAsXmlRequest.type,
+		protocol.CopyResultsRequest.type,
 		protocol.EditCommitRequest.type,
 		protocol.EditCreateRowRequest.type,
 		protocol.EditDeleteRowRequest.type,
@@ -518,7 +514,7 @@ export class QueryFeature extends SqlOpsFeature<undefined> {
 						}
 					);
 				case 'markdown':
-					return client.sendRequest(protocol.SaveResultsAsMarkdownRequest.type, requestParams).then (
+					return client.sendRequest(protocol.SaveResultsAsMarkdownRequest.type, requestParams).then(
 						undefined,
 						e => {
 							client.logFailedRequest(protocol.SaveResultsAsMarkdownRequest.type, e);
@@ -555,6 +551,16 @@ export class QueryFeature extends SqlOpsFeature<undefined> {
 				r => undefined,
 				e => {
 					client.logFailedRequest(protocol.QueryExecutionOptionsRequest.type, e);
+					return Promise.reject(e);
+				}
+			);
+		};
+
+		let copyResults = (params: azdata.CopyResultsRequestParams): Thenable<void> => {
+			return client.sendRequest(protocol.CopyResultsRequest.type, params).then(
+				r => undefined,
+				e => {
+					client.logFailedRequest(protocol.CopyResultsRequest.type, e);
 					return Promise.reject(e);
 				}
 			);
@@ -701,7 +707,8 @@ export class QueryFeature extends SqlOpsFeature<undefined> {
 			runQueryStatement,
 			runQueryString,
 			saveResults,
-			updateCell
+			updateCell,
+			copyResults
 		});
 	}
 }

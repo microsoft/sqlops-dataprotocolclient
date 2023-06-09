@@ -123,31 +123,16 @@ export namespace ConnectionRequest {
 
 
 export namespace ConnectionCompleteNotification {
-	export const type = new NotificationType<types.ConnectionCompleteParams, void>('connection/complete');
+	export const type = new NotificationType<azdata.ConnectionInfoSummary, void>('connection/complete');
 }
 
 // ------------------------------- < Connection Changed Event > -------------------------------------
 
 /**
- * Parameters for the ConnectionChanged notification.
- */
-export class ConnectionChangedParams {
-	/**
-	 * Owner URI of the connection that changed.
-	 */
-	public ownerUri: string;
-
-	/**
-	 * Summary of details containing any connection changes.
-	 */
-	public connection: types.ConnectionSummary;
-}
-
-/**
  * Connection changed event callback declaration.
  */
 export namespace ConnectionChangedNotification {
-	export const type = new NotificationType<ConnectionChangedParams, void>('connection/connectionchanged');
+	export const type = new NotificationType<azdata.ChangedConnectionInfo, void>('connection/connectionchanged');
 }
 
 // ------------------------------- < Password Change for Connection Event > -------------------------------------
@@ -463,6 +448,13 @@ export namespace SaveResultsAsXmlRequest {
 }
 // --------------------------------- </ Save Results as Xml Request > ------------------------------------------
 
+// --------------------------------- < Copy Results Request > ------------------------------------------
+// copy results to clipboard
+export namespace CopyResultsRequest {
+	export const type = new RequestType<azdata.CopyResultsRequestParams, void, void, void>('query/copy');
+}
+// --------------------------------- </ Copy Results Request > ------------------------------------------
+
 // ------------------------------- < T-SQL Syntax Parse > -----------------------------------
 export namespace SyntaxParseRequest {
 	export const type = new RequestType<azdata.SyntaxParseParams, azdata.SyntaxParseResult, void, void>('query/syntaxparse');
@@ -504,7 +496,7 @@ export namespace ScriptingRequest {
 // ------------------------------- < Scripting Complete Event > ------------------------------------
 
 export namespace ScriptingCompleteNotification {
-	export const type = new NotificationType<types.ScriptingCompleteParams, void>('scripting/scriptComplete');
+	export const type = new NotificationType<azdata.ScriptingCompleteResult, void>('scripting/scriptComplete');
 }
 
 
@@ -586,38 +578,38 @@ export namespace EditSubsetRequest {
 // ------------------------------- < Object Explorer Events > ------------------------------------
 
 export namespace ObjectExplorerCreateSessionRequest {
-	export const type = new RequestType<azdata.ConnectionInfo, types.CreateSessionResponse, void, void>('objectexplorer/createsession');
+	export const type = new RequestType<azdata.ConnectionInfo, azdata.ObjectExplorerSessionResponse, void, void>('objectexplorer/createsession');
 }
 
 export namespace ObjectExplorerExpandRequest {
-	export const type = new RequestType<types.ExpandParams, boolean, void, void>('objectexplorer/expand');
+	export const type = new RequestType<azdata.ExpandNodeInfo, boolean, void, void>('objectexplorer/expand');
 }
 
 export namespace ObjectExplorerRefreshRequest {
-	export const type = new RequestType<types.ExpandParams, boolean, void, void>('objectexplorer/refresh');
+	export const type = new RequestType<azdata.ExpandNodeInfo, boolean, void, void>('objectexplorer/refresh');
 }
 
 export namespace ObjectExplorerCloseSessionRequest {
-	export const type = new RequestType<types.CloseSessionParams, types.CloseSessionResponse, void, void>('objectexplorer/closesession');
+	export const type = new RequestType<azdata.ObjectExplorerCloseSessionInfo, azdata.ObjectExplorerCloseSessionResponse, void, void>('objectexplorer/closesession');
 }
 
 export namespace ObjectExplorerFindNodesRequest {
-	export const type = new RequestType<types.FindNodesParams, types.FindNodesResponse, void, void>('objectexplorer/findnodes');
+	export const type = new RequestType<azdata.FindNodesInfo, azdata.ObjectExplorerFindNodesResponse, void, void>('objectexplorer/findnodes');
 }
 
 // ------------------------------- < Object Explorer Events > ------------------------------------
 
 
 export namespace ObjectExplorerCreateSessionCompleteNotification {
-	export const type = new NotificationType<types.SessionCreatedParameters, void>('objectexplorer/sessioncreated');
+	export const type = new NotificationType<azdata.ObjectExplorerSession, void>('objectexplorer/sessioncreated');
 }
 
 export namespace ObjectExplorerSessionDisconnectedNotification {
-	export const type = new NotificationType<types.SessionDisconnectedParameters, void>('objectexplorer/sessiondisconnected');
+	export const type = new NotificationType<azdata.ObjectExplorerSession, void>('objectexplorer/sessiondisconnected');
 }
 
 export namespace ObjectExplorerExpandCompleteNotification {
-	export const type = new NotificationType<types.ExpandResponse, void>('objectexplorer/expandCompleted');
+	export const type = new NotificationType<azdata.ObjectExplorerExpandInfo, void>('objectexplorer/expandCompleted');
 }
 
 // ------------------------------- < Task Service Events > ------------------------------------

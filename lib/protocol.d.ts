@@ -104,26 +104,13 @@ export declare namespace ConnectionRequest {
     const type: RequestType<ConnectParams, boolean, void, void>;
 }
 export declare namespace ConnectionCompleteNotification {
-    const type: NotificationType<types.ConnectionCompleteParams, void>;
-}
-/**
- * Parameters for the ConnectionChanged notification.
- */
-export declare class ConnectionChangedParams {
-    /**
-     * Owner URI of the connection that changed.
-     */
-    ownerUri: string;
-    /**
-     * Summary of details containing any connection changes.
-     */
-    connection: types.ConnectionSummary;
+    const type: NotificationType<azdata.ConnectionInfoSummary, void>;
 }
 /**
  * Connection changed event callback declaration.
  */
 export declare namespace ConnectionChangedNotification {
-    const type: NotificationType<ConnectionChangedParams, void>;
+    const type: NotificationType<azdata.ChangedConnectionInfo, void>;
 }
 /**
  * Connection request message format
@@ -307,6 +294,9 @@ export declare namespace SaveResultsAsExcelRequest {
 export declare namespace SaveResultsAsXmlRequest {
     const type: RequestType<azdata.SaveResultsRequestParams, azdata.SaveResultRequestResult, void, void>;
 }
+export declare namespace CopyResultsRequest {
+    const type: RequestType<azdata.CopyResultsRequestParams, void, void, void>;
+}
 export declare namespace SyntaxParseRequest {
     const type: RequestType<azdata.SyntaxParseParams, azdata.SyntaxParseResult, void, void>;
 }
@@ -330,7 +320,7 @@ export declare namespace ScriptingRequest {
     const type: RequestType<types.ScriptingParams, azdata.ScriptingResult, void, void>;
 }
 export declare namespace ScriptingCompleteNotification {
-    const type: NotificationType<types.ScriptingCompleteParams, void>;
+    const type: NotificationType<azdata.ScriptingCompleteResult, void>;
 }
 export interface EditSessionOperationParams {
     ownerUri: string;
@@ -383,28 +373,28 @@ export declare namespace EditSubsetRequest {
     const type: RequestType<azdata.EditSubsetParams, azdata.EditSubsetResult, void, void>;
 }
 export declare namespace ObjectExplorerCreateSessionRequest {
-    const type: RequestType<azdata.ConnectionInfo, types.CreateSessionResponse, void, void>;
+    const type: RequestType<azdata.ConnectionInfo, azdata.ObjectExplorerSessionResponse, void, void>;
 }
 export declare namespace ObjectExplorerExpandRequest {
-    const type: RequestType<types.ExpandParams, boolean, void, void>;
+    const type: RequestType<azdata.ExpandNodeInfo, boolean, void, void>;
 }
 export declare namespace ObjectExplorerRefreshRequest {
-    const type: RequestType<types.ExpandParams, boolean, void, void>;
+    const type: RequestType<azdata.ExpandNodeInfo, boolean, void, void>;
 }
 export declare namespace ObjectExplorerCloseSessionRequest {
-    const type: RequestType<types.CloseSessionParams, types.CloseSessionResponse, void, void>;
+    const type: RequestType<azdata.ObjectExplorerCloseSessionInfo, azdata.ObjectExplorerCloseSessionResponse, void, void>;
 }
 export declare namespace ObjectExplorerFindNodesRequest {
-    const type: RequestType<types.FindNodesParams, types.FindNodesResponse, void, void>;
+    const type: RequestType<azdata.FindNodesInfo, azdata.ObjectExplorerFindNodesResponse, void, void>;
 }
 export declare namespace ObjectExplorerCreateSessionCompleteNotification {
-    const type: NotificationType<types.SessionCreatedParameters, void>;
+    const type: NotificationType<azdata.ObjectExplorerSession, void>;
 }
 export declare namespace ObjectExplorerSessionDisconnectedNotification {
-    const type: NotificationType<types.SessionDisconnectedParameters, void>;
+    const type: NotificationType<azdata.ObjectExplorerSession, void>;
 }
 export declare namespace ObjectExplorerExpandCompleteNotification {
-    const type: NotificationType<types.ExpandResponse, void>;
+    const type: NotificationType<azdata.ObjectExplorerExpandInfo, void>;
 }
 export declare namespace ListTasksRequest {
     const type: RequestType<azdata.ListTasksParams, azdata.ListTasksResponse, void, void>;

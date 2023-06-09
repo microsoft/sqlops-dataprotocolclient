@@ -18,10 +18,10 @@
     esutils "^2.0.2"
     js-tokens "^4.0.0"
 
-"@types/azdata@^1.40.0":
-  version "1.40.0"
-  resolved "https://registry.yarnpkg.com/@types/azdata/-/azdata-1.40.0.tgz#0a454d9261a6eadbb70692515184bcea5bbb9d61"
-  integrity sha512-CGsuH9wY6616UGskR1bMd3KcOTHhh43dQz9ruSji3EmzUG6EYJCE+6D3+UZ6M+Ub73XzDeYXobe/rk+fGkaYlg==
+"@types/azdata@^1.44.0":
+  version "1.44.0"
+  resolved "https://registry.yarnpkg.com/@types/azdata/-/azdata-1.44.0.tgz#c6bb4baacd1b0f74b46742bffd61ae40e922989d"
+  integrity sha512-AbZnAUybkG+Vqk96PNMcv8ypzN9zqsk1k85v2Gyl5xwUrLkEgGmHnrnK6p70PM3OFaABCYU+t/4fMnnK1JY1YA==
   dependencies:
     "@types/vscode" "*"
 
