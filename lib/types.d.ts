@@ -1,85 +1,4 @@
 import * as azdata from 'azdata';
-/**
- * Contains success information, a sessionId to be used when requesting
- * expansion of nodes, and a root node to display for this area
- */
-export interface CreateSessionResponse {
-    /**
-     * Unique Id to use when sending any requests for objects in the tree
-     * under the node
-     */
-    sessionId: string;
-}
-/**
- * Information returned from a createSessionRequest. Contains success information, a sessionId to be used
- * when requesting expansion of nodes, and a root node to display for this area
- */
-export interface SessionCreatedParameters {
-    /**
-     * Whether the session was created successfully.
-     */
-    success: boolean;
-    /**
-     * The ID of the session.
-     */
-    sessionId: string;
-    /**
-     * The root node for the session, if it was created successfully.
-     */
-    rootNode: NodeInfo;
-    /**
-     * Error message for the failure, if the session was not created successfully.
-     */
-    errorMessage?: string | undefined;
-    /**
-     * Error number for the failure, if the session was not created successfully.
-     */
-    errorNumber?: number | undefined;
-}
-export interface SessionDisconnectedParameters {
-    success: boolean;
-    sessionId: string;
-    rootNode: NodeInfo;
-    errorMessage: string;
-}
-export interface ExpandResponse {
-    nodePath: string;
-    sessionId: string;
-    nodes: NodeInfo[];
-    errorMessage: string;
-}
-export interface NodeInfo {
-    nodePath: string;
-    nodeType: string;
-    nodeSubType: string;
-    nodeStatus: string;
-    label: string;
-    isLeaf: boolean;
-    metadata: azdata.ObjectMetadata;
-    errorMessage: string;
-}
-export interface ExpandParams {
-    sessionId: string;
-    nodePath: string;
-}
-export interface CloseSessionParams {
-    sessionId: string;
-}
-export interface CloseSessionResponse {
-    success: boolean;
-    sessionId: string;
-}
-export interface FindNodesParams {
-    sessionId: string;
-    type: string;
-    schema: string;
-    name: string;
-    database: string;
-    parentObjectNames: string[];
-}
-export interface FindNodesResponse {
-    nodes: NodeInfo[];
-}
 export interface CategoryValue {
     displayName: string;
     name: string;
@@ -96,23 +15,6 @@ export interface ServiceOption {
     isRequired: boolean;
     isArray: boolean;
 }
-export interface ConnectionOption {
-    name: string;
-    displayName: string;
-    description: string;
-    groupName: string;
-    valueType: string;
-    defaultValue: string;
-    objectType: string;
-    categoryValues: CategoryValue[];
-    specialValueType: string;
-    isIdentity: boolean;
-    isRequired: boolean;
-    isArray: boolean;
-}
-export interface ConnectionProviderOptions {
-    options: ConnectionOption[];
-}
 export interface AdminServicesProviderOptions {
     databaseInfoOptions: ServiceOption[];
     databaseFileInfoOptions: ServiceOption[];
@@ -124,64 +26,6 @@ export interface FeatureMetadataProvider {
     optionsMetadata: ServiceOption[];
 }
 /**
- * Summary that identifies a unique database connection.
- */
-export declare class ConnectionSummary {
-    /**
-     * server name
-     */
-    serverName: string;
-    /**
-     * database name
-     */
-    databaseName: string;
-    /**
-     * user name
-     */
-    userName: string;
-}
-/**
- * Connection response format.
- */
-export declare class ConnectionCompleteParams {
-    /**
-     * URI identifying the owner of the connection
-     */
-    ownerUri: string;
-    /**
-     * Connection id returned from service host, if the connection was successful.
-     */
-    connectionId?: string | undefined;
-    /**
-     * Additional optional detailed error messages from the engine or service host, if an error occurred.
-     */
-    messages?: string | undefined;
-    /**
-     * Error message returned from the engine or service host, if an error occurred.
-     */
-    errorMessage?: string | undefined;
-    /**
-     * Error number returned from the engine or server host, if an error occurred.
-     */
-    errorNumber?: number | undefined;
-    /**
-     * Information about the connected server, if the connection was successful.
-     */
-    serverInfo?: ServerInfo | undefined;
-    /**
-     * Information about the actual connection established, if the connection was successful.
-     */
-    connectionSummary?: ConnectionSummary | undefined;
-    /**
-     * Whether the server version is supported by the provider. Default is to assume true.
-     */
-    isSupportedVersion?: boolean | undefined;
-    /**
-     * Additional optional message with details about why the version isn't supported.
-     */
-    unsupportedVersionMessage?: string | undefined;
-}
-/**
  * Update event parameters
  */
 export declare class IntelliSenseReadyParams {
@@ -189,57 +33,6 @@ export declare class IntelliSenseReadyParams {
      * URI identifying the text document
      */
     ownerUri: string;
-}
-/**
- * Information about a SQL Server instance.
- */
-export declare class ServerInfo {
-    /**
-     * The major version of the SQL Server instance.
-     */
-    serverMajorVersion: number;
-    /**
-     * The minor version of the SQL Server instance.
-     */
-    serverMinorVersion: number;
-    /**
-     * The build of the SQL Server instance.
-     */
-    serverReleaseVersion: number;
-    /**
-     * The ID of the engine edition of the SQL Server instance.
-     */
-    engineEditionId: number;
-    /**
-     * String containing the full server version text.
-     */
-    serverVersion: string;
-    /**
-     * String describing the product level of the server.
-     */
-    serverLevel: string;
-    /**
-     * The edition of the SQL Server instance.
-     */
-    serverEdition: string;
-    /**
-     * Whether the SQL Server instance is running in the cloud (Azure) or not.
-     */
-    isCloud: boolean;
-    /**
-     * The version of Azure that the SQL Server instance is running on, if applicable.
-     */
-    azureVersion: number;
-    /**
-     * The Operating System version string of the machine running the SQL Server instance.
-     */
-    osVersion: string;
-    /**
-     * options for all new server properties.
-     */
-    options: {
-        [key: string]: any;
-    };
 }
 export declare class CapabiltiesDiscoveryResult {
     capabilities: azdata.DataProtocolServerCapabilities;
@@ -369,69 +162,6 @@ export interface RestorePlanDetailInfo {
     isReadOnly: boolean;
     isVisible: boolean;
     defaultValue: any;
-}
-export interface ResultSetSummary {
-    id: number;
-    batchId: number;
-    rowCount: number;
-    columnInfo: IDbColumn[];
-}
-export interface BatchSummary {
-    hasError: boolean;
-    id: number;
-    selection: azdata.ISelectionData;
-    resultSetSummaries: ResultSetSummary[];
-    executionElapsed: string;
-    executionEnd: string;
-    executionStart: string;
-}
-export interface IDbColumn {
-    allowDBNull?: boolean;
-    baseCatalogName: string;
-    baseColumnName: string;
-    baseSchemaName: string;
-    baseServerName: string;
-    baseTableName: string;
-    columnName: string;
-    columnOrdinal?: number;
-    columnSize?: number;
-    isAliased?: boolean;
-    isAutoIncrement?: boolean;
-    isExpression?: boolean;
-    isHidden?: boolean;
-    isIdentity?: boolean;
-    isKey?: boolean;
-    isBytes?: boolean;
-    isChars?: boolean;
-    isSqlVariant?: boolean;
-    isUdt?: boolean;
-    dataType: string;
-    isXml?: boolean;
-    isJson?: boolean;
-    isLong?: boolean;
-    isReadOnly?: boolean;
-    isUnique?: boolean;
-    numericPrecision?: number;
-    numericScale?: number;
-    udtAssemblyQualifiedName: string;
-    dataTypeName: string;
-}
-export interface IGridResultSet {
-    columns: IDbColumn[];
-    rowsUri: string;
-    numberOfRows: number;
-}
-export interface IResultMessage {
-    batchId?: number;
-    isError: boolean;
-    time: string;
-    message: string;
-}
-export interface EditRow {
-    cells: azdata.DbCellValue[];
-    id: number;
-    isDirty: boolean;
-    state: azdata.EditRowState;
 }
 export interface ExecutionPlanOptions {
     includeEstimatedExecutionPlanXml?: boolean;
@@ -677,28 +407,6 @@ export interface ScriptingParams {
      * Operation associated with the script request
      */
     operation: azdata.ScriptOperation;
-}
-export interface ScriptingCompleteParams {
-    /**
-     * The error details for an error that occurred during the scripting operation.
-     */
-    errorDetails: string;
-    /**
-     * The error message for an error that occurred during the scripting operation.
-     */
-    errorMessage: string;
-    /**
-     * A value to indicate an error occurred during the scripting operation.
-     */
-    hasError: boolean;
-    /**
-     * A value to indicate the scripting operation was canceled.
-     */
-    canceled: boolean;
-    /**
-     * A value to indicate the scripting operation successfully completed.
-     */
-    success: boolean;
 }
 export declare class TableMetadata {
     columns: azdata.ColumnMetadata[];
