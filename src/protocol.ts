@@ -448,6 +448,13 @@ export namespace SaveResultsAsXmlRequest {
 }
 // --------------------------------- </ Save Results as Xml Request > ------------------------------------------
 
+// --------------------------------- < Copy Results Request > ------------------------------------------
+// copy results to clipboard
+export namespace CopyResultsRequest {
+	export const type = new RequestType<azdata.CopyResultsRequestParams, void, void, void>('query/copy');
+}
+// --------------------------------- </ Copy Results Request > ------------------------------------------
+
 // ------------------------------- < T-SQL Syntax Parse > -----------------------------------
 export namespace SyntaxParseRequest {
 	export const type = new RequestType<azdata.SyntaxParseParams, azdata.SyntaxParseResult, void, void>('query/syntaxparse');
