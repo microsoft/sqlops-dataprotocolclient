@@ -718,7 +718,8 @@ export class MetadataFeature extends SqlOpsFeature<undefined> {
 		protocol.MetadataQueryRequest.type,
 		protocol.ListDatabasesRequest.type,
 		protocol.TableMetadataRequest.type,
-		protocol.ViewMetadataRequest.type
+		protocol.ViewMetadataRequest.type,
+		protocol.AllServerMetadataRequest.type
 	];
 
 	constructor(client: SqlOpsDataClient) {
@@ -786,12 +787,24 @@ export class MetadataFeature extends SqlOpsFeature<undefined> {
 			);
 		};
 
+		let getAllServerMetadata = (owneruri: string): Thenable<string> => {
+			let params: protocol.AllServerMetadataParams = { ownerUri: owneruri };
+			return client.sendRequest(protocol.AllServerMetadataRequest.type, params).then(
+				r => r.scriptFileContent,
+				e => {
+					client.logFailedRequest(protocol.AllServerMetadataRequest.type, e);
+					return Promise.resolve(undefined);
+				}
+			);
+		}
+
 		return azdata.dataprotocol.registerMetadataProvider({
 			providerId: client.providerId,
 			getDatabases,
 			getMetadata,
 			getTableInfo,
-			getViewInfo
+			getViewInfo,
+			getAllServerMetadata
 		});
 	}
 }

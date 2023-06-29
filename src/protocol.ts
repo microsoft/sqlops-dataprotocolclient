@@ -292,6 +292,19 @@ export namespace ViewMetadataRequest {
 	export const type = new RequestType<TableMetadataParams, TableMetadataResult, void, void>('metadata/view');
 }
 
+// ------------------------------- < All Server Metadata Request > ---------------------------------------
+export class AllServerMetadataParams {
+	public ownerUri: string;
+}
+
+export class AllServerMetadataResult {
+	public scriptFileContent: string;
+}
+
+export namespace AllServerMetadataRequest {
+	export const type = new RequestType<AllServerMetadataParams, AllServerMetadataResult, void, void>('metadata/allServerMetadata');
+}
+
 /**
  * Event sent when the language service is finished updating after a connection
  */
