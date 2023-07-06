@@ -143,7 +143,7 @@ export class ConnectionChangedParams {
 	/**
 	 * Summary of details containing any connection changes.
 	 */
-	public connection: azdata.ConnectionSummary
+	public connection: azdata.ConnectionSummary;
 }
 
 /**
