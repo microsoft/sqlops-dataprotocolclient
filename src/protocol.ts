@@ -128,11 +128,29 @@ export namespace ConnectionCompleteNotification {
 
 // ------------------------------- < Connection Changed Event > -------------------------------------
 
+// NOTE: The parameter types here are currently different than what's defined in ADS - that uses "connectionUri" while
+// this uses "ownerUri". See https://github.com/microsoft/sqlops-dataprotocolclient/issues/88 for details
+
+/**
+ * Parameters for the ConnectionChanged notification.
+ */
+export class ConnectionChangedParams {
+	/**
+	 * Owner URI of the connection that changed.
+	 */
+	public ownerUri: string;
+
+	/**
+	 * Summary of details containing any connection changes.
+	 */
+	public connection: azdata.ConnectionSummary
+}
+
 /**
  * Connection changed event callback declaration.
  */
 export namespace ConnectionChangedNotification {
-	export const type = new NotificationType<azdata.ChangedConnectionInfo, void>('connection/connectionchanged');
+	export const type = new NotificationType<ConnectionChangedParams, void>('connection/connectionchanged');
 }
 
 // ------------------------------- < Password Change for Connection Event > -------------------------------------
