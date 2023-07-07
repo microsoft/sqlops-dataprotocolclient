@@ -289,7 +289,15 @@ export class ConnectionFeature extends SqlOpsFeature<undefined> {
 		};
 
 		let registerOnConnectionChanged = (handler: (changedConnInfo: azdata.ChangedConnectionInfo) => any): void => {
-			client.onNotification(protocol.ConnectionChangedNotification.type, handler);
+			// NOTE: The parameter types here are currently different than what's defined in ADS - that uses "connectionUri" while
+			// this uses "ownerUri". So we need to translate that here so that the object ADS gets is actually correct.
+			// See https://github.com/microsoft/sqlops-dataprotocolclient/issues/88 for details
+			client.onNotification(protocol.ConnectionChangedNotification.type, (params: protocol.ConnectionChangedParams) => {
+				handler({
+					connectionUri: params.ownerUri,
+					connection: params.connection
+				});
+			});
 		};
 
 		azdata.dataprotocol.onDidChangeLanguageFlavor((params) => {
