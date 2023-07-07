@@ -107,10 +107,23 @@ export declare namespace ConnectionCompleteNotification {
     const type: NotificationType<azdata.ConnectionInfoSummary, void>;
 }
 /**
+ * Parameters for the ConnectionChanged notification.
+ */
+export declare class ConnectionChangedParams {
+    /**
+     * Owner URI of the connection that changed.
+     */
+    ownerUri: string;
+    /**
+     * Summary of details containing any connection changes.
+     */
+    connection: azdata.ConnectionSummary;
+}
+/**
  * Connection changed event callback declaration.
  */
 export declare namespace ConnectionChangedNotification {
-    const type: NotificationType<azdata.ChangedConnectionInfo, void>;
+    const type: NotificationType<ConnectionChangedParams, void>;
 }
 /**
  * Connection request message format
