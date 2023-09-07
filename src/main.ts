@@ -1267,8 +1267,8 @@ export class FileBrowserFeature extends SqlOpsFeature<undefined> {
 	protected registerProvider(options: undefined): Disposable {
 		const client = this._client;
 
-		let openFileBrowser = (ownerUri: string, expandPath: string, fileFilters: string[], changeFilter: boolean): Thenable<boolean> => {
-			let params: types.FileBrowserOpenParams = { ownerUri, expandPath, fileFilters, changeFilter };
+		let openFileBrowser = (ownerUri: string, expandPath: string, fileFilters: string[], changeFilter: boolean, showFoldersOnly?: boolean): Thenable<boolean> => {
+			let params: types.FileBrowserOpenParams = { ownerUri, expandPath, fileFilters, changeFilter, showFoldersOnly };
 			return client.sendRequest(protocol.FileBrowserOpenRequest.type, params).then(
 				r => r,
 				e => {

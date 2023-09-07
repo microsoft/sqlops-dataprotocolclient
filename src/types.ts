@@ -184,6 +184,7 @@ export interface FileBrowserOpenParams {
 	expandPath: string;
 	fileFilters: string[];
 	changeFilter: boolean;
+	showFoldersOnly?: boolean;
 }
 
 export interface FileTreeNode {
