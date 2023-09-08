@@ -566,7 +566,7 @@ export class QueryFeature extends SqlOpsFeature<undefined> {
 
 		let copyResults = (params: azdata.CopyResultsRequestParams): Thenable<azdata.CopyResultsRequestResult> => {
 			return client.sendRequest(protocol.CopyResultsRequest.type, params).then(
-				undefined,
+				r => r,
 				e => {
 					client.logFailedRequest(protocol.CopyResultsRequest.type, e);
 					return Promise.reject(e);
