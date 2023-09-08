@@ -308,7 +308,7 @@ export declare namespace SaveResultsAsXmlRequest {
     const type: RequestType<azdata.SaveResultsRequestParams, azdata.SaveResultRequestResult, void, void>;
 }
 export declare namespace CopyResultsRequest {
-    const type: RequestType<azdata.CopyResultsRequestParams, void, void, void>;
+    const type: RequestType<azdata.CopyResultsRequestParams, azdata.CopyResultsRequestResult, void, void>;
 }
 export declare namespace SyntaxParseRequest {
     const type: RequestType<azdata.SyntaxParseParams, azdata.SyntaxParseResult, void, void>;
