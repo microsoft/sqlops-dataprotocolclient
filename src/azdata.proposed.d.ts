@@ -661,12 +661,7 @@ declare module 'azdata' {
 		type?: ExtensionNodeType;
 	}
 
-	export interface AccountKey {
-		/**
-		 * Auth Library used to add the account
-		 */
-		authLibrary?: string;
-	}
+	export interface Component extends vscode.Disposable { }
 
 	export namespace workspace {
 		/**
@@ -692,6 +687,25 @@ declare module 'azdata' {
 		 * Specifies whether to use headerFilter plugin
 		 */
 		headerFilter?: boolean,
+	}
+
+	export type ExecutionPlanData = executionPlan.ExecutionPlanGraphInfo | executionPlan.ExecutionPlanGraph[];
+
+	export interface ExecutionPlanComponentProperties extends ComponentProperties {
+		/**
+		 * Provide the execution plan file to be displayed. In case of execution plan graph info, the file type will determine the provider to be used to generate execution plan graphs
+		 */
+		data?: ExecutionPlanData;
+	}
+
+	/**
+	 * Defines the executionPlan component
+	 */
+	export interface ExecutionPlanComponent extends Component, ExecutionPlanComponentProperties {
+	}
+
+	export interface ModelBuilder {
+		executionPlan(): ComponentBuilder<ExecutionPlanComponent, ExecutionPlanComponentProperties>;
 	}
 
 	export interface ListViewOption {
@@ -854,17 +868,13 @@ declare module 'azdata' {
 		 */
 		includeHeaders: boolean
 		/**
-		 * Whether to remove line breaks from the cell value.
-		 */
-		removeNewLines: boolean;
-		/**
 		 * The selected ranges to be copied.
 		 */
 		selections: SelectionRange[];
 	}
 
 	export interface CopyResultsRequestResult {
-		/** 
+		/**
 		 * Result string from copy operation
 		 */
 		results: string;
@@ -886,12 +896,19 @@ declare module 'azdata' {
 
 	export enum DataProviderType {
 		TableDesignerProvider = 'TableDesignerProvider',
-		ExecutionPlanProvider = 'ExecutionPlanProvider'
+		ExecutionPlanProvider = 'ExecutionPlanProvider',
+		ServerContextualizationProvider = 'ServerContextualizationProvider'
 	}
 
 	export namespace dataprotocol {
 		export function registerTableDesignerProvider(provider: designers.TableDesignerProvider): vscode.Disposable;
 		export function registerExecutionPlanProvider(provider: executionPlan.ExecutionPlanProvider): vscode.Disposable;
+		/**
+		 * Registers a server contextualization provider, which can provide context about a server to extensions like GitHub
+		 * Copilot for improved suggestions.
+		 * @param provider The provider to register
+		 */
+		export function registerServerContextualizationProvider(provider: contextualization.ServerContextualizationProvider): vscode.Disposable;
 	}
 
 	export namespace designers {
@@ -900,8 +917,9 @@ declare module 'azdata' {
 		 * @param providerId The table designer provider Id.
 		 * @param tableInfo The table information. The object will be passed back to the table designer provider as the unique identifier for the table.
 		 * @param telemetryInfo Optional Key-value pair containing any extra information that needs to be sent via telemetry
+		 * @param objectExplorerContext Optional The context used to refresh Object Explorer after the table is created or edited
 		 */
-		export function openTableDesigner(providerId: string, tableInfo: TableInfo, telemetryInfo?: { [key: string]: string }): Thenable<void>;
+		export function openTableDesigner(providerId: string, tableInfo: TableInfo, telemetryInfo?: { [key: string]: string }, objectExplorerContext?: ObjectExplorerContext): Thenable<void>;
 
 		/**
 		 * Definition for the table designer provider.
@@ -1771,6 +1789,23 @@ declare module 'azdata' {
 		}
 	}
 
+	export namespace contextualization {
+		export interface GetServerContextualizationResult {
+			/**
+			 * The retrieved server context.
+			 */
+			context: string | undefined;
+		}
+
+		export interface ServerContextualizationProvider extends DataProvider {
+			/**
+			 * Gets server context, which can be in the form of create scripts but is left up each provider.
+			 * @param ownerUri The URI of the connection to get context for.
+			 */
+			getServerContextualization(ownerUri: string): Thenable<GetServerContextualizationResult>;
+		}
+	}
+
 	/**
 	 * Component to display text with an icon representing the severity
 	 */
@@ -1824,14 +1859,21 @@ declare module 'azdata' {
 		/**
 		 * Corresponds to the aria-live accessibility attribute for this component
 		 */
-		ariaLive?: AriaLiveValue
+		ariaLive?: AriaLiveValue;
 	}
 
 	export interface ContainerProperties extends ComponentProperties {
 		/**
 		 * Corresponds to the aria-live accessibility attribute for this component
 		 */
-		ariaLive?: AriaLiveValue
+		ariaLive?: AriaLiveValue;
+	}
+
+	export interface DropDownProperties {
+		/**
+		 * Whether or not an option in the list must be selected or a "new" option can be set. Only applicable when 'editable' is true. Default false.
+		 */
+		strictSelection?: boolean;
 	}
 
 	export interface NodeInfo {
@@ -1926,16 +1968,24 @@ declare module 'azdata' {
 		NotBetween = 7,
 		Contains = 8,
 		NotContains = 9,
-		IsNull = 10,
-		IsNotNull = 11
+		StartsWith = 10,
+		NotStartsWith = 11,
+		EndsWith = 12,
+		NotEndsWith = 13
 	}
 
-	export namespace window {
-		export interface Wizard extends LoadingComponentBase {
-		}
+	export interface ModelView extends vscode.Disposable { }
 
-		export interface Dialog extends LoadingComponentBase {
-		}
+	export interface DeclarativeTableMenuCellValue extends vscode.Disposable { }
+
+	export namespace window {
+		export interface Wizard extends LoadingComponentBase { }
+
+		export interface Dialog extends LoadingComponentBase, vscode.Disposable { }
+
+		export interface ModelViewPanel extends vscode.Disposable { }
+
+		export interface ModelViewDashboard extends vscode.Disposable { }
 
 		/**
 		 * Opens the error dialog with customization options provided.
@@ -2000,6 +2050,32 @@ declare module 'azdata' {
 			 */
 			isPrimary: boolean;
 		}
+
+		export interface FileFilters {
+			/**
+			 * The label to display in the file filter field next to the list of filters.
+			 */
+			label: string;
+			/**
+			 * The filters to limit what files are visible in the file browser (e.g. '*.sql' for SQL files).
+			 */
+			filters: string[];
+		}
+
+		/**
+		 * Opens a dialog to select a file path on the specified server's machine. Note: The dialog for just browsing local
+		 * files without any connection is opened via vscode.window.showOpenDialog.
+		 * @param connectionUri The URI of the connection to the target server
+		 * @param targetPath The file path on the server machine to open by default in the dialog
+		 * @param fileFilters The filters used to limit which files are displayed in the file browser
+		 * @param showFoldersOnly Optional argument to specify whether the browser should only show folders
+		 * @returns The path of the file chosen from the dialog, and undefined if the dialog is closed without selecting anything.
+		 */
+		export function openServerFileBrowserDialog(connectionUri: string, targetPath: string, fileFilters: FileFilters[], showFoldersOnly?: boolean): Thenable<string | undefined>;
+	}
+
+	export interface FileBrowserProvider extends DataProvider {
+		openFileBrowser(ownerUri: string, expandPath: string, fileFilters: string[], changeFilter: boolean, showFoldersOnly?: boolean): Thenable<boolean>;
 	}
 
 	export interface TableComponent {
@@ -2007,5 +2083,22 @@ declare module 'azdata' {
 		 * Set active cell.
 		 */
 		setActiveCell(row: number, column: number): void;
+	}
+
+	export interface ProfilerProvider {
+		startSession(sessionId: string, sessionName: string, sessionType?: ProfilingSessionType): Thenable<boolean>;
+	}
+
+	export enum ProfilingSessionType {
+		RemoteSession = 0,
+		LocalFile = 1
+	}
+
+	export interface SplitViewLayout extends FlexLayout {
+		/**
+		 * SplitView size. Height if the orientation is vertical, width if the orientation is horizontal
+		 * If undefined, the size of the model view container is used
+		 */
+		splitViewSize?: number | string | undefined;
 	}
 }
