@@ -1,12 +1,13 @@
 import {
 	LanguageClient, ServerOptions, LanguageClientOptions as VSLanguageClientOptions, DynamicFeature, ServerCapabilities, RegistrationData,
-	RPCMessageType, Disposable, RequestType
+	RPCMessageType, Disposable, RequestType, NotificationType
 } from 'vscode-languageclient';
 
 import * as is from 'vscode-languageclient/lib/utils/is';
 import * as UUID from 'vscode-languageclient/lib/utils/uuid';
 
 import * as azdata from 'azdata';
+import * as vscode from 'vscode';
 
 import { c2p, Ic2p } from './codeConverter';
 
@@ -36,6 +37,7 @@ export interface ClientOptions extends VSLanguageClientOptions {
 export abstract class SqlOpsFeature<T> implements DynamicFeature<T> {
 
 	protected _providers: Map<string, Disposable> = new Map<string, Disposable>();
+	protected _disposables: Disposable[] = [];
 
 	constructor(protected _client: SqlOpsDataClient, private _message: RPCMessageType | RPCMessageType[]) {
 	}
@@ -77,6 +79,7 @@ export abstract class SqlOpsFeature<T> implements DynamicFeature<T> {
 		let provider = this._providers.get(id);
 		if (provider) {
 			provider.dispose();
+			// TODO Should remove it from list
 		}
 	}
 
@@ -84,6 +87,21 @@ export abstract class SqlOpsFeature<T> implements DynamicFeature<T> {
 		this._providers.forEach((value) => {
 			value.dispose();
 		});
+		this._disposables.forEach(d => d.dispose());
+		this._providers.clear();
+		this._disposables = [];
+	}
+
+	/**
+	 * Registers an EventEmitter for the specified notification, which will fire an event whenever that notification is received.
+	 */
+	protected registerNotificationEmitter<P, RO>(notificationType: NotificationType<P, RO>): vscode.EventEmitter<P> {
+		const eventEmitter = new vscode.EventEmitter<P>();
+		this._disposables.push(eventEmitter);
+		this._client.onNotification(notificationType, params => {
+			eventEmitter.fire(params);
+		});
+		return eventEmitter;
 	}
 }
 
@@ -278,26 +296,25 @@ export class ConnectionFeature extends SqlOpsFeature<undefined> {
 			return Promise.resolve();
 		};
 
-		let registerOnConnectionComplete = (handler: (connSummary: azdata.ConnectionInfoSummary) => any): void => {
-			client.onNotification(protocol.ConnectionCompleteNotification.type, handler);
+		const onConnectionCompleteEventEmitter = this.registerNotificationEmitter(protocol.ConnectionCompleteNotification.type);
+		let registerOnConnectionComplete = (handler: (connSummary: azdata.ConnectionInfoSummary) => any): vscode.Disposable => {
+			return onConnectionCompleteEventEmitter.event(handler);
 		};
 
-		let registerOnIntelliSenseCacheComplete = (handler: (connectionUri: string) => any): void => {
-			client.onNotification(protocol.IntelliSenseReadyNotification.type, (params: types.IntelliSenseReadyParams) => {
-				handler(params.ownerUri);
-			});
+		const onIntelliSenseReadyEventEmitter = this.registerNotificationEmitter(protocol.IntelliSenseReadyNotification.type);
+		let registerOnIntelliSenseCacheComplete = (handler: (connectionUri: string) => any): vscode.Disposable => {
+			return onIntelliSenseReadyEventEmitter.event(params => handler(params.ownerUri));
 		};
 
-		let registerOnConnectionChanged = (handler: (changedConnInfo: azdata.ChangedConnectionInfo) => any): void => {
+		const onConnectionChangedEventEmitter = this.registerNotificationEmitter(protocol.ConnectionChangedNotification.type);
+		let registerOnConnectionChanged = (handler: (changedConnInfo: azdata.ChangedConnectionInfo) => any): vscode.Disposable => {
 			// NOTE: The parameter types here are currently different than what's defined in ADS - that uses "connectionUri" while
 			// this uses "ownerUri". So we need to translate that here so that the object ADS gets is actually correct.
 			// See https://github.com/microsoft/sqlops-dataprotocolclient/issues/88 for details
-			client.onNotification(protocol.ConnectionChangedNotification.type, (params: protocol.ConnectionChangedParams) => {
-				handler({
-					connectionUri: params.ownerUri,
-					connection: params.connection
-				});
-			});
+			return onConnectionChangedEventEmitter.event(params => handler({
+				connectionUri: params.ownerUri,
+				connection: params.connection
+			}));
 		};
 
 		azdata.dataprotocol.onDidChangeLanguageFlavor((params) => {
@@ -479,28 +496,34 @@ export class QueryFeature extends SqlOpsFeature<undefined> {
 			return Promise.resolve();
 		};
 
-		let registerOnQueryComplete = (handler: (result: azdata.QueryExecuteCompleteNotificationResult) => any): void => {
-			client.onNotification(protocol.QueryExecuteCompleteNotification.type, handler);
+		const onQueryCompleteEventEmitter = this.registerNotificationEmitter(protocol.QueryExecuteCompleteNotification.type);
+		let registerOnQueryComplete = (handler: (result: azdata.QueryExecuteCompleteNotificationResult) => any): vscode.Disposable => {
+			return onQueryCompleteEventEmitter.event(handler);
 		};
 
-		let registerOnBatchStart = (handler: (batchInfo: azdata.QueryExecuteBatchNotificationParams) => any): void => {
-			client.onNotification(protocol.QueryExecuteBatchStartNotification.type, handler);
+		const onQueryExecuteBatchStartEventEmitter = this.registerNotificationEmitter(protocol.QueryExecuteBatchStartNotification.type);
+		let registerOnBatchStart = (handler: (batchInfo: azdata.QueryExecuteBatchNotificationParams) => any): vscode.Disposable => {
+			return onQueryExecuteBatchStartEventEmitter.event(handler);
 		};
 
-		let registerOnBatchComplete = (handler: (batchInfo: azdata.QueryExecuteBatchNotificationParams) => any): void => {
-			client.onNotification(protocol.QueryExecuteBatchCompleteNotification.type, handler);
+		const onQueryExecuteBatchCompleteEventEmitter = this.registerNotificationEmitter(protocol.QueryExecuteBatchCompleteNotification.type);
+		let registerOnBatchComplete = (handler: (batchInfo: azdata.QueryExecuteBatchNotificationParams) => any): vscode.Disposable => {
+			return onQueryExecuteBatchCompleteEventEmitter.event(handler);
 		};
 
-		let registerOnResultSetAvailable = (handler: (resultSetInfo: azdata.QueryExecuteResultSetNotificationParams) => any): void => {
-			client.onNotification(protocol.QueryExecuteResultSetAvailableNotification.type, handler);
+		const onQueryExecuteResultSetAvailableEventEmitter = this.registerNotificationEmitter(protocol.QueryExecuteResultSetAvailableNotification.type);
+		let registerOnResultSetAvailable = (handler: (resultSetInfo: azdata.QueryExecuteResultSetNotificationParams) => any): vscode.Disposable => {
+			return onQueryExecuteResultSetAvailableEventEmitter.event(handler);
 		};
 
-		let registerOnResultSetUpdated = (handler: (resultSetInfo: azdata.QueryExecuteResultSetNotificationParams) => any): void => {
-			client.onNotification(protocol.QueryExecuteResultSetUpdatedNotification.type, handler);
+		const onQueryExecuteResultSetUpdatedEventEmitter = this.registerNotificationEmitter(protocol.QueryExecuteResultSetUpdatedNotification.type);
+		let registerOnResultSetUpdated = (handler: (resultSetInfo: azdata.QueryExecuteResultSetNotificationParams) => any): vscode.Disposable => {
+			return onQueryExecuteResultSetUpdatedEventEmitter.event(handler);
 		};
 
-		let registerOnMessage = (handler: (message: azdata.QueryExecuteMessageParams) => any): void => {
-			client.onNotification(protocol.QueryExecuteMessageNotification.type, handler);
+		const onQueryExecuteMessageEventEmitter = this.registerNotificationEmitter(protocol.QueryExecuteMessageNotification.type);
+		let registerOnMessage = (handler: (message: azdata.QueryExecuteMessageParams) => any): vscode.Disposable => {
+			return onQueryExecuteMessageEventEmitter.event(handler);
 		};
 
 		let saveResults = (requestParams: azdata.SaveResultsRequestParams): Thenable<azdata.SaveResultRequestResult> => {
@@ -681,10 +704,9 @@ export class QueryFeature extends SqlOpsFeature<undefined> {
 		};
 
 		// Edit Data Event Handlers
-		let registerOnEditSessionReady = (handler: (ownerUri: string, success: boolean, message: string) => any): void => {
-			client.onNotification(protocol.EditSessionReadyNotification.type, (params: azdata.EditSessionReadyParams) => {
-				handler(params.ownerUri, params.success, params.message);
-			});
+		const onEditSessionReadyEventEmitter = this.registerNotificationEmitter(protocol.EditSessionReadyNotification.type);
+		let registerOnEditSessionReady = (handler: (ownerUri: string, success: boolean, message: string) => any): vscode.Disposable => {
+			return onEditSessionReadyEventEmitter.event(params => handler(params.ownerUri, params.success, params.message));
 		};
 
 		return azdata.dataprotocol.registerQueryProvider({
@@ -1096,16 +1118,19 @@ export class ObjectExplorerFeature extends SqlOpsFeature<undefined> {
 			);
 		};
 
-		let registerOnSessionCreated = (handler: (response: azdata.ObjectExplorerSession) => any): void => {
-			client.onNotification(protocol.ObjectExplorerCreateSessionCompleteNotification.type, handler);
+		const onObjectExplorerCreateSessionCompleteEventEmitter = this.registerNotificationEmitter(protocol.ObjectExplorerCreateSessionCompleteNotification.type);
+		let registerOnSessionCreated = (handler: (response: azdata.ObjectExplorerSession) => any): vscode.Disposable => {
+			return onObjectExplorerCreateSessionCompleteEventEmitter.event(handler);
 		};
 
-		let registerOnSessionDisconnected = (handler: (response: azdata.ObjectExplorerSession) => any): void => {
-			client.onNotification(protocol.ObjectExplorerSessionDisconnectedNotification.type, handler);
+		const onObjectExplorerSessionDisconnectedEventEmitter = this.registerNotificationEmitter(protocol.ObjectExplorerSessionDisconnectedNotification.type);
+		let registerOnSessionDisconnected = (handler: (response: azdata.ObjectExplorerSession) => any): vscode.Disposable => {
+			return onObjectExplorerSessionDisconnectedEventEmitter.event(handler);
 		};
 
-		let registerOnExpandCompleted = (handler: (response: azdata.ObjectExplorerExpandInfo) => any): void => {
-			client.onNotification(protocol.ObjectExplorerExpandCompleteNotification.type, handler);
+		const onObjectExplorerExpandCompleteEventEmitter = this.registerNotificationEmitter(protocol.ObjectExplorerExpandCompleteNotification.type);
+		let registerOnExpandCompleted = (handler: (response: azdata.ObjectExplorerExpandInfo) => any): vscode.Disposable => {
+			return onObjectExplorerExpandCompleteEventEmitter.event(handler);
 		};
 
 		return azdata.dataprotocol.registerObjectExplorerProvider({
@@ -1161,8 +1186,9 @@ export class ScriptingFeature extends SqlOpsFeature<undefined> {
 				);
 		};
 
-		let registerOnScriptingComplete = (handler: (scriptingCompleteResult: azdata.ScriptingCompleteResult) => any): void => {
-			client.onNotification(protocol.ScriptingCompleteNotification.type, handler);
+		const onScriptingCompleteEventEmitter = this.registerNotificationEmitter(protocol.ScriptingCompleteNotification.type);
+		let registerOnScriptingComplete = (handler: (scriptingCompleteResult: azdata.ScriptingCompleteResult) => any): vscode.Disposable => {
+			return onScriptingCompleteEventEmitter.event(handler);
 		};
 
 		return azdata.dataprotocol.registerScriptingProvider({
@@ -1220,12 +1246,14 @@ export class TaskServicesFeature extends SqlOpsFeature<undefined> {
 			);
 		};
 
-		let registerOnTaskCreated = (handler: (response: azdata.TaskInfo) => any): void => {
-			client.onNotification(protocol.TaskCreatedNotification.type, handler);
+		const onTaskCreatedEventEmitter = this.registerNotificationEmitter(protocol.TaskCreatedNotification.type);
+		let registerOnTaskCreated = (handler: (response: azdata.TaskInfo) => any): vscode.Disposable => {
+			return onTaskCreatedEventEmitter.event(handler);
 		};
 
-		let registerOnTaskStatusChanged = (handler: (response: azdata.TaskProgressInfo) => any): void => {
-			client.onNotification(protocol.TaskStatusChangedNotification.type, handler);
+		const onTaskStatusChangedEventEmitter = this.registerNotificationEmitter(protocol.TaskStatusChangedNotification.type);
+		let registerOnTaskStatusChanged = (handler: (response: azdata.TaskProgressInfo) => any): vscode.Disposable => {
+			return onTaskStatusChangedEventEmitter.event(handler);
 		};
 
 		return azdata.dataprotocol.registerTaskServicesProvider({
@@ -1278,8 +1306,9 @@ export class FileBrowserFeature extends SqlOpsFeature<undefined> {
 			);
 		};
 
-		let registerOnFileBrowserOpened = (handler: (response: azdata.FileBrowserOpenedParams) => any): void => {
-			client.onNotification(protocol.FileBrowserOpenedNotification.type, handler);
+		const onFileBrowserOpenedEventEmitter = this.registerNotificationEmitter(protocol.FileBrowserOpenedNotification.type);
+		let registerOnFileBrowserOpened = (handler: (response: azdata.FileBrowserOpenedParams) => any): vscode.Disposable => {
+			return onFileBrowserOpenedEventEmitter.event(handler);
 		};
 
 		let expandFolderNode = (ownerUri: string, expandPath: string): Thenable<boolean> => {
@@ -1293,8 +1322,9 @@ export class FileBrowserFeature extends SqlOpsFeature<undefined> {
 			);
 		};
 
-		let registerOnFolderNodeExpanded = (handler: (response: azdata.FileBrowserExpandedParams) => any): void => {
-			client.onNotification(protocol.FileBrowserExpandedNotification.type, handler);
+		const onFileBrowserExpandedEventEmitter = this.registerNotificationEmitter(protocol.FileBrowserExpandedNotification.type);
+		let registerOnFolderNodeExpanded = (handler: (response: azdata.FileBrowserExpandedParams) => any): vscode.Disposable => {
+			return onFileBrowserExpandedEventEmitter.event(handler);
 		};
 
 		let validateFilePaths = (ownerUri: string, serviceType: string, selectedFiles: string[]): Thenable<boolean> => {
@@ -1308,8 +1338,9 @@ export class FileBrowserFeature extends SqlOpsFeature<undefined> {
 			);
 		};
 
-		let registerOnFilePathsValidated = (handler: (response: azdata.FileBrowserValidatedParams) => any): void => {
-			client.onNotification(protocol.FileBrowserValidatedNotification.type, handler);
+		const onFileBrowserValidatedEventEmitter = this.registerNotificationEmitter(protocol.FileBrowserValidatedNotification.type);
+		let registerOnFilePathsValidated = (handler: (response: azdata.FileBrowserValidatedParams) => any): vscode.Disposable => {
+			return onFileBrowserValidatedEventEmitter.event(handler);
 		};
 
 		let closeFileBrowser = (ownerUri: string): Thenable<azdata.FileBrowserCloseResponse> => {

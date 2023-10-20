@@ -1,4 +1,5 @@
-import { LanguageClient, ServerOptions, LanguageClientOptions as VSLanguageClientOptions, DynamicFeature, ServerCapabilities, RegistrationData, RPCMessageType, Disposable, RequestType } from 'vscode-languageclient';
+import { LanguageClient, ServerOptions, LanguageClientOptions as VSLanguageClientOptions, DynamicFeature, ServerCapabilities, RegistrationData, RPCMessageType, Disposable, RequestType, NotificationType } from 'vscode-languageclient';
+import * as vscode from 'vscode';
 import { Ic2p } from './codeConverter';
 import * as protocol from './protocol';
 import { Ip2c } from './protocolConverter';
@@ -16,6 +17,7 @@ export declare abstract class SqlOpsFeature<T> implements DynamicFeature<T> {
     protected _client: SqlOpsDataClient;
     private _message;
     protected _providers: Map<string, Disposable>;
+    protected _disposables: Disposable[];
     constructor(_client: SqlOpsDataClient, _message: RPCMessageType | RPCMessageType[]);
     get messages(): RPCMessageType | RPCMessageType[];
     abstract fillClientCapabilities(capabilities: protocol.ClientCapabilities): void;
@@ -24,6 +26,10 @@ export declare abstract class SqlOpsFeature<T> implements DynamicFeature<T> {
     protected abstract registerProvider(options: T): Disposable;
     unregister(id: string): void;
     dispose(): void;
+    /**
+     * Registers an EventEmitter for the specified notification, which will fire an event whenever that notification is received.
+     */
+    protected registerNotificationEmitter<P, RO>(notificationType: NotificationType<P, RO>): vscode.EventEmitter<P>;
 }
 export declare class CapabilitiesFeature extends SqlOpsFeature<undefined> {
     private static readonly messagesTypes;
