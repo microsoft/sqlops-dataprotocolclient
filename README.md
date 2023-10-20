@@ -1,4 +1,19 @@
 
+# Description
+
+This repo is for the `dataprotocol-client` package, which is used by Azure Data Studio extensions wishing to implement certain core features, such as a Query Provider.
+
+This is done through an implementation on top of the VS Code [Language Client](https://code.visualstudio.com/api/language-extensions/language-server-extension-guide). This package is used to set up the features and messages that will then be implemented by the backing language server (such as [SQL Tools Service](https://github.com/Microsoft/sqltoolsservice)). You can see further descriptions of the messages defined [here](https://github.com/microsoft/sqltoolsservice/blob/main/docs/guide/jsonrpc_protocol.md)
+
+Currently, this package is NOT published to npm or any other package manager. Instead, extensions will reference the Github releases directly. These releases point to commits out of the [release](https://github.com/microsoft/sqlops-dataprotocolclient/tree/release) branch, which contains the compiled
+JS sources that extensions will be using at runtime.
+
+To reference this package, add an entry like this to your package.json dependencies :
+
+`github:Microsoft/sqlops-dataprotocolclient#1.3.8`
+
+replacing the version with the version of the release you wish to use.
+
 # Build and Run From Source
 
 ```bash
@@ -9,11 +24,24 @@ yarn run watch
 ```
 
 # Create a release
-New releases need to be created off the release branch, the release branch contains the lib folder.
-1. make the changes in the main branch
-1. cherry-pick the changes to release branch and build it, lib folder will be updated
-1. commit the changes to release branch
-1. create a release: https://github.com/microsoft/sqlops-dataprotocolclient/releases, the source will be included automatically. 
+
+New releases need to be created off the [release](https://github.com/microsoft/sqlops-dataprotocolclient/tree/release) branch, the release branch contains the lib folder.
+
+1. Make the changes in the main branch (including a version bump)
+2. Create a new branch off of the [release](https://github.com/microsoft/sqlops-dataprotocolclient/tree/release) branch
+3. Merge the changes to your new branch
+   * You can also cherry-pick changes over if desired, although generally we should always be releasing everything from main
+4. Run `yarn compile` locally to build the sources, you should see changes in the lib folder
+5. Commit the changes to your branch
+6. Open a PR to merge these changes into the release branch and once approved merge it in
+    * IMPORTANT : This should be done with a merge commit, NOT a squash merge
+7. Create a release: https://github.com/microsoft/sqlops-dataprotocolclient/releases
+
+Now you can reference the new release in your extension with an entry in the dependencies section like this
+
+`github:Microsoft/sqlops-dataprotocolclient#1.3.8`
+
+replacing the version with whatever the latest released version you just made is.
 
 # Contributing
 
