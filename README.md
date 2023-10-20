@@ -8,11 +8,7 @@ This is done through an implementation on top of the VS Code [Language Client](h
 Currently, this package is NOT published to npm or any other package manager. Instead, extensions will reference the Github releases directly. These releases point to commits out of the [release](https://github.com/microsoft/sqlops-dataprotocolclient/tree/release) branch, which contains the compiled
 JS sources that extensions will be using at runtime.
 
-To reference this package, add an entry like this to your package.json dependencies :
-
-`github:Microsoft/sqlops-dataprotocolclient#1.3.8`
-
-replacing the version with the version of the release you wish to use.
+See [the wiki](https://github.com/microsoft/sqlops-dataprotocolclient/wiki/Releasing-Changes#using-this-package) for more information.
 
 # Build and Run From Source
 
@@ -25,23 +21,7 @@ yarn run watch
 
 # Create a release
 
-New releases need to be created off the [release](https://github.com/microsoft/sqlops-dataprotocolclient/tree/release) branch, the release branch contains the lib folder.
-
-1. Make the changes in the main branch (including a version bump)
-2. Create a new branch off of the [release](https://github.com/microsoft/sqlops-dataprotocolclient/tree/release) branch
-3. Merge the changes to your new branch
-   * You can also cherry-pick changes over if desired, although generally we should always be releasing everything from main
-4. Run `yarn compile` locally to build the sources, you should see changes in the lib folder
-5. Commit the changes to your branch
-6. Open a PR to merge these changes into the release branch and once approved merge it in
-    * IMPORTANT : This should be done with a merge commit, NOT a squash merge
-7. Create a release: https://github.com/microsoft/sqlops-dataprotocolclient/releases
-
-Now you can reference the new release in your extension with an entry in the dependencies section like this
-
-`github:Microsoft/sqlops-dataprotocolclient#1.3.8`
-
-replacing the version with whatever the latest released version you just made is.
+See [the wiki](https://github.com/microsoft/sqlops-dataprotocolclient/wiki/Releasing-Changes) for instructions on making and releasing new changes.
 
 # Contributing
 
