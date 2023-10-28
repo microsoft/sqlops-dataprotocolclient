@@ -512,17 +512,17 @@ declare module 'azdata' {
 
 	export interface ConnectionInfoSummary {
 		/**
-         * Process ID returned from service host, if connection was successful.
-         */
-		pid?: string | undefined;
-    }
+		 * ID used to identify the connection on the server, if available.
+		 */
+		serverConnectionId?: string | undefined;
+	}
 
 	export interface QueryExecuteCompleteNotificationResult {
 		/**
-         * Process ID returned from service host, if query connect + execute was successful.
-         */
-        pid?: string | undefined;
-    }
+		 * ID used to identify the connection used to run the query on the server, if available.
+		 */
+		serverConnectionId?: string | undefined;
+	}
 
 	/*
 	 * Add optional per-OS default value.
