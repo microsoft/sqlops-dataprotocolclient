@@ -362,6 +362,7 @@ export class QueryFeature extends SqlOpsFeature<undefined> {
 		protocol.SaveResultsAsExcelRequest.type,
 		protocol.SaveResultsAsXmlRequest.type,
 		protocol.CopyResultsRequest.type,
+		protocol.CopyResultsToClipboardNotification.type,
 		protocol.EditCommitRequest.type,
 		protocol.EditCreateRowRequest.type,
 		protocol.EditDeleteRowRequest.type,
@@ -597,6 +598,11 @@ export class QueryFeature extends SqlOpsFeature<undefined> {
 			);
 		};
 
+		let copyResultsToClipboard = (params: azdata.CopyResultsRequestParams): Thenable<void> => {
+			client.sendNotification(protocol.CopyResultsToClipboardNotification.type, params);
+			return Promise.resolve();
+		};
+
 		// Edit Data Requests
 		let commitEdit = (ownerUri: string): Thenable<void> => {
 			let params: azdata.EditCommitParams = { ownerUri };
@@ -738,7 +744,8 @@ export class QueryFeature extends SqlOpsFeature<undefined> {
 			runQueryString,
 			saveResults,
 			updateCell,
-			copyResults
+			copyResults,
+			copyResultsToClipboard
 		});
 	}
 }
