@@ -473,13 +473,6 @@ export namespace CopyResultsRequest {
 }
 // --------------------------------- </ Copy Results Request > ------------------------------------------
 
-// --------------------------------- < Copy Results To Clipboard Notification > ------------------------------------------
-// copy results to clipboard
-export namespace CopyResultsToClipboardNotification {
-	export const type = new NotificationType<azdata.CopyResultsRequestParams, void>('query/copyToClipboard');
-}
-// --------------------------------- </ Copy Results To Clipboard Notification > ------------------------------------------
-
 // ------------------------------- < T-SQL Syntax Parse > -----------------------------------
 export namespace SyntaxParseRequest {
 	export const type = new RequestType<azdata.SyntaxParseParams, azdata.SyntaxParseResult, void, void>('query/syntaxparse');
