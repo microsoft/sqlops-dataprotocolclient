@@ -886,9 +886,9 @@ declare module 'azdata' {
 		 */
 		selections: SelectionRange[];
 		/**
-		 * Whether to copy the results directly to the clipboard from STS.
+		 * * Whether to copy the results directly from the backend.
 		 */
-		CopyDirectlyToClipboard: boolean;
+		copyInBackend: boolean;
 	}
 
 	export interface CopyResultsRequestResult {
