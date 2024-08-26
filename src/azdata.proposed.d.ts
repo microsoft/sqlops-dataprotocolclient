@@ -885,10 +885,6 @@ declare module 'azdata' {
 		 * The selected ranges to be copied.
 		 */
 		selections: SelectionRange[];
-		/**
-		 * Whether to copy the results directly to the clipboard from STS.
-		 */
-		CopyDirectlyToClipboard: boolean;
 	}
 
 	export interface CopyResultsRequestResult {
