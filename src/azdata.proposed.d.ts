@@ -906,10 +906,6 @@ declare module 'azdata' {
 		 * Otherwise, The default handler will load all the selected data to ADS and perform the copy operation.
 		 */
 		copyResults?(requestParams: CopyResultsRequestParams): Thenable<CopyResultsRequestResult>;
-		/**
-		 * Copy the selected data to the clipboard.
-		 */
-		copyResultsToClipboard?(requestParams: CopyResultsRequestParams): Thenable<void>;
 	}
 
 	export enum DataProviderType {
