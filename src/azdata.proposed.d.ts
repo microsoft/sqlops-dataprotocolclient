@@ -888,7 +888,7 @@ declare module 'azdata' {
 		/**
 		 * Whether to copy results from the UI process.
 		 */
-		copyFromUIProcess: boolean;
+		copyFromUIProcess?: boolean;
 	}
 
 	export interface CopyResultsRequestResult {

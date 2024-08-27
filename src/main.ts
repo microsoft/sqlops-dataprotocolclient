@@ -8,6 +8,7 @@ import * as UUID from 'vscode-languageclient/lib/utils/uuid';
 
 import * as azdata from 'azdata';
 import * as vscode from 'vscode';
+import * as os from 'os';
 
 import { c2p, Ic2p } from './codeConverter';
 
@@ -588,6 +589,11 @@ export class QueryFeature extends SqlOpsFeature<undefined> {
 		};
 
 		let copyResults = (params: azdata.CopyResultsRequestParams): Thenable<azdata.CopyResultsRequestResult> => {
+			params.copyFromUIProcess = true;
+			if (!vscode.env.remoteName && os.platform() !== 'linux') {
+				params.copyFromUIProcess = false;
+			}
+
 			return client.sendRequest(protocol.CopyResultsRequest.type, params).then(
 				r => r,
 				e => {
