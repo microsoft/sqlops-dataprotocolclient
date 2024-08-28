@@ -885,10 +885,6 @@ declare module 'azdata' {
 		 * The selected ranges to be copied.
 		 */
 		selections: SelectionRange[];
-		/**
-		 * Whether to copy results from the UI process.
-		 */
-		copyFromUIProcess?: boolean;
 	}
 
 	export interface CopyResultsRequestResult {
