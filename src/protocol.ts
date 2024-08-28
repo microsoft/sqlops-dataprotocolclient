@@ -469,7 +469,7 @@ export namespace SaveResultsAsXmlRequest {
 // --------------------------------- < Copy Results Request > ------------------------------------------
 // copy results to clipboard
 export namespace CopyResultsRequest {
-	export const type = new RequestType<azdata.CopyResultsRequestParams, azdata.CopyResultsRequestResult, void, void>('query/copy');
+	export const type = new RequestType<azdata.CopyResultsRequestParams, void, void, void>('query/copy');
 }
 // --------------------------------- </ Copy Results Request > ------------------------------------------
 
