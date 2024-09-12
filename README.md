@@ -1,4 +1,15 @@
 
+# Description
+
+This repo is for the `dataprotocol-client` package, which is used by Azure Data Studio extensions wishing to implement certain core features, such as a Query Provider.
+
+This is done through an implementation on top of the VS Code [Language Client](https://code.visualstudio.com/api/language-extensions/language-server-extension-guide). This package is used to set up the features and messages that will then be implemented by the backing language server (such as [SQL Tools Service](https://github.com/Microsoft/sqltoolsservice)). You can see further descriptions of the messages defined [here](https://github.com/microsoft/sqltoolsservice/blob/main/docs/guide/jsonrpc_protocol.md)
+
+Currently, this package is NOT published to npm or any other package manager. Instead, extensions will reference the Github releases directly. These releases point to commits out of the [release](https://github.com/microsoft/sqlops-dataprotocolclient/tree/release) branch, which contains the compiled
+JS sources that extensions will be using at runtime.
+
+See [the wiki](https://github.com/microsoft/sqlops-dataprotocolclient/wiki/Releasing-Changes#using-this-package) for more information.
+
 # Build and Run From Source
 
 ```bash
@@ -9,11 +20,8 @@ yarn run watch
 ```
 
 # Create a release
-New releases need to be created off the release branch, the release branch contains the lib folder.
-1. make the changes in the main branch
-1. cherry-pick the changes to release branch and build it, lib folder will be updated
-1. commit the changes to release branch
-1. create a release: https://github.com/microsoft/sqlops-dataprotocolclient/releases, the source will be included automatically. 
+
+See [the wiki](https://github.com/microsoft/sqlops-dataprotocolclient/wiki/Releasing-Changes) for instructions on making and releasing new changes.
 
 # Contributing
 
